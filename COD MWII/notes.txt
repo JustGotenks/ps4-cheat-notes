@@ -1,0 +1,1109 @@
+(clear leading 0s)
+^0{2,}([A-Z0-9]+)
+    $1
+
+
+
+cave start => 0x 32D3000
+
+
+
+
+
+-------------------------------- Infinite Bullets/Grenades --------------------------------
+
+1091BBF588	4 bytes	X	28	[0]-33-1091720000-87936KB
+
+
+shoot/reload
+0x29D7427
+
+shoot
+  29F9834
+  29C3B0E
+  29A179A
+  1D0A784
+  1D249E7|1D2492C|1D24988
+   9BB088 <-
+  13AE91A
+   D81D7A
+8000075C2
+
+rdi	    0x1D
+rsi	    0x1
+rdx	    0x1E
+rcx	    0x0
+r8	    0x3017A60
+r9	    0xF
+r10	    0x0
+r11	    0x159633B7C0
+r12	    0xFFFFFFFF
+r13	    0x0
+r14	    0x0
+r15	    0x7EE551D80
+rbp	    0x7EE5519B0
+rbx	    0x1D
+rax	    0x1091BBF528
+
+
+
+reload
+  29E4847
+  29EFF6C
+  29BC99A
+  29A179A
+  1D0A784
+  1D24988|1D249E7
+   9BB088 <-
+  13AE91A
+   D81D7A
+8000075C2
+
+rdi	    0x1E
+rsi	    0xFFFFFFFF
+rdx	    0x1D
+rcx	    0x0
+r8	    0x3017A60
+r9	    0xF
+r10	    0x0
+r11	    0x159633B7C0
+r12	    0x1
+r13	    0x0
+r14	    0x0
+r15	    0x7EE551C80
+rbp	    0x7EE551C40
+rbx	    0x1E
+rax	    0x1091BBF528
+
+
+
+
+
+
+
+
+
+29D7418  39 F2         cmp    edx, esi
+29D741A  0F 4D DF      cmovge ebx, edi
+29D741D  45 85 E4      test   r12d, r12d
+
+29D7420  0F 49 DF      cmovns ebx, edi
+29D7423  89 5C 88 60   mov    dword ptr [rax + rcx*4 + 0x60], ebx
+
+29D7427  5B            pop    rbx
+29D7428  41 5C         pop    r12
+29D742A  41 5E         pop    r14
+
+source => 29D7420
+return => 29D7427
+cave   => 32D3000
+
+
+|== default ==|
+cmovns ebx, edi
+mov dword ptr [rax + rcx*4 + 0x60], ebx
+0F 49 DF 89 5C 88 60
+
+|== activated ==|
+jmp 0x32D3000
+E9 DB BB 8F 00 90 90
+
+
+|== default ==|
+
+|== activated ==|
+cmovns ebx, edi
+cmovs ebx, edx
+cmovs edi, edx
+mov dword ptr [rax + rcx*4 + 0x60], ebx
+jmp 0x29D7427
+
+0F 49 DF 0F 48 DA 0F 48 FA 89 5C 88 60 E9 15 44 
+70 FF 90 90
+
+
+
+
+
+0x29D7409   bullet
+rdi	    0x108C9BC64A
+rsi	    0x7EEFE17EA
+rdx	    0x4A
+rcx	    0x0
+r8	    0x3017A60
+r9	    0xF
+r10	    0x0
+r11	    0x1596340140
+r12	    0xFFFFFFFF
+r13	    0x0
+r14	    0x0
+r15	    0x7EEFE17A0
+rbp	    0x7EEFE13D0
+rbx	    0x108C9BB388
+rax	    0x108C9BC600
+
+
+
+
+
+
+
+-------------------------------- No Mag decrease --------------------------------
+
+1091BBF064	4 bytes	X	60	[0]-33-1091720000-87936KB
+
+
+reload
+0x29E49F1
+
+  29EFF6C
+  29BC99A
+  29A179A
+  1D0A784
+  1D24988
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+
+
+rdi	    0x15A7417E70
+rsi	    0x7EE5544D8
+rdx	    0x7FFFFFFFFFFFFFFF
+rcx	    0x37
+r8	    0x3017A60
+r9	    0xF
+r10	    0x0
+r11	    0x159633B7C0
+r12	    0x7EE551C80
+r13	    0x0
+r14	    0x800061410
+r15	    0x5
+rbp	    0x7EE552070
+rbx	    0x1091BBE318
+rax	    0x1091BBF014
+
+
+29E49D4  C5 FC 11 48 20         vmovups ymmword ptr [rax + 0x20], ymm1
+29E49D9  C5 FC 11 00            vmovups ymmword ptr [rax], ymm0
+29E49DD  C7 40 50 00 00 00 00   mov     dword ptr [rax + 0x50], 0
+29E49E4  48 8B B5 F8 FB FF FF   mov     rsi, qword ptr [rbp - 0x408]
+
+29E49EB  44 29 F9               sub     ecx, r15d
+
+29E49EE  89 48 50               mov     dword ptr [rax + 0x50], ecx
+29E49F1  8B 56 28               mov     edx, dword ptr [rsi + 0x28]
+29E49F4  48 8B 8E E8 05 00 00   mov     rcx, qword ptr [rsi + 0x5e8]
+29E49FB  4C 8B 46 08            mov     r8, qword ptr [rsi + 8]
+29E49FF  49 8B 06               mov     rax, qword ptr [r14]
+29E4A02  48 3B 45 D0            cmp     rax, qword ptr [rbp - 0x30]
+
+
+source => 29E49EB
+return => 
+cave   => 
+
+
+|== default ==|
+sub ecx, r15d
+44 29 F9
+
+|== activated ==|
+sub ecx, 0x0
+83 E9 00
+
+
+
+
+
+-------------------------------- No Recoil --------------------------------
+got it from shooting and not shooting
+1091BBE480	4 bytes	X	24283	[0]-33-1091720000-87936KB
+
+maybe x-axis (from 1091BBE480)
+0x 1091BBE560
+
+shoot
+0x2A64DDE
+
+  29F87E4
+  29C3B0E
+  29A179A
+  1D0A784
+  1D2492C
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+
+after shoot going down
+  29F46DD
+  29C3758
+  29A179A
+  1D0A784
+  1D2492C
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+
+
+
+2A64DCA  41 8B 85 48 02 00 00      mov   eax, dword ptr [r13 + 0x248]
+
+2A64DD1  FF C0                     inc   eax
+2A64DD3  0F B6 C0                  movzx eax, al
+
+2A64DD6  66 41 89 85 48 02 00 00   mov   word ptr [r13 + 0x248], ax
+2A64DDE  48 8B 06                  mov   rax, qword ptr [rsi]
+2A64DE1  48 3B 45 D0               cmp   rax, qword ptr [rbp - 0x30]
+2A64DE5  75 0F                     jne   0x2a64df6
+
+
+source => 2A64DD1
+return => 2A64DD6
+cave   => 32D3040
+
+
+|== default ==|
+inc eax
+movzx eax, al
+FF C0 0F B6 C0
+
+|== activated ==|
+jmp 0x32D3040
+E9 6A E2 86 00
+
+
+|== default ==|
+
+|== activated ==|
+cmp rdi, 0x0
+jnz original
+cmp r12, 0x29
+je no_recoil
+original:
+    inc eax
+    movzx eax, al
+exit:
+    jmp 0x2A64DD6
+no_recoil:
+    mov eax, 0x1
+    jmp exit
+nop
+nop
+nop
+48 83 FF 00 75 06 49 83 FC 29 74 0A FF C0 0F B6 
+C0 E9 80 1D 79 FF B8 00 00 00 00 EB F4 90 90 90
+
+
+
+0x 108C9AB208
+0x 2A64DDE  [r13 + 248]
+
+
+
+0x 2A650FA
+1D85805
+1D96F07
+ 981184
+129C66D
+ C4E430
+ C5320C
+ E6AD6A
+ 4000BF
+
+
+wrong
+rdi	    0x48
+rsi	    0x108CBF1904
+rdx	    0x88
+rcx	    0x108C9AB474
+r8	    0x0
+r9	    0x108C9AB474
+r10	    0x0
+r11	    0x1596345888
+r12	    0x108C9AB454
+r13	    0x108CBF1904
+r14	    0x48
+r15	    0x108CBF16F8
+rbp	    0x7EEFE2E70
+rbx	    0x0
+rax	    0x48
+
+correct
+rdi	    0x2F6EBC8
+rsi	    0x108CBF1904
+rdx	    0x2DD4A00
+rcx	    0x108C9AB474
+r8	    0x0
+r9	    0x3017550
+r10	    0x0
+r11	    0x1596345888
+r12	    0x108C9AB454
+r13	    0x0
+r14	    0x4B
+r15	    0x29
+rbp	    0x7EEFE2E70
+rbx	    0x2
+rax	    0x4B
+
+
+
+
+
+0x 2A64DDE
+
+  29F87E4
+  29C3B0E
+  29A179A
+  1D0A784
+  1D2492C
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+
+
+
+
+
+2A650E5  0F B6 C0               movzx eax, al
+2A650E8  66 89 86 A8 00 00 00   mov word ptr [rsi + 0xa8], ax
+2A650EF  E9 DF FD FF FF         jmp 0x2a64ed3
+
+2A650F4  48 8B 4D A0            mov rcx, qword ptr [rbp - 0x60]
+2A650F8  89 01                  mov dword ptr [rcx], eax
+
+2A650FA  48 8B 0D 47 75 A7 00   mov rcx, qword ptr [rip + 0xa77547]
+2A65101  48 8B 01               mov rax, qword ptr [rcx]
+2A65104  48 3B 45 D0            cmp rax, qword ptr [rbp - 0x30]
+
+source => 2A650F4
+return => 2A650FA
+cave   => 32D30C0
+
+
+|== default ==|
+mov rcx, qword ptr [rbp - 0x60]
+mov dword ptr [rcx], eax
+48 8B 4D A0 89 01
+
+|== activated ==|
+jmp 0x32D30C0
+E9 C7 DF 86 00 90
+
+
+|== default ==|
+
+|== activated ==|
+cmp r15, 0x29
+je no_recoil
+original:
+    mov rcx, qword ptr [rbp - 0x60]
+    mov dword ptr [rcx], eax
+exit:
+    jmp 0x2A650FA
+no_recoil:
+    mov eax, 0x0
+    jmp exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------- Godmode --------------------------------
+
+108AE50D18	4 bytes	X	100	[0]-33-108AE50000-5440KB
+
+108C9B04E0	4 bytes	X	100	[0]-33-108C4A0000-7104KB
+108CA04528	4 bytes	X	100	[0]-33-108C4A0000-7104KB
+108CA0AD60	4 bytes	X	100	[0]-33-108C4A0000-7104KB
+
+1091BBE670	4 bytes	X	100	[0]-33-1091AE0000-5568KB
+
+1094E91368	4 bytes	X	100	[0]-33-1094E50000-6784KB
+
+10A5B36720	4 bytes	X	100	[0]-33-10A5B30000-512KB
+
+
+
+
+
+108AE50D18 -> 
+108C9B04E0 -> 
+108CA04528 -> 
+108CA0AD60 -> 
+1091BBE670 ->  0x1D0FD2F | 0x1CE8898
+
+1094E91368 -> 0x1CE813E <------
+
+0x 1CE813E
+  1CE5C34
+  245B85C
+  245C519
+  22A1E8B
+  22A2294
+  245FB33
+  228E8E5
+  2241383
+  1D271DF
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+grenade/shot[0]
+0x 1CE813E
+  1CE6B09
+  24FB249
+  28E5CE3
+  28E5F28
+  28E59B6
+  1D28F9E
+  1D27456
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+grenade/shot[1]
+0x1CE8341
+  1CE6B09
+  24FB249
+  28E5CE3
+  28E5F28
+  28E59B6
+  1D28F9E
+  1D27456
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+0x1CF3546   <-- if you get to here then it will glitch and you wont die for some reason. cheat detector?
+  16770F4
+  167F44D
+  1D247FF
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+
+
+
+
+
+
+
+[MC]
+rdi	    0x1094E9 1198
+rsi	    0x11            X healthAftter (currentHealth - damage)
+rdx	    0x64            X currentHealth
+rcx	    0x0             X
+r8	    0x1091BF 0984   ?? changed to 0EA4 after negative healthAftter
+r9	    0x1094F7 EEE8   ?? -> triplet
+r10	    0x7EE549358     X
+r11	    0x0             X
+r12	    0x1094F7 EEE8   ?? -> triplet
+r13	    0x2             X
+r14	    0x1094F7 EEE8   ?? -> triplet
+r15	    0x0             X
+rbp	    0x7EE5486F0     X
+rbx	    0x0             X
+rax	    0x53            X damage
+
+
+[NME]
+rdi	    0x1094F7 EEE8
+rsi	    0xFFFFFFD1
+rdx	    0xA
+rcx	    0x10951C 5CA0
+r8	    0x1091BD D008
+r9	    0x1094E9 1198
+r10	    0x1091BD D014
+r11	    0x322
+r12	    0x1094E9 1198
+r13	    0x2
+r14	    0x0
+r15	    0x0
+rbp	    0x7EE553250
+rbx	    0x0
+rax	    0x39
+
+
+
+
+
+
+
+loc_1CE80AD -> if MC dead (r8 === 0)
+
+
+
+
+
+
+
+
+got it from tracing IDA
+    where r9 = damage
+1CE6F14  0F 84 97 03 00 00      je  0x1ce72b1
+1CE6F1A  83 3D 7B EE DF 06 00   cmp dword ptr [rip + 0x6dfee7b], 0
+1CE6F21  74 6E                  je  0x1ce6f91
+1CE6F23  80 BF 0C AC 00 00 00   cmp byte ptr [rdi + 0xac0c], 0
+
+1CE6F2A  4C 89 4C 24 28         mov qword ptr [rsp + 0x28], r9
+
+1CE6F2F  44 8B 65 50            mov r12d, dword ptr [rbp + 0x50]
+1CE6F33  44 8B 5D 48            mov r11d, dword ptr [rbp + 0x48]
+1CE6F37  44 8B 6D 40            mov r13d, dword ptr [rbp + 0x40]
+1CE6F3B  8B 5D 38               mov ebx, dword ptr [rbp + 0x38]
+
+source => 1CE6F2A
+return => 1CE6F2F
+cave   => 32D3080
+
+
+|== default ==|
+mov qword ptr [rsp + 0x28], r9
+4C 89 4C 24 28
+
+|== activated ==|
+jmp 0x32D3080
+E9 51 C1 5E 01
+
+
+|== default ==|
+
+|== activated ==|
+pushf
+cmp dword ptr [r14], 0x0
+je godmode
+original:
+    popf
+    mov qword ptr [rsp + 0x28], r9
+exit:
+    jmp 0x1CE6F2F
+godmode:
+    mov r9, 0x0
+    jmp original
+
+
+
+
+--------- Godmode for all ---------
+
+source => 1CE6F2A
+return => 1CE6F2F
+cave   => 32D3150
+
+
+|== default ==|
+mov qword ptr [rsp + 0x28], r9
+4C 89 4C 24 28
+
+|== activated ==|
+jmp 0x32D3150
+E9 21 C2 5E 01
+
+
+|== default ==|
+
+|== activated ==|
+mov r9, 0x0
+original:
+    mov qword ptr [rsp + 0x28], r9
+exit:
+    jmp 0x1CE6F2F
+
+
+
+
+rdi	    0x1091BDCFA8    X
+rsi	    0x1094F807A8    X
+rdx	    0x1091C21E0E    X
+rcx	    0x1094E91198    X
+r8	    0x7EE553700     X
+r9	    0x113           <-- damage
+r10	    0x1094F808F0    X
+r11	    0x1596340A70    X
+r12	    0x7EE553700     X
+r13	    0x0
+r14	    0x1094E9 1198   <-- maybe players ID
+r15	    0x3             X
+rbp	    0x7EE5524C0     X
+rbx	    0x1094E91198    X
+rax	    0x0             X
+
+
+
+[r14]
+        MC(1)   friendly(2)             enemy(2)
+0x00	0x00	0x7FF0234	0x7FF0235	0x7FF0267	0x7FF0239
+0x14	0x03	0x01	    0x01	    0x01	    0x01
+0x6C	0x00	0x03	    0x03	    0x03	    0x03
+0x90	0xD0015	0x00	    0x00	    0x00	    0x00
+0xB4	0x00	0x112C84	0x102C85	0x1AC12	    0x1BC12
+0x110	0x01	0x20001	    0x20001	    0x20001	    0x20001
+0x16C	0x10	0x00	    0x00	    0x00	    0x00
+
+0x18C	0x00	0x10	    0x10	    0x10	    0x10
+0x1B0	0x00	0x01	    0x01	    0x01	    0x01
+0x1CC	0x00	0x29BF8	    0x29BF8	    0x29BF8	    0x29BF8
+0x2EC	0x10	0x00	    0x00	    0x00	    0x00
+0x2F0	0x00	0x91A0398	0x9152C98	0x919CB28	0x919B3F8
+
+0x444	14	2	2	2	2
+0x55C	0	256	256	256	256
+0x620	0	298	298	298	298
+0x624	0	924	924	924	924
+
+
+might be good for OHK
+0x64	0x90000	0x01	0x01	0x07	0x07
+
+        MC      friendlys               NMEs
+0x1D8	0x00	0x12C	    0x12C	    0xAF546	0xA939E	0xACE36	0xA939E	0xA939E	0xACE36	0xACE36	0xACE36	0xACE36
+0x4E0	0x00	0x1010F	    0x10125	    0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00
+0x514	0x00	0x1020000	0x1010000	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00
+0x518	0x00	0x201	    0x102	    0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00
+0x51C	0x00	0x1010101	0x1020100	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00
+0x644	0x00	0x01	    0x01	    0x00	0x0D	0x00	0x00	0x0D	0x00	0x00	0x00	0x00
+
+
+
+
+
+
+-------------------------------- Rapid Fire --------------------------------
+
+view all (no recoil break @ 0x2A64DD6, then [r13])
+0x 1091BDBFF0
+
+
+rapid fire
+0x1091BDC7E8    ([r13 + 0x7F8])
+
+semi to auto
+0x 1091BDC80C   ([r13 + 0x81C])
+
+maybe super accuracy
+0x 1091BDCC18   ([r13 + 0xC28])
+
+
+
+
+
+
+rapid fire
+0x1091BDC7E8    ([r13 + 0x7F8])
+
+on shoot
+order
+0x 
+    29F684B -> 41 00 00 00
+    29F6875 -> 41 00 00 00
+    29D80E9 -> FF FF FF FF
+    29D80E9 -> 64 00 00 00
+    29FDE75 -> 64 00 00 00
+    29D80E9 -> 22 00 00 00
+    29D80E9 -> E6 FF FF FF
+    29D9B73 -> 00 00 00 00
+
+
+0x 29F684B, 29F6875
+  29C3B0E
+  29A179A <-- same
+  1D0A784
+  1D249E7 | 1D24988 | 1D2492C
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+0x 29D80E9
+  29B150B
+  29A179A <-- same
+  1D0A784
+  1D249E7 | 1D2492C
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+0x 29D80E9
+  29B150B
+  29A179A <-- same
+  1D0A784
+  1D2492C
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+0x 29FDE75
+  29D925F
+  29B150B
+  29A179A <-- same
+  1D0A784
+  1D2492C
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+0x 29D80E9
+  29B150B
+  29A179A <-- same
+  1D0A784
+  1D2492C
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+0x 29D80E9
+  29B150B
+  29A179A <-- same
+  1D0A784
+  1D2492C
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+0x 29D9B73
+  29B150B
+  29A179A <-- same
+  1D0A784
+  1D2492C
+   9BB088
+  13AE91A
+   D81D7A
+8000075C2
+
+
+
+29C3B0E
+29B150B
+29B150B
+29B150B
+29B150B
+29B150B
+29B150B
+
+
+0x 29C3AEC
+rdi	    0x1595D99420
+rsi	    0x0
+rdx	    0x7EEFE1E68
+rcx	    0xFFFFFFFF
+r8	    0x108C9B9688
+r9	    0xF
+r10	    0x0
+r11	    0x159633CEB8
+r12	    0x2F6CFB0
+r13	    0x0
+r14	    0x7EEFE1FF8
+r15	    0x108C9B9688
+rbp	    0x7EEFE2250
+rbx	    0x2
+rax	    0x0
+
+
+
+correct
+rdx	    0x7EE552448
+r8	    0x1091BDBFF0
+r14	    0x7EE5525D8
+r15	    0x1091BDBFF0
+rbp	    0x7EE552830
+
+
+
+0x 29F681E
+rdi	    0x7EEFE1640
+rsi	    0x1595D99420
+rdx	    0x0
+rcx	    0x255ED0
+r8	    0x3017A60
+r9	    0xF
+r10	    0x100BB7AF40
+r11	    0x159633CEB8
+r12	    0x0
+r13	    0x0
+r14	    0x108C9C6A90
+r15	    0x108C9B9688
+rbp	    0x7EEFE1AD0
+rbx	    0x0
+rax	    0x0
+
+
+
+rdi	    0x7EE551C20
+r14	    0xA0A9830
+r15	    0x1091BDBFF0
+rbp	    0x7EE5520B0
+
+0xA0A9830
+
+
+
+29F681E  31 C9                     xor   ecx, ecx
+29F6820  3D 00 80 00 00            cmp   eax, 0x8000
+29F6825  89 84 24 80 01 00 00      mov   dword ptr [rsp + 0x180], eax
+29F682C  45 89 E6                  mov   r14d, r12d
+29F682F  0F 42 C8                  cmovb ecx, eax
+29F6832  41 89 8C 1F FC 07 00 00   mov   dword ptr [r15 + rbx + 0x7fc], ecx
+29F683A  8B 84 24 10 02 00 00      mov   eax, dword ptr [rsp + 0x210]
+29F6841  85 C0                     test  eax, eax
+
+29F6843  41 89 84 1F F8 07 00 00   mov   dword ptr [r15 + rbx + 0x7f8], eax
+29F684B  7E 28                     jle   0x29f6875
+
+----------------------------------------------------------------
+29F684D  41 8B 94 1F 10 08 00 00   mov   edx, dword ptr [r15 + rbx + 0x810]
+29F6855  49 8D 8C 1F F8 07 00 00   lea   rcx, [r15 + rbx + 0x7f8]
+29F685D  89 D6                     mov   esi, edx
+29F685F  C1 FE 1F                  sar   esi, 0x1f
+29F6862  C4 E2 48 F2 D2            andn  edx, esi, edx
+29F6867  29 D0                     sub   eax, edx
+29F6869  BA 01 00 00 00            mov   edx, 1
+29F686E  85 C0                     test  eax, eax
+29F6870  0F 4F D0                  cmovg edx, eax
+29F6873  89 11                     mov   dword ptr [rcx], edx
+
+source => 29F6843
+return => 29F684D
+cave   => 32D30C0
+
+
+|== default ==|
+mov dword ptr [r15 + rbx + 0x7f8], eax
+jle 0x29f6875
+41 89 84 1F F8 07 00 00 7E 28
+
+|== activated ==|
+jmp 0x32D30C0
+E9 78 C8 8D 00 90 90 90 90 90
+
+
+|== default ==|
+
+|== activated ==|
+pushf
+cmp 
+mov dword ptr [r15 + rbx + 0x7f8], 0x0
+mov dword ptr [r15 + rbx + 0x810], 0x0
+mov eax, 0x0
+jmp 0x29F684D
+
+
+
+
+
+
+
+
+-------------------------------- Super Accuracy --------------------------------
+
+
+
+
+2994FAD
+29F900B
+0x29F2452
+
+
+possible default values for gun accuracy
+
+Kastov 762  ->  11.1771     (rifle)
+EBR-14      ->  29.8473     (sniper)
+
+
+
+
+0x 260BD6A
+
+
+
+260BD46  48 8B 85 00 FC FF FF         mov rax, qword ptr [rbp - 0x400]
+260BD4D  C5 FA 5E 85 F0 FB FF FF      vdivss xmm0, xmm0, dword ptr [rbp - 0x410]
+260BD55  C5 E2 2A 88 A0 03 00 00      vcvtsi2ss xmm1, xmm3, dword ptr [rax + 0x3a0]
+
+260BD5D  C5 F2 5F C0                  vmaxss xmm0, xmm1, xmm0
+
+260BD61  C4 C1 7A 11 87 08 8B 0E 00   vmovss dword ptr [r15 + 0xe8b08], xmm0
+260BD6A  49 63 C6                     movsxd rax, r14d
+260BD6D  48 8D 0D 3C 32 CC 08         lea rcx, [rip + 0x8cc323c]
+260BD74  48 8D BD 00 FD FF FF         lea rdi, [rbp - 0x300]
+260BD7B  48 8D B5 10 FC FF FF         lea rsi, [rbp - 0x3f0]
+
+source => 260BD5D
+return => 
+cave   => 
+
+
+|== default ==|
+vmaxss xmm0, xmm1, xmm0
+C5 F2 5F C0
+
+|== activated ==|
+vxorps xmm0, xmm0, xmm0
+C5 F8 57 C0
+
+
+|== default ==|
+
+|== activated ==|
+vxorps xmm0, xmm0, xmm0
+vmovss dword ptr [r15 + 0xe8b08], xmm0
+jmp 0x260BD6A
+C4 C1 7A 11 87 08 8B 0E 00 E9 7C 8B 33 FF 90 90
+
+
+
+29F900B
+9090909090909090
+C5FA1183280C0000
+
+
+
+
+
+
+
+
+
+
+-------------------------------- One-hit Kill ---------------------------------
+
+
+        MC      friendlys               NMEs
+0x1D8	0x00	0x12C	    0x12C	    0xAF546	0xA939E	0xACE36	0xA939E	0xA939E	0xACE36	0xACE36	0xACE36	0xACE36
+0x4E0	0x00	0x1010F	    0x10125	    0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00        X
+0x514	0x00	0x1020000	0x1010000	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00        X
+0x518	0x00	0x201	    0x102	    0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00        X
+0x51C	0x00	0x1010101	0x1020100	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00	0x00        X
+0x644	0x00	0x01	    0x01	    0x00	0x0D	0x00	0x00	0x0D	0x00	0x00	0x00	0x00        X
+
+
+
+
+
+        MC          friend          NMEs                                                vehicles
+0x00	0x00	    0x7FF0179	    0x7FF021C	0x7FF0142	0x7FF027E	0x7FF01DE	    0x7FF01B2	0x7FF0198	0x7FF01B3	0x7FF01A7
+0x08	0x70001	    0x70013	        0x70013	    0x70013	    0x70013	    0x70013	        0x06	    0x06	    0x06	    0x06
+0x14	0x03	    0x01	        0x01	    0x01	    0x01	    0x01	        0x00	    0x00	    0x00	    0x00
+0xB4	0x00	    0x71800776	    0x7F62F536	0x120C08	0x201C09	0xF9EDF228	    0x00	    0x00	    0x00	    0x00
+0xDC	0x00	    0xDFF02	        0x124D28	0x1254C6	0x124D28	0x1253FE	    0x00	    0x00	    0x00	    0x00
+0x120	0x41BC0000	0x42100000	    0x42100000	0x42100000	0x42100000	0x42100000	    0x00	    0x00	    0x00	    0x00
+0x164	0x00	    0xECE3C	        0x12587C	0x12584A	0x124B98	0x1256EC	    0x00	    0x00	    0x00	    0x00
+0x170	0xA35F350	0xA35F428	    0xA35F860	0xA35F500	0xA35F788	0xA3601A8	    0x00	    0x00	    0x00	    0x00
+0x188	0x00	    0x969DE408	    0x969EDC00	0x969E15A0	0x969EAA68	0x96A0FD88	    0x00	    0x00	    0x00	    0x00
+0x1AC	0x00	    0x2266E	        0x2E600	    0x2E6B8	    0x2E6B8	    0x2E6B8	        0x00	    0x00	    0x00	    0x00
+0x1B0	0x00	    0x02	        0x01	    0x01	    0x01	    0x01	        0x00	    0x00	    0x00	    0x00
+0x1B4	0x00	    0x06	        0x02	    0x02	    0x02	    0x02	        0x00	    0x00	    0x00	    0x00
+0x1B8	0x300	    0x40200200	    0x40000200	0x40000200	0x40000200	0x40000200	    0x00	    0x00	    0x00	    0x00
+0x1C0	0x14010	    0x24010	        0x24010	    0x24010	    0x24010	    0x24010	        0x00	    0x00	    0x00	    0x00
+0x1C4	0x5DEF	    0x5DEE	        0x5DEE	    0x5DEE	    0x5DEE	    0x5DEE	        0x5DEF	    0x5DEF	    0x5DEF	    0x5DEF
+0x1CC	0x00	    0x1258AE	    0x1258AE	0x1258AE	0x1258AE	0x1258AE	    0x00	    0x00	    0x00	    0x00
+0x1D8	0x00	    0x12C	        0x5BF4A	    0x10E7EE	0x10E7EE	0x10E7EE	    0x00	    0x00	    0x00	    0x00
+0x330	0x00	    0x33E	        0x33E	    0x33E	    0x33E	    0x33E	        0x00	    0x00	    0x00	    0x00
+0x4F8	0x00	    0x48	        0x38	    0x36	    0x36	    0x36	        0x00	    0x00	    0x00	    0x00
+0x508	0x00	    0x1010101	    0x2030101	0x1050901	0x1030501	0x1020501	    0x00	    0x00	    0x00	    0x00
+0x50C	0x00	    0x11701	        0x10100	    0x2010B00	0x10010100	0xF010F00	    0x00	    0x00	    0x00	    0x00
+0x510	0x00	    0x8002802	    0x1041900	0x1010900	0x1010300	0x1012300	    0x00	    0x00	    0x00	    0x00
+0x620	0x00	    0x12A	        0x12A	    0x12A	    0x12A	    0x12A	        0x00	    0x00	    0x00	    0x00
+
+
+
+
+
+1CE6F0B  41 BF 03 00 00 00      mov r15d, 3
+1CE6F11  83 F8 13               cmp eax, 0x13
+1CE6F14  0F 84 97 03 00 00      je 0x1ce72b1
+1CE6F1A  83 3D 7B EE DF 06 00   cmp dword ptr [rip + 0x6dfee7b], 0
+1CE6F21  74 6E                  je 0x1ce6f91
+
+1CE6F23  80 BF 0C AC 00 00 00   cmp byte ptr [rdi + 0xac0c], 0
+
+1CE6F2A  4C 89 4C 24 28         mov qword ptr [rsp + 0x28], r9
+1CE6F2F  44 8B 65 50            mov r12d, dword ptr [rbp + 0x50]
+1CE6F33  44 8B 5D 48            mov r11d, dword ptr [rbp + 0x48]
+1CE6F37  44 8B 6D 40            mov r13d, dword ptr [rbp + 0x40]
+
+source => 1CE6F23
+return => 1CE6F2A
+cave   => 32D3190
+
+
+|== default ==|
+cmp byte ptr [rdi + 0xac0c], 0
+80 BF 0C AC 00 00 00
+
+|== activated ==|
+jmp 0x32D3190
+E9 68 C2 5E 01 90 90
+
+
+|== default ==|
+
+|== activated ==|
+cmp dword ptr [r14], 0x0
+je original
+cmp dword ptr [r14 + 0x14], 0x01
+je OHK
+original:
+    cmp byte ptr [rdi + 0xac0c], 0
+exit:
+    jmp 0x1CE6F2A
+OHK:
+    mov r9, 0x186A0
+    jmp original
+41 83 3E 00 74 0D 41 81 BE D8 01 00 00 2C 01 00 
+00 75 0C 80 BF 0C AC 00 00 00 E9 7B 3D A1 FE 49 
+C7 C1 10 27 00 00 EB EB
+
+
+
+
+
+
+
+-------------------------------- Infinite Crafting Items ---------------------------------
+
+get + onCraft
+0x1677C88
+
+

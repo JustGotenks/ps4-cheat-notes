@@ -1,0 +1,175 @@
+====================================
+==== Code cave start: 0x173B000 ====
+====================================
+
+
+------------------------Infinite Health------------------------
+
+122711B   49 89 FE                  mov       r14, rdi
+122711E   49 8B 07                  mov       rax, qword ptr [r15]
+1227121   48 89 45 D0               mov       qword ptr [rbp-0x30], rax
+1227125   44 8B A7 34 19 00 00      mov       r12d, dword ptr [rdi+0x1934]
+
+122712C   C5 FA 11 87 34 19 00 00   vmovss    dword ptr [rdi+0x1934], xmm0
+1227134   C5 F8 2E 87 30 19 00 00   vucomiss  xmm0, dword ptr [rdi+0x1930]
+
+122713C   48 8B BF B8 16 00 00      mov       rdi, qword ptr [rdi+0x16B8]
+1227143   73 0F                     jae       0x1227154
+1227145   BE 75 00 00 00            mov       esi, 0x75
+122714A   E8 51 66 02 00            call      0x124D7A0
+
+Source => 122712c   E2712C
+Return => 1227134   E2712C
+Cave   => 173B000   133B000
+
+
+|== default ==|
+C5 FA 11 87 34 19 00 00
+vmovss dword ptr [rdi+0x1934], xmm0
+
+|== activated ==|
+E9 CF 3E 51 00 90 90 90
+jmp 0x173B000
+nop nop nop
+
+
+
+|== default ==|
+null
+
+|== activated ==|
+81 3F 18 56 82 01 75 12 C7 87 30 19 00 00 00 00
+7A 44 C5 FA 10 87 30 19 00 00 C5 FA 11 87 34 19
+00 00 E9 0D C1 AE FF 90
+cmp_player:
+  cmp dword ptr [rdi], 0x1825618
+  jne original
+set_health:
+  // 0x447A0000 is 1000 in float
+  mov dword ptr [rdi+0x1930], 0x447A0000
+  vmovss xmm0, dword ptr [rdi+0x1930]
+original:
+  vmovss dword ptr [rdi+0x1934], xmm0
+  jmp 0x1227134
+  nop
+
+
+------------------------Max Resources (on get)------------------------
+
+AE0170   EB 10                     jmp   0xAE0182
+AE0172   49 8D 87 78 4A 00 00      lea   rax, [r15+0x4A78]
+AE0179   EB 07                     jmp   0xAE0182
+AE017B   49 8D 87 30 0C 00 00      lea   rax, [r15+0xC30]
+
+AE0182   42 89 5C A8 08            mov   dword ptr [rax+r13*4+8], ebx
+AE0187   41 80 BF E0 11 09 00 00   cmp   byte ptr [r15+0x911E0], 0
+
+AE018F   0F 84 82 00 00 00         je    0xAE0217
+AE0195   41 FF 87 E8 11 09 00      inc   dword ptr [r15+0x911E8]
+AE019C   41 80 8F EC 11 09 00 01   or    byte ptr [r15+0x911EC], 1
+AE01A4   41 FF 87 E4 11 09 00      inc   dword ptr [r15+0x911E4]
+
+Source => AE0182    6E0182
+Return => AE0187    6E0187
+Cave   => 173B040   133B040
+
+
+|== default ==|
+42 89 5C A8 08
+mov dword ptr [rax+r13*4+8], ebx
+
+|== activated ==|
+E9 B9 AE C5 00
+jmp 0x173B040
+
+
+
+|== default ==|
+null
+
+|== activated ==|
+42 C7 44 A8 08 E7 03 00 00 E9 39 51 3A FF 90 90
+mov dword ptr [rax+r13*4+8], 0x3E7
+jmp 0xAE0187
+
+
+------------------------Infinite Resolve------------------------
+
+B363A8   49 89 FC                  mov     r12, rdi
+B363AB   48 8B 00                  mov     rax, qword ptr [rax]
+B363AE   48 89 45 D0               mov     qword ptr [rbp-0x30], rax
+B363B2   44 8B AF 54 43 00 00      mov     r13d, dword ptr [rdi+0x4354]
+
+B363B9   C5 FA 11 87 54 43 00 00   vmovss  dword ptr [rdi+0x4354], xmm0
+B363C1   48 39 3D D0 8A 12 02      cmp     qword ptr [rip+0x2128AD0], rdi
+
+B363C8   0F 84 49 02 00 00         je      0xB36617
+B363CE   4C 8D B5 40 FF FF FF      lea     r14, [rbp-0xC0]
+B363D5   4C 89 E6                  mov     rsi, r12
+B363D8   BA 0F 00 00 00            mov     edx, 0xF
+
+Source => B363B9    7363B9
+Return => B363C1    7363C1
+Cave   => 173B060   133B060
+
+
+|== default ==|
+C5 FA 11 87 54 43 00 00
+vmovss dword ptr [rdi+0x4354], xmm0
+
+|== activated ==|
+E9 A2 4C C0 00 90 90 90
+jmp 0x173B060
+nop nop nop
+
+
+
+|== default ==|
+null
+
+|== activated ==|
+C7 87 54 43 00 00 00 00 20 41 E9 52 B3 3F FF 90
+// 0x41200000 is 10 in float
+mov dword ptr [rdi+0x4354], 0x41200000
+jmp 0xB363C1
+nop
+
+
+------------------------Infinite Tech Points (enable after earn 1 point)------------------------
+
+AE2CA8   4C 01 D1                  add   rcx, r10
+AE2CAB   42 2B 7C A9 58            sub   edi, dword ptr [rcx+r13*4+0x58]
+AE2CB0   EB 02                     jmp   0xAE2CB4
+AE2CB2   31 FF                     xor   edi, edi
+
+AE2CB4   43 01 74 AC 58            add   dword ptr [r12+r13*4+0x58], esi
+AE2CB9   4C 8D 3D 20 3F 66 03      lea   r15, [rip+0x3663F20]
+
+AE2CC0   4D 85 C0                  test  r8, r8
+AE2CC3   47 8B 8C AF 74 0C 00 00   mov   r9d, dword ptr [r15+r13*4+0xC74]
+AE2CCB   74 08                     je    0xAE2CD5
+AE2CCD   47 03 8C A8 EC 4C 0C 00   add   r9d, dword ptr [r8+r13*4+0xC4CEC]
+
+Source => AE2CB4    6E2CB4
+Return => AE2CB9    6E2CB9
+Cave   => 173B080   133B080
+
+
+|== default ==|
+43 01 74 AC 58
+add dword ptr [r12+r13*4+0x58], esi
+
+|== activated ==|
+E9 C7 83 C5 00
+jmp 0x173B080
+
+
+
+|== default ==|
+null
+
+|== activated ==|
+43 C6 44 AC 58 00 E9 2E 7C 3A FF 90
+mov byte ptr [r12+r13*4+0x58], 0
+jmp 0xAE2CB9
+nop

@@ -1,0 +1,652 @@
+
+------------------------Infinite Health v1------------------------
+
+health
+2C2A53558	float	X	46	[0]-33-2C2280000-16400KB
+
+lost
+0x8087EE5B
+
+gain / used health potion
+0x8087EAAD
+
+
+80801978  48 8B 3B              mov     rdi, qword ptr [rbx]
+8080197B  48 8B 87 B8 00 00 00  mov     rax, qword ptr [rdi + 0xb8]
+80801982  80 78 01 00           cmp     byte ptr [rax + 1], 0
+80801986  75 E2                 jne     0x8080196a
+
+80801988  C5 FA 10 45 EC        vmovss  xmm0, dword ptr [rbp - 0x14]
+
+8080198D  4C 89 F7              mov     rdi, r14
+80801990  31 F6                 xor     esi, esi
+80801992  E8 19 D4 07 00        call    0x8087edb0
+
+
+source => 80801988
+return => 8080198D
+cave   => 1CA3B6C   X
+
+
+|== default ==|
+vmovss  xmm0, dword ptr [rbp - 0x14]
+C5 FA 10 45 EC
+
+|== activated ==|
+jmp 0x1CA3B6C
+E9 DF 21 4A 81
+
+
+|== default ==|
+
+|== activated ==|
+xorps xmm0, xmm0
+vmovss dword ptr [rbp - 0x14], xmm0
+jmp 0x8080198D
+nop
+nop
+nop
+0F 57 C0 C5 FA 11 45 EC E9 14 DE B5 7E 90 90 90
+
+
+
+
+
+------------------------Infinite Health v2------------------------
+
+8087EDDF  C6 05 37 9E 63 02 01  mov         byte ptr [rip + 0x2639e37], 1
+8087EDE6  31 FF                 xor         edi, edi
+8087EDE8  E8 A3 F4 11 00        call        0x8099e290
+
+8087EDED  C5 FA 10 4B 18        vmovss      xmm1, dword ptr [rbx + 0x18]
+
+8087EDF2  C5 EA 2A C0           vcvtsi2ss   xmm0, xmm2, eax
+8087EDF6  31 FF                 xor         edi, edi
+8087EDF8  C5 F2 5C C0           vsubss      xmm0, xmm1, xmm0
+8087EDFC  E8 8F F4 11 00        call        0x8099e290
+8087EE01  41 89 C6              mov         r14d, eax
+8087EE04  48 8B 03              mov         rax, qword ptr [rbx]
+
+source => 8087EDED
+return => 8087EDF2
+cave   => 1CA3B6C
+
+
+|== default ==|
+vmovss xmm1, dword ptr [rbx + 0x18]
+C5 FA 10 4B 18
+
+|== activated ==|
+jmp 0x1CA3B6C
+E9 7A 4D 42 81
+
+
+|== default ==|
+
+|== activated ==|
+pushf
+cmp r12, 0x5
+je godmode
+original:
+    vmovss xmm1, dword ptr [rbx + 0x18]
+exit:
+    popf
+    jmp 0x8087EDF2
+godmode:
+    vmovss xmm1, dword ptr [rbx + 0x1C]
+    vmovss dword ptr [rbx + 0x18], xmm1
+    xor rax, rax
+    jmp exit
+66 9C 49 83 FC 05 74 0C C5 FA 10 4B 18 66 9D E9 
+72 B2 BD 7E C5 FA 10 4B 1C C5 FA 11 4B 18 48 31 
+C0 EB EA 90
+
+
+
+MC
+rdi	    0x201F812F0     X
+rsi	    0x4B6D94        X
+rdx	    0x16DB28        X
+rcx	    0x96DB28        X
+r8	    0x0             X
+r9	    0x40D2DB65      X
+r10	    0x800000        X
+r11	    0x120000        X
+r12	    0x5
+r13	    0x2DB72 3B40    X
+r14	    0x2D22E 4000
+r15	    0x28
+rbp	    0x7EEFF50A0     X
+rbx	    0x2D22E 4000
+rax	    0x7             X
+
+
+[NME 1]
+rdi	    0x201F812F0
+rsi	    0x666668
+rdx	    0x4CCCD0
+rcx	    0xCCCCD0
+r8	    0x0
+r9	    0x4099999A
+r10	    0x800000
+r11	    0x120000
+r12	    0x2DBCAAD68
+r13	    0x2D7E8 C6C0
+r14	    0x2DBCA AC40
+r15	    0x82ED13C8
+rbp	    0x7EEFF 5FF0
+rbx	    0x2DCCC C100
+rax	    0x5
+
+
+
+
+
+[NME 2]
+rdi	    0x201F812F0
+rsi	    0x666668
+rdx	    0x4CCCD0
+rcx	    0xCCCCD0
+r8	    0x0
+r9	    0x4099999A
+r10	    0x800000
+r11	    0x120000
+r12	    0x2DBCAABA8
+r13	    0x2BCBE 6000
+r14	    0x2DBCA AA80
+r15	    0x82ED13C8
+rbp	    0x7EEFF 5FF0
+rbx	    0x2DCCC C000
+rax	    0x5
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------Infinite Stamina------------------------
+
+
+stamina
+Delete	2BD643608	float	X	47	[0]-33-2BD580000-16400KB	False	
+
+
+
+hit
+0x808004E6
+
+
+get
+0x807FFB39
+
+808004BB  C5 FA 10 45 C4  vmovss   xmm0, dword ptr [rbp - 0x3c]
+808004C0  C5 FA 10 55 C0  vmovss   xmm2, dword ptr [rbp - 0x40]
+
+808004C5  C5 FA 5C 45 C8  vsubss   xmm0, xmm0, dword ptr [rbp - 0x38]
+
+808004CA  C5 F0 57 C9     vxorps   xmm1, xmm1, xmm1
+808004CE  31 FF           xor      edi, edi
+
+source => 808004C5
+return => 
+cave   => 
+
+
+|== default ==|
+vsubss xmm0, xmm0, dword ptr [rbp - 0x38]
+C5 FA 5C 45 C8
+
+|== activated ==|
+nopppp
+
+
+
+
+
+------------------------Infinite Ammo/Potions (on use)------------------------
+
+bombs
+2EB140CD4	4 bytes	X	4	[0]-33-2EA2C0000-16400KB	False	
+
+
+
+got
+0x807FA37D
+
+
+throw
+0x807FA855
+
+
+
+807FA842  BE E7 03 00 00        mov     esi, 0x3e7
+807FA847  31 D2                 xor     edx, edx
+807FA849  E8 F2 A7 FF FF        call    0x807f5040
+
+807FA84E  44 29 B3 D4 00 00 00  sub     dword ptr [rbx + 0xd4], r14d
+
+807FA855  41 B6 01              mov     r14b, 1
+807FA858  41 83 FC 02           cmp     r12d, 2
+807FA85C  0F 85 B3 00 00 00     jne     0x807fa915
+
+source => 807FA84E
+return => 807FA855
+cave   => 1CA3BFC
+
+
+|== default ==|
+sub dword ptr [rbx + 0xd4], r14d
+44 29 B3 D4 00 00 00
+
+|== activated ==|
+jmp 0x1CA3BFC
+E9 A9 93 4A 81 90 90
+
+
+|== default ==|
+
+|== activated ==|
+push rax
+mov eax, dword ptr [rbx + 0xd8]
+mov dword ptr [rbx + 0xd4], eax
+mov rdx, 0x0
+mov r14d, 0x0
+pop rax
+jmp 0x807FA855
+nop
+48 C7 C2 00 00 00 00 41 BE 00 00 00 00 F3 41 0F 
+2A CE E9 52 6C B5 7E 90
+
+
+
+
+------------------------One-hit Kill v1------------------------
+
+enemy health
+2BF6C2B18	float	X	77	[0]-33-2BEAC0000-16400KB
+
+hit
+0x8087EE5B
+
+
+0x8087EE5B
+
+enemy hit
+rdi	    0x0
+rsi	    0x201809D20 <-- maybe. also worked with boss
+rdx	    0xFFC00000  <- changed within itself
+rcx	    0x0
+r8	    0x0
+r9	    0x0
+r10	    0x800000
+r11	    0x120000
+r12	    0x2BF981BA8
+r13	    0x2C78E46C0 <- changed within itself
+r14	    0x41        <- changed within itself
+r15	    0x82ED13C8
+rbp	    0x7EEFF5FF0
+rbx	    0x2BF6C2B00
+rax	    0x82ED1460
+
+
+
+
+player hit
+rdi	    0x0
+rsi	    0x201910160 <-- maybe
+rdx	    0x0
+rcx	    0xFFFFFFFF
+r8	    0x0
+r9	    0x0
+r10	    0x800000
+r11	    0x120000
+r12	    0x5
+r13	    0x2E776C480 <- changed within itself
+r14	    0x32        <- changed within itself
+r15	    0x28
+rbp	    0x7EEFF50A0
+rbx	    0x2C2A53540
+rax	    0x82ED1460
+
+
+
+
+        player      enemy 1     enemy 2
+0x00	0x19E87F0	0x1671B20	0x1671B20
+0x28	0xC3161330	0x1000000	0x1000000
+0xE8	0x01	    0x00	    0x00        X
+
+
+
+
+
+
+8087EE46  C4 C1 62 2A C6  vcvtsi2ss xmm0, xmm3, r14d
+8087EE4B  C5 F0 57 C9     vxorps    xmm1, xmm1, xmm1
+8087EE4F  31 FF           xor       edi, edi
+8087EE51  E8 EA CE 08 01  call      0x8190bd40
+
+8087EE56  C5 FA 11 43 18  vmovss    dword ptr [rbx + 0x18], xmm0
+
+8087EE5B  48 83 C4 10     add       rsp, 0x10
+8087EE5F  5B              pop       rbx
+8087EE60  41 5E           pop       r14
+8087EE62  5D              pop       rbp
+
+source => 8087EE56
+return => 8087EE5B
+cave   => 1CA3B9C   X
+
+
+|== default ==|
+vmovss dword ptr [rbx + 0x18], xmm0
+C5 FA 11 43 18
+
+|== activated ==|
+jmp 0x1CA3B9C
+E9 41 4D 42 81
+
+
+|== default ==|
+
+|== activated ==|
+pushf
+cmp esi, 0x201910160
+je original
+mov r14d, 0x0
+cvtsi2ss xmm0, r14d
+cvtsi2ss xmm1, r14d
+original:
+    vmovss dword ptr [rbx + 0x18], xmm0
+popf
+jmp 0x8087EE5B
+nop
+nop
+66 9C 81 FE 60 01 91 01 74 10 41 BE 00 00 00 00 
+F3 41 0F 2A C6 F3 41 0F 2A CE C5 FA 11 43 18 66 
+9D E9 99 B2 BD 7E 90 90
+
+
+
+
+------------------------One-hit Kill v2------------------------
+
+
+8087EDDF  C6 05 37 9E 63 02 01  mov         byte ptr [rip + 0x2639e37], 1
+8087EDE6  31 FF                 xor         edi, edi
+8087EDE8  E8 A3 F4 11 00        call        0x8099e290
+8087EDED  C5 FA 10 4B 18        vmovss      xmm1, dword ptr [rbx + 0x18]
+
+8087EDF2  C5 EA 2A C0           vcvtsi2ss   xmm0, xmm2, eax
+8087EDF6  31 FF                 xor         edi, edi
+
+8087EDF8  C5 F2 5C C0           vsubss      xmm0, xmm1, xmm0
+8087EDFC  E8 8F F4 11 00        call        0x8099e290
+8087EE01  41 89 C6              mov         r14d, eax
+8087EE04  48 8B 03              mov         rax, qword ptr [rbx]
+
+source => 8087EDF2
+return => 8087EDF8
+cave   => 1CA3BBC
+
+
+|== default ==|
+vcvtsi2ss   xmm0, xmm2, eax
+xor         edi, edi
+C5 EA 2A C0 31 FF
+
+|== activated ==|
+jmp 0x1CA3BBC
+E9 C5 4D 42 81 90
+
+
+|== default ==|
+
+|== activated ==|
+pushf
+cmp r12, 0x5
+je original
+vcvtsi2ss xmm1, xmm2, eax
+vmovss dword ptr [rbx + 0x18], xmm1
+original:
+    vcvtsi2ss xmm0, xmm2, eax
+    xor edi, edi
+popf
+jmp 0x8087EDF8
+66 9C 81 3B F0 87 9E 01 74 09 C5 EA 2A C8 C5 FA 
+11 4B 18 C5 EA 2A C0 31 FF 66 9D E9 1C B2 BD 7E
+
+
+
+------------------------No Gold waste------------------------
+coins
+
+2C2A53630	4 bytes	X	19	[0]-33-2C2280000-16400KB	False	
+
+
+got coins
+0x807F4AA5
+
+spent
+0x807FCD90
+
+
+
+
+
+got coins
+0x807F4AA5
+
+807F4A7D  83 BF E0 00 00 00 00  cmp     dword ptr [rdi + 0xe0], 0
+807F4A84  75 05                 jne     0x807f4a8b
+807F4A86  E8 05 A4 63 01        call    0x81e2ee90
+807F4A8B  44 01 F3              add     ebx, r14d
+
+807F4A8E  BA FF FF FF 7F        mov     edx, 0x7fffffff
+
+807F4A93  31 F6                 xor     esi, esi
+807F4A95  31 C9                 xor     ecx, ecx
+
+source => 807F4A8E
+return => 807F4A93
+cave   => 1CA3C3C
+
+
+|== default ==|
+mov edx, 0x7fffffff
+BA FF FF FF 7F
+
+|== activated ==|
+jmp 0x1CA3C3C
+E9 A9 F1 4A 81
+
+
+|== default ==|
+
+|== activated ==|
+mov ebx, 0xF423F
+original:
+    mov edx, 0x7fffffff
+jmp 0x807F4A93
+BB 3F 42 0F 00 BA FF FF FF 7F E9 48 0E B5 7E 90
+
+
+
+
+
+spent
+0x807FCD90
+
+807FCD67  83 BF E0 00 00 00 00  cmp     dword ptr [rdi + 0xe0], 0
+807FCD6E  75 05                 jne     0x807fcd75
+807FCD70  E8 1B 21 63 01        call    0x81e2ee90
+
+807FCD75  44 29 FB              sub     ebx, r15d
+
+807FCD78  BA FF FF FF 7F        mov     edx, 0x7fffffff
+807FCD7D  31 F6                 xor     esi, esi
+807FCD7F  31 C9                 xor     ecx, ecx
+
+source => 807FCD75
+return => 
+cave   => 
+
+
+|== default ==|
+sub ebx, r15d
+44 29 FB
+
+|== activated ==|
+sub ebx, 0x0
+83 EB 00
+
+
+
+
+
+
+
+------------------------ Infinite Arrows ------------------------
+
+0x8092B9C8
+
+0x8092B133
+
+
+
+8092B9B0  72 10                    jb     0x8092b9c2
+8092B9B2  C5 FA 10 87 A4 03 00 00  vmovss xmm0, dword ptr [rdi + 0x3a4]
+8092B9BA  C5 FA 11 87 94 03 00 00  vmovss dword ptr [rdi + 0x394], xmm0
+
+8092B9C2  FF 8F 9C 03 00 00        dec    dword ptr [rdi + 0x39c]
+
+8092B9C8  48 8B 87 68 03 00 00     mov    rax, qword ptr [rdi + 0x368]
+8092B9CF  48 85 C0                 test   rax, rax
+8092B9D2  74 1C                    je     0x8092b9f0
+
+source => 8092B9C2
+return => 
+cave   => 
+
+
+|== default ==|
+dec dword ptr [rdi + 0x39c]
+FF 8F 9C 03 00 00
+
+|== activated ==|
+90 90 90 90 90 90
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------ Infinite something [wizard] ------------------------
+
+throw
+0x80A8DB61
+
+
+get
+0x80A8D970
+
+
+
+
+
+
+
+80A8DB40  C5 F2 59 40 18               vmulss xmm0, xmm1, dword ptr [rax + 0x18]
+80A8DB45  C5 FA 5E 0D 2B 72 4D 01      vdivss xmm1, xmm0, dword ptr [rip + 0x14d722b]
+80A8DB4D  C4 C1 7A 11 8E 70 03 00 00   vmovss dword ptr [r14 + 0x370], xmm1
+80A8DB56  EB 15                        jmp    0x80a8db6d
+
+80A8DB58  C4 C1 7A 11 8E 70 03 00 00   vmovss dword ptr [r14 + 0x370], xmm1
+
+80A8DB61  49 8B 86 68 03 00 00         mov    rax, qword ptr [r14 + 0x368]
+80A8DB68  48 85 C0                     test   rax, rax
+80A8DB6B  74 57                        je     0x80a8dbc4
+80A8DB6D  48 8D 0D EC 38 44 02         lea    rcx, [rip + 0x24438ec]
+
+source => 80A8DB58
+return => 80A8DB61
+cave   => 1CA3C6C
+
+
+|== default ==|
+vmovss dword ptr [r14 + 0x370], xmm1
+C4 C1 7A 11 8E 70 03 00 00
+
+|== activated ==|
+jmp 0x1CA3C6C
+E9 0F 61 21 81 90 90 90 90
+
+
+
+|== default ==|
+
+|== activated ==|
+mov rax, qword ptr [r14 + 0x368]
+vmovss xmm1, dword ptr [rax + 0x18]
+vmovss dword ptr [r14 + 0x370], xmm1
+jmp 0x80A8DB61
+
+
+
+
+
+
+
+80A8D954  C5 FA 11 4D F4            vmovss  dword ptr [rbp - 0xc], xmm1
+80A8D959  E8 52 1A 2D 01            call    0x81d5f3b0
+80A8D95E  C5 FA 59 45 F0            vmulss  xmm0, xmm0, dword ptr [rbp - 0x10]
+80A8D963  C5 FA 58 45 F4            vaddss  xmm0, xmm0, dword ptr [rbp - 0xc]
+
+80A8D968  C5 FA 11 83 70 03 00 00   vmovss  dword ptr [rbx + 0x370], xmm0
+
+80A8D970  48 8B 83 68 03 00 00      mov     rax, qword ptr [rbx + 0x368]
+80A8D977  48 85 C0                  test    rax, rax
+80A8D97A  0F 84 D7 00 00 00         je      0x80a8da57
+80A8D980  C5 FA 10 48 18            vmovss  xmm1, dword ptr [rax + 0x18]
+
+source => 80A8D968
+return => 80A8D970
+cave   => 1CA3C9C   X
+
+
+|== default ==|
+vmovss dword ptr [rbx + 0x370], xmm0
+C5 FA 11 83 70 03 00 00
+
+|== activated ==|
+jmp 0x1CA3C9C
+E9 2F 63 21 81 90 90 90
+
+
+
+|== default ==|
+
+|== activated ==|
+mov rax, qword ptr [rbx + 0x368]
+vmovss xmm0, dword ptr [rax + 0x18]
+vmovss dword ptr [rbx + 0x370], xmm0
+jmp 0x80A8D970
+
+
+
+

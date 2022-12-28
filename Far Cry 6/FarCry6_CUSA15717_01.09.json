@@ -1,0 +1,225 @@
+{
+  "name": "Far Cry 6",
+  "id": "CUSA15717",
+  "version": "01.09",
+  "process": "eboot.bin",
+  "mods": [
+    {
+      "name": "No Damage",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "4BBA510",
+          "on": "9090909090",
+          "off": "E88BBBDEFB"
+        },
+        {
+          "offset": "3C48E9F",
+          "on": "9090909090",
+          "off": "E8CC05FFFF"
+        },
+        {
+          "offset": "3C349B6",
+          "on": "909090909090",
+          "off": "FF9048050000"
+        },
+        {
+          "offset": "3C2D2E1",
+          "on": "E9A60300009090",
+          "off": "488B0560D9D604"
+        }
+      ]
+    },
+    {
+      "name": "Infinite Sprint",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "3C2E380",
+          "on": "909090909090",
+          "off": "FF9070050000"
+        }
+      ]
+    },
+    {
+      "name": "Infinite Ammo/Throwables",
+      "hint": "Buying/trading item stock doesnt reduce",
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "173B1F3",
+          "on": "83E800",
+          "off": "4429F0"
+        }
+      ]
+    },
+    {
+      "name": "One-hit Kill",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80D7030",
+          "on": "669C81FD60A4CCEE740AC5FA108560FFFFFFEB0CC5F857C0C5FA118560FFFFFF669DE9D559B4FB90",
+          "off": "669C81FD60A4CCEE740AC5FA108560FFFFFFEB0CC5F857C0C5FA118560FFFFFF669DE9D559B4FB90"
+        },
+        {
+          "offset": "3C1CA24",
+          "on": "E907A64B04909090",
+          "off": "C5FA108560FFFFFF"
+        }
+      ]
+    },
+    {
+      "name": "No Reload",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "50863FC",
+          "on": "909090",
+          "off": "4429FE"
+        }
+      ]
+    },
+    {
+      "name": "No Supressor Overheat",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80D7070",
+          "on": "0F57C00F57C9C5FA1145DCE97E2608FD",
+          "off": "0F57C00F57C9C5FA1145DCE97E2608FD"
+        },
+        {
+          "offset": "51596F9",
+          "on": "E972D9F702",
+          "off": "C5FA1145DC"
+        }
+      ]
+    },
+    {
+      "name": "No Recoil",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "50830EA",
+          "on": "9090909090",
+          "off": "E8A1561100"
+        }
+      ]
+    },
+    {
+      "name": "Super Accuracy",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80D7090",
+          "on": "C5F057C9C5FA1188E00A0000E9CBB7FDFC909090",
+          "off": "C5F057C9C5FA1188E00A0000E9CBB7FDFC909090"
+        },
+        {
+          "offset": "50B2864",
+          "on": "E927480203909090",
+          "off": "C5FA1188E00A0000"
+        }
+      ]
+    },
+    {
+      "name": "Super Jump",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80D7170",
+          "on": "C5FA100518000000C5FA118030120000C5FA108030120000E969A7AEFC909090",
+          "off": "C5FA100518000000C5FA118030120000C5FA108030120000E969A7AEFC909090"
+        },
+        {
+          "offset": "4BC18EE",
+          "on": "E97D585103909090",
+          "off": "E97D585103909090"
+        },
+        {
+          "offset": "80D7190",
+          "on": "00000041",
+          "off": "0000A03F"
+        }
+      ]
+    },
+    {
+      "name": "Teleport to sky",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80D70F0",
+          "on": "50A110710D08000000008946088986D80000005848898D28FFFFFFE969B54CFD",
+          "off": "50A110710D08000000008946088986D80000005848898D28FFFFFFE969B54CFD"
+        },
+        {
+          "offset": "55A2672",
+          "on": "E9794AB3029090",
+          "off": "48898D28FFFFFF"
+        },
+        {
+          "offset": "80D7110",
+          "on": "00007A44",
+          "off": "00007A44"
+        }
+      ]
+    },
+    {
+      "name": "Never Wanted",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80D70C0",
+          "on": "C5FA10050C000000C5FA114740E93EC2B5F89090",
+          "off": "C5FA10050C000000C5FA114740E93EC2B5F89090"
+        },
+        {
+          "offset": "C3330B",
+          "on": "E9B03D4A07",
+          "off": "C5FA114740"
+        },
+        {
+          "offset": "80D70D4",
+          "on": "00000000",
+          "off": "00000000"
+        }
+      ]
+    },
+    {
+      "name": "Always Wanted",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80D70C0",
+          "on": "C5FA10050C000000C5FA114740E93EC2B5F89090",
+          "off": "C5FA10050C000000C5FA114740E93EC2B5F89090"
+        },
+        {
+          "offset": "C3330B",
+          "on": "E9B03D4A07",
+          "off": "C5FA114740"
+        },
+        {
+          "offset": "80D70D4",
+          "on": "0000F042",
+          "off": "0000F042"
+        }
+      ]
+    }
+  ],
+  "credits": [
+    "JustGotenks"
+  ]
+}

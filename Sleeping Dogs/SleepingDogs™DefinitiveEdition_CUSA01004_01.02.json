@@ -1,0 +1,96 @@
+{
+  "name": "Sleeping Dogs™ Definitive Edition",
+  "id": "CUSA01004",
+  "version": "01.02",
+  "process": "eboot.bin",
+  "mods": [
+    {
+      "name": "Godmode",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "9584B2",
+          "on": "E949ABD50090",
+          "off": "C4C17A115654"
+        },
+        {
+          "offset": "16B3000",
+          "on": "41837E44007506F3410F105654C4C17A115654E9A0542AFF",
+          "off": "000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "One-hit kill",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "958491",
+          "on": "E98AABD500909090",
+          "off": "C5FA2ACEC5F857C0"
+        },
+        {
+          "offset": "16B3020",
+          "on": "41837E44007409BE00000000F30F2AC6C5FA2ACEC5F857C0E95C542AFF909090",
+          "off": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "Max Cash (on get)",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "89A6A5",
+          "on": "E99689E1009090",
+          "off": "4429A0C4030000"
+        },
+        {
+          "offset": "16B3040",
+          "on": "41BC00CA9A3B4489A0C4030000E95A761EFF9090",
+          "off": "0000000000000000000000000000000000000000"
+        },
+        {
+          "offset": "8BB9D4",
+          "on": "E98776DF009090",
+          "off": "4429B0C4030000"
+        },
+        {
+          "offset": "16B3060",
+          "on": "41BE00CA9A3B4489B0C4030000E9698920FF9090",
+          "off": "0000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "No reload (full clip)",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "969721",
+          "on": "0F4ECA",
+          "off": "0F4FCA"
+        }
+      ]
+    },
+    {
+      "name": "Full ammo",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "969E43",
+          "on": "0F4ED6",
+          "off": "0F4FD6"
+        }
+      ]
+    }
+  ],
+  "credits": [
+    "JustGotenks"
+  ]
+}

@@ -1,0 +1,557 @@
+PS4Cheater filter before 11-09-22
+    anon, exe, Game, dlmalloc, SmallBlockAllocator
+
+
+cave start -->  1B2B628
+
+42D18C42
+
+------------------------Godmode------------------------
+health
+Delete	148028B330	float	X	97.54378	WAD_Char_HeroA00[0]-33-1480200000-10240KB	False	health
+
+hit
+0xDE9337
+
+DE931C   C5 EA C2 D1 01        vcmpltss     xmm2, xmm2, xmm1
+DE9321   C5 F2 5D C8           vminss       xmm1, xmm1, xmm0
+DE9325   C4 E3 79 4A C9 20     vblendvps    xmm1, xmm0, xmm1, xmm2
+DE932B   C5 FA 10 55 D4        vmovss       xmm2, dword ptr [rbp - 0x2c]
+
+DE9330   C4 C1 7A 11 4C 24 28  vmovss       dword ptr [r12 + 0x28], xmm1
+
+DE9337   C5 F8 29 4D C0        vmovaps      xmmword ptr [rbp - 0x40], xmm1
+DE933C   C5 F8 2E CA           vucomiss     xmm1, xmm2
+DE9340   75 02                 jne          0xde9344
+DE9342   7B 29                 jnp          0xde936d
+
+source => DE9330
+return => DE9337
+cave   => 1B2B628
+
+
+|== default ==|
+vmovss       dword ptr [r12 + 0x28], xmm1
+C4 C1 7A 11 4C 24 28
+
+|== activated ==|
+jmp 0x1B2B628
+nop
+nop
+E9 F3 22 D4 00 90 90
+
+
+|== default ==|
+...
+
+|== activated ==|
+cmp word ptr [r12 + 0xA0], 0xB308
+jne original
+vmovss xmm1, dword ptr [r12 + 0x88]
+original:
+    vmovss dword ptr [r12 + 0x28], xmm1
+jmp 0xDE9337
+nop
+66 41 81 BC 24 A0 00 00 00 08 B3 75 0A C4 C1 7A 
+10 8C 24 88 00 00 00 C4 C1 7A 11 4C 24 28 E9 EC 
+DC 2B FF 90
+
+Delete	114290BB04	double	X	0.00780627503991128	WAD_R_UI[0]-33-1140E00000-34816KB	False	
+
+when hit
+(health)
+rsi	    0x0
+rdx	    0xFFFFFFFFFFFFF040
+rcx	    0x185E601
+
+r11	    0x144364 CEB0
+r12	    0x148028 B308
+r13	    0x7EEFE1710
+r14	    0x148028 B308
+
+rbp	    0x7EEFE1080
+rbx	    0x1442C5 8340
+rax	    0xB02400
+
+
+
+
+maybe compare last 2 bytes (word) of r12. Can be seen at [r12 + 0xA0]
+    B308 -> player health
+    B3A0 -> rage
+
+    8CB8 -> boss health
+    9768 -> boss bottom bar
+
+    3470 -> enemy health        -
+    35A0 -> enemy bottom bar    x
+    4A28 -> enemy bottom bar    -
+    BC78 -> enemy bottom bar    -
+    CB78 -> enemy bottom bar    yes
+    BAC0 -> enemy health        x
+
+    4A58 -> Atreus health
+    4B88 -> Atreus arrows
+
+
+
+r12	0x18002B 4B88
+
+------------------------Cheat Activator------------------------
+
+source => DE9330
+cave start --> 1B2B628
+
+
+==============>  BEFORE  <==============
+pushf
+push rax
+kratos_godmode_check:
+    cmp r11w, 0xCEB0
+    je godmode
+kratos_inf_rage_check:
+    cmp r11w, 0xB000
+    je infinite_rage
+atreus_godmode_check:
+    cmp r11w, 0xCC90
+    je godmode
+atreus_inf_rage_check:
+    cmp r11w, 0xB608
+    je infinite_rage
+atreus_arrows_check:
+    cmp r11w, 0xA958
+    je inf_arrows
+inf_arrows_check:
+    cmp r11w, 0xE410
+    je inf_arrows
+OHK_check:
+    cmp r11w, 0x5410
+    je OHK
+instant_r3_check:
+    cmp esi, 0x10C0FD9A80
+    je instant_r3
+original:
+    vmovss dword ptr [r12 + 0x28], xmm1
+pop rax
+popf
+jmp 0xDE9337
+//
+godmode:
+    cmp byte ptr [0x1B2BA28], 0x00
+    jmp max_capacity
+infinite_rage:
+    cmp byte ptr [0x1B2BA29], 0x00
+    jmp max_capacity
+OHK:
+    cmp byte ptr [0x1B2BA2A], 0x00
+    je original
+    mov eax, 0x0
+    jmp convert
+instant_r3:
+    cmp byte ptr [0x1B2BA2B], 0x00
+    jmp max_capacity
+inf_arrows:
+    cmp byte ptr [0x1B2BA2C], 0x00
+    jmp max_capacity
+//
+convert:
+    cvtsi2ss xmm1, eax
+    jmp original
+max_capacity:
+    je original
+    vmovss xmm1, dword ptr [rbx + 0x14]
+    jmp original
+==============>  BEFORE  <==============
+
+
+original:
+    vmovss dword ptr [r12 + 0x28], xmm1
+jmp 0xDE9337
+cmp word ptr [r12 + 0xA0], 0xB308
+...
+C4 C1 7A 11 4C 24 28 E9 03 DD 2B FF
+
+|== activated ==|
+
+pushf
+push rax
+damage_check:
+    push r13
+    sar r13, 0x10
+    cmp r13, 0x7EEFE
+    pop r13
+    je damage
+kratos_inf_rage_check:
+    cmp r11w, 0xB000
+    je infinite_rage
+atreus_inf_rage_check:
+    cmp r11w, 0xB608
+    je infinite_rage
+atreus_arrows_check:
+    cmp r11w, 0xA958
+    je inf_arrows
+inf_arrows_check:
+    cmp r11w, 0xE410
+    je inf_arrows
+instant_r3_check:
+    cmp esi, 0x10C0FD9A80
+    je instant_r3
+original:
+    vmovss dword ptr [r12 + 0x28], xmm1
+exit:
+    pop rax
+    popf
+    jmp 0xDE9337
+//
+break:
+    jmp original
+damage:
+    cmp dword ptr [r12 + 0x198], 0x00
+    je godmode
+    jmp OHK
+godmode:
+    cmp byte ptr [0x1B2BA28], 0x00
+    vmovss dword ptr [r12 + 0x28], xmm2
+    jmp exit
+infinite_rage:
+    cmp byte ptr [0x1B2BA29], 0x00
+    jmp max_capacity
+OHK:
+    cmp byte ptr [0x1B2BA2A], 0x00
+    je original
+    mov eax, 0x0
+    jmp convert
+instant_r3:
+    cmp byte ptr [0x1B2BA2B], 0x00
+    jmp max_capacity
+inf_arrows:
+    cmp byte ptr [0x1B2BA2C], 0x00
+    jmp max_capacity
+//
+convert:
+    cvtsi2ss xmm1, eax
+    jmp original
+max_capacity:
+    je original
+    vmovss xmm1, dword ptr [rbx + 0x14]
+    jmp original
+
++ "by JustGotenks"
+
+
+// adds "by JustGotenks" in String View
+62 79 20 4A 75 73 74 47 6F 74 65 6E 6B 73   -> 14
+
+// adds "JustGotenks" in String View
+4A 75 73 74 47 6F 74 65 6E 6B 73            -> 11
+
+
+
+
+
+[r12]
+        MC
+0x00	0x8028B3A0	0xC1FF6B00	0xC1FED5C0	0xC1FF6B00	X -> didnt work for atreus
+0x08	0x8028C148	0xC1FF78A8	0xC1FEE368	0xC1FF78A8	X -> didnt work for atreus
+0x64	0x3F800000	0x00		0x00		0x00		X -> didnt work for atreus
+0x74	0x100		0x101		0x101		0x101		X -> didnt work for atreus
+0xB8	0xD67C1449	0xF6CD1815	0xF6CD1815	0xF6CD1815	X -> didnt work for atreus
+0xC0	0x41400000	0x00		0x00		0x00		X -> MC changes
+0xFC	0x00		0xBF800000	0xBF800000	0xBF800000	X -> didnt work for atreus
+0x118	0x14701		0x00		0x00		0x00		X -> didnt work for atreus
+0x154	0xED50D8FA	0x4251		0x4251		0x4251		X -> didnt work for atreus
+0x194	0x00		0xBF800000	0xBF800000	0xBF800000	X -> didnt work for atreus
+0x1B0	0x258A00	0x00		0x00		0x00		X -> didnt work for atreus
+0x1C8	0x8028B568	0xC1FF6CC8	0xC1FED788	0xC1FF6CC8	X -> didnt work for atreus
+0x44C	0x4472		0x79953084	0x79953084	0x79953084	X -> didnt work for atreus
+0x650	0xBD000000	0x00		0x00		0x00		X -> didnt work for atreus
+0x6E8	0x3F000000	0x00		0x00		0x00		X -> didnt work for atreus
+0x6FC	0xBEDD0100	0x100		0x100		0x100		X -> didnt work for atreus
+0x100	0x00		0x4107DCBC	0x40BC8504	0x4107DCBC	X -> as atreus fighting that special monster
+0x6EC	0xBF800000	0x00		0x00		0x00		X -> as atreus fighting that special monster
+0x784	0x00		0xBF800000	0xBF800000	0xBF800000	X -> as atreus fighting that special monster
+0x84	0x00		0x40BFB8C9	0x40A2E6B6	0x40BFB8C9	X -> after code crash
+
+
+0x198	0x00		0x4107DCBC	0x40BC8504	0x4107DCBC	
+0x654	0x00		0xBF800000	0xBF800000	0xBF800000	
+
+
+
+
+rdi	    0x2801BA 9060
+rsi	    0x0
+rdx	    0xFFFFFFFFFFFFF460
+rcx	    0x185E601
+r8	    0x2801BA 9060
+r9	    0xFFFFFFFF
+r10	    0x2780EE D100
+r11	    0x278107 7618
+r12	    0x2801BA BBC8
+r13	    0x7EEFE 1710
+r14	    0x2801BA BBC8
+r15	    0xE
+rbp	    0x7EEFE 1080
+rbx	    0x2780EE 3890
+rax	    0xB0240
+
+
+
+rdi	    0x2801BB 25A0
+rsi	    0x0
+rdx	    0xFFFFFFFFFFFFF460
+rcx	    0x185E601
+r8	    0x2801BB 25A0
+r9	    0xFFFFFFFF
+r10	    0x2780EE D100
+r11	    0x278107 7618
+r12	    0x2801BB 5108
+r13	    0x7EEFE 1710
+r14	    0x2801BB 5108
+r15	    0xE
+rbp	    0x7EEFE 1080
+rbx	    0x2780EE 3890
+rax	    0xB02400
+
+
+
+rdi	    0x25C02B 1EF0
+rsi	    0x0
+rdx	    0xFFFFFFFFFFFFF040
+rcx	    0xF3F8167CB71FC500
+r8	    0x25C02B 1EF0
+r9	    0xFFFFFFFF
+r10	    0x258184 94A8
+r11	    0x258191 CC90
+r12	    0x25C02B 4A58
+r13	    0x7EEFE 1710
+r14	    0x25C02B 4A58
+r15	    0x9
+rbp	    0x7EEFE 1080
+rbx	    0x258157 9E40
+rax	    0x0
+
+
+
+
+
+
+
+
+------------------------One-hit Kill------------------------
+DE931C   C5 EA C2 D1 01        vcmpltss     xmm2, xmm2, xmm1
+DE9321   C5 F2 5D C8           vminss       xmm1, xmm1, xmm0
+DE9325   C4 E3 79 4A C9 20     vblendvps    xmm1, xmm0, xmm1, xmm2
+
+DE932B   C5 FA 10 55 D4        vmovss       xmm2, dword ptr [rbp - 0x2c]
+
+DE9330   C4 C1 7A 11 4C 24 28  vmovss       dword ptr [r12 + 0x28], xmm1
+DE9337   C5 F8 29 4D C0        vmovaps      xmmword ptr [rbp - 0x40], xmm1
+DE933C   C5 F8 2E CA           vucomiss     xmm1, xmm2
+DE9340   75 02                 jne          0xde9344
+DE9342   7B 29                 jnp          0xde936d
+
+source => DE932B
+return => DE9330
+cave   => 1B2B668
+
+
+|== default ==|
+vmovss       xmm2, dword ptr [rbp - 0x2c]
+C5 FA 10 55 D4
+
+|== activated ==|
+jmp 0x1B2B668
+nop
+nop
+E9 38 23 D4 00
+
+
+|== default ==|
+...
+
+|== activated ==|
+vmovss xmm2, dword ptr [rbp - 0x2c]
+cmp rsi, 0x0
+ja exit
+cmp word ptr [r12], 0x8028B3A0
+je exit
+push rax
+mov rax, 0x0
+cvtsi2ss xmm1, rax
+pop rax
+exit:
+    jmp 0xDE9330
+C5 FA 10 55 D4 48 83 FE 00 77 17 66 41 81 3C 24 
+A0 B3 74 0E 50 48 C7 C0 00 00 00 00 F3 48 0F 2A 
+C8 58 E9 A1 DC 2B FF 90
+
+
+------------------------Infinite XP/HS------------------------
+Delete	10C348D498	4 bytes	X	494	WAD_R_Perm[0]-33-10C2200000-20480KB	False	
+
+add
+0x101BD54
+
+101BD40 C4 E2 68 F2 C9          andn    ecx, edx, ecx
+101BD45 39 F9                   cmp     ecx, edi
+101BD47 0F 4D CF                cmovge  ecx, edi
+101BD4A 84 C0                   test    al, al
+
+101BD4C   89 8D 40 FF FF FF     mov     dword ptr [rbp - 0xc0], ecx
+101BD52   89 0E                 mov     dword ptr [rsi], ecx
+
+101BD54   0F 84 F2 05 00 00     je      0x101c34c
+101BD5A   44 39 85 40 FF FF FF  cmp     dword ptr [rbp - 0xc0], r8d
+101BD61   0F 84 E5 05 00 00     je      0x101c34c
+
+source => 101BD4C
+return => 101BD54
+cave   => 1B2B828
+
+
+|== default ==|
+mov dword ptr [rbp - 0xc0], ecx
+mov dword ptr [rsi], ecx
+89 8D 40 FF FF FF 89 0E
+
+|== activated ==|
+jmp 0x1B2B828
+nop
+nop
+nop
+E9 D7 FA B0 00 90 90 90
+
+
+|== default ==|
+...
+
+|== activated ==|
+mov ecx, dword ptr [0x1B2BA08]
+original:
+    mov dword ptr [rbp - 0xc0], ecx
+    mov dword ptr [rsi], ecx
+jmp 0x101BD54
+nop
+nop
+B9 9F 86 01 00 89 8D 40 FF FF FF 89 0E E9 1A 05 
+4F FF 90 90
+
+
+
+
+------------------------No Cooldown------------------------
+
+Delete	17801E904A	2 bytes	X	17031	WAD_Char_HeroA00[0]-33-1780000000-2048KB	False	
+
+after r1 + after bringing back axe (hitting triangle)
+0xE48815
+
+regenerating
+0xE47129
+
+
+
+
+E470F8   E8 63 B5 CB FF        call     0xb02660
+E470FD   C5 FA 59 45 80        vmulss   xmm0, xmm0, dword ptr [rbp - 0x80]
+
+E47102   C4 C1 7A 10 4C 24 38  vmovss   xmm1, dword ptr [r12 + 0x38]
+
+E47109   C5 E8 57 D2           vxorps   xmm2, xmm2, xmm2
+E4710D   C5 F2 5C C0           vsubss   xmm0, xmm1, xmm0
+E47111   C5 F0 57 C9           vxorps   xmm1, xmm1, xmm1
+E47115   C5 F8 29 4D 80        vmovaps  xmmword ptr [rbp - 0x80], xmm1
+E4711A   C5 F8 2E C2           vucomiss xmm0, xmm2
+E4711E   C5 FA 5F C2           vmaxss   xmm0, xmm0, xmm2
+E47122   C4 C1 7A 11 44 24 38  vmovss   dword ptr [r12 + 0x38], xmm0
+E47129   4D 63 6C 24 24        movsxd   r13, dword ptr [r12 + 0x24]
+E4712E   4D 8B 74 24 18        mov      r14, qword ptr [r12 + 0x18]
+
+source => E470FD
+return => E47102
+cave   => 1B2B858
+
+
+|== default ==|
+vmovss   xmm1, dword ptr [r12 + 0x38]
+C4 C1 7A 10 4C 24 38
+
+|== activated ==|
+vmovss xmm1, dword ptr [rbp - 0x80]
+nop
+nop
+C5 FA 10 4D 80 90 90
+
+
+
+
+
+
+
+
+
+------------------------Infinite Arrows------------------------
+Delete	17802B4B18	float	X	30	WAD_Char_Atreus00[0]-33-1780200000-6144KB	False	
+
+(when getting)
+rdi	    0x17802B 1EF0
+
+rcx	    0x4E2F0F3707C94B01
+r8	    0x17802B 1EF0
+r9	    0x13                X
+r10	    0x16C028 A1B0       X
+r11	    0x10C0FC E410
+r12	    0x17802B 4AF0
+r13	    0x10C0FC 9C18       X
+r14	    0x17802B 4AF0       X
+r15	    0x0                 X
+rbp	    0x7EEFE 00E0         X
+rbx	    0x10C0FC E358
+rax	    0x0                 X
+
+
+(when removing)
+rdi	    0x17802B 1EF0
+
+rcx	    0x4E2F0F3707C94B01
+r8	    0x17802B 1EF0
+r9	    0x13                X
+r10	    0xD99D3B8901E7BD87  X
+r11	    0x10C0FC E410       maybe
+r12	    0x17802B 4AF0       maybe !
+r13	    0x178001 D950       X
+r14	    0x17802B 4AF0       X
+r15	    0x0                 X
+rbp	    0x7EEFE 2050         X
+rbx	    0x10C0FC E358       maybe !
+rax	    0x0                 X
+
+0xDE9330
+
+
+
+
+
+
+
+
+
+------------------------Infinite Forged Item------------------------
+
+Delete	10C348D4F8	4 bytes	X	67	WAD_R_Perm[0]-33-10C2200000-20480KB	False	
+
+
+spent
+0x101BD54
+
+get
+0x1B2B835
+
+
+
+
+
+
+
+

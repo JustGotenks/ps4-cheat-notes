@@ -1,0 +1,218 @@
+mov dword ptr [rbx + 0xd5c], edx
+
+
+if r11 === 0x80
+  continue adding
+else
+
+
+2693000
+
+229FC0D00
+
+
+
+adding cash:
+0x4D005A
+
+mov edx, dword ptr [rbx + 0xd60]
+mov dword ptr [rbx + 0xd5c], edx
+
+4D0054
+
+
+
+
+
+
+removing cash
+0x4D0220
+
+mov ecx, dword ptr [rbx + 0xd60]
+mov dword ptr [rbx + 0xd5c], ecx
+------------------------
+
+
+
+revolver
+0x215CCAA20
+
+
+tommy gun
+0x21D3B4060
+
+
+mov esi, dword ptr [rax + 0x80]
+mov dword ptr [rax + 0x80], esi
+------------------------------------------------
+
+current ammo clip
+
+
+inf ammo
+0x5A9D7C
+
+
+when shooting
+0x15123E9
+
+when getting ammo
+0x5A9510
+
+  15123E0   41 8B 07    mov eax, dword ptr [r15]
+  15123E3   2B 45 C8    sub eax, dword ptr [rbp - 0x38]
+  15123E6   41 89 07    mov dword ptr [r15], eax
+  15123E6   41 89 07    mov dword ptr [r14], eax
+
+
+  15123E0   41 8B 07    mov eax, dword ptr [r15]
+  15123E3   90 90 90    nop
+  15123E6   41 89 07    mov dword ptr [r15], eax
+  15123E6   41 89 07    mov dword ptr [r14], eax
+
+
+217D99760
+
+5A94DF  mov rax, qword ptr [r15 + r14*8 + 0x68]
+...
+5A94F5  vcvttss2si ecx, xmm0
+...
+5A9510  add dword ptr [rax + 0x80], edx
+
+
+
+push rax      // might not need this
+
+mov rax, qword ptr [r15 + r14*8 + 0x68]   // sets xmm2 (full magazine)
+vcvttss2si edx, xmm2                      // convert float to integer
+mov dword ptr [rax + 0x80], edx
+
+
+------------------------------------------------
+
+health start: 200.0
+eve start   :  35.0
+
+
+health pointer when damaged   [seems like this is attached to enemy health too]
+0x4BC325
+
+0x4BC31D
+  vmovss dword ptr [rbx + 0x6d0], xmm1
+
+  vmovss xmm1, dword ptr [rbx + 0x6d0]
+  vmovss dword ptr [rbx + 0x6d0], xmm1
+
+
+
+0x4BC31D => breakpoint to see attacks coming in
+
+
+me
+rcx 0x8
+
+enemy | hit with bullet
+rcx 0x0
+
+me attacked by explosive
+rcx 0x9
+
+might be enemy type or hit type
+r11
+  0x0 OR > 0x2000 => me
+  0x34 => Mounted gunner bot
+  0x36 => big metal guy (protecting girl)
+  0x3E => Flying robot
+  0x44 => Security Camera
+  0x46 => Leadhead Splicer | Dr. Steinman
+  0x3A => Thuggish Splicer | Nitro Splicer
+
+
+                me        enemy
+[rbx]   0x000   0x26A4558  0x26CD510
+        0x37C   0          2
+        0x380   0          1
+
+[Custom Code Cave helper]
+  cmp dword ptr [rbx], 0x26A4558          // if not me (Not Equal to 0x26A4558)
+  jne og_label                            //  then do original (jump to original code)
+  vmovss xmm1, dword ptr [rbx + 0x6d0]    // else => health will be original health (no damage)
+  og_label:
+  original();
+  jump_back();
+
+[Assembled]
+  cmp dword ptr [rbx], 0x26a4558
+  jne 0x2693060
+  vmovss xmm1, dword ptr [rbx + 0x6d0]
+  vmovss dword ptr [rbx + 0x6d0], xmm1
+  jmp 0x4bc325
+  NOP           // added NOP to make the bytes even
+
+
+
+
+
+
+when hitting enemies
+r8 0x1
+
+health pointer when added health
+0x4BBF99
+
+
+remaining health [enemy]
+xmm3
+
+amount of damage given to enemy
+xmm2
+
+
+
+dword ptr [rbx + 0x92c]     =>      current health [enemy]
+
+
+
+vcmpltss xmm2, xmm2, xmm3
+vandnps xmm1, xmm2, xmm1
+cmp dword ptr [rbx], 0x26a4558
+je 0x4bc31d
+vxorps xmm1, xmm1, xmm1
+jmp 0x4bc31d
+
+
+
+
+
+
+eve pointer when taking out
+0x4CFE50
+
+  vmovss dword ptr [rbx + 0xd68], xmm1
+
+  vmovss xmm1, dword ptr [rbx + 0xd68]
+  vmovss dword ptr [rbx + 0xd68], xmm1
+
+________________________________________________________
+
+Adam  => User Malloc[3]
+
+removes Adam pointer
+0x4D05D2
+mov dword ptr [r12 + 0xd64], edx
+
+[r12 + 0xd64]  =>  current Adam amount
+
+
+[inside r12]
+these might be the max
+0xD5C	500
+0xD60	500
+
+
+
+adds Adam pointer
+0x4D03F6
+
+
+________________________________________________________

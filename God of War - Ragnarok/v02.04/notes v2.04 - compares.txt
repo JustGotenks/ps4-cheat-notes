@@ -1,0 +1,710 @@
+
+
+
+DE9D30
+
+
+
+
+---[ kratos hit ]---
+B5BD6B
+DE9A7F
+ADD0DA  <-- look here for difference between MC and enemies
+            [rbx + 0x28] has current health which is at xmm0
+AE3AC7
+AD36F2
+4EDCD2
+4858C6
+4836DC
+4000BF
+
+
+0xADCD9B (atreus MC health going down by poison)
+rdi	    0x44DFC30
+rsi	    0x0             X
+rdx	    0x0             X
+rcx	    0x0             X
+r8	    0x16401DC460
+r9	    0x0             X
+r10	    0x0             X
+r11	    0x160191CC90    X
+r12	    0x0             X
+r13	    0x7EEFDF470     X
+r14	    0x0             X
+r15	    0x0             X
+rbp	    0x7EEFDF440     X
+rbx	    0x16402B 1EF0
+rax	    0x44DFC30
+
+
+
+
+
+
+
+
+
+---[ r3 ]---
+cmp esi     0x10C0FD9D80
+
+-- reducing --
+B5BD6B
+DE9A7F
+B5BA69
+ADC2C9
+AE3AC7
+AD36F2
+4EDCD2
+4858C6
+4836DC
+4000BF
+
+
+-- getting (when r3 == 0) --
+B5BD6B
+DE9A7F <-
+B5BA69
+ADC2C9
+AE3AC7
+AD36F2
+4EDCD2
+4858C6 <-
+4836DC
+4000BF
+
+
+
+-- getting (when r3 > 0) --
+ B5BD6B
+ DE9A7F <-
+179E5CC
+1239099
+12516E7
+ 9320E5
+ 820158
+ 8077B2
+ 6C65BF
+ 6C5971
+ 4DE07F
+ 4858C6 <-
+ 4836DC
+ 4000BF
+
+
+
+rdi	    0x18C21AE5F0
+rsi	    0x10C0FD9D80
+rdx	    0x0
+rcx	    0x0
+r8	    0x18C21AE5F0
+r9	    0xFFFFFFFF
+r10	    0x1880B5C020
+r11	    0x656D1AF9232CA78B
+r12	    0x18C21B1B70
+r13	    0x0
+r14	    0x18C21B1B70
+r15	    0xE
+rbp	    0x7EEFE1030
+rbx	    0x10C0FD9D78
+rax	    0x16C0288700
+
+rsp	    0x7EEFE0FE0
+
+
+
+rdi	    0x18C219BB70
+rsi	    0x10C0FD9D80
+rdx	    0x0
+rcx	    0x0
+r8	    0x18C219BB70
+r9	    0xFFFFFFFF
+r10	    0x1880B5C020
+r11	    0x656D1AF9232CA78B
+r12	    0x18C219F0F0
+r13	    0x0
+r14	    0x18C219F0F0
+r15	    0xE
+rbp	    0x7EEFE1030
+rbx	    0x10C0FD9D78
+rax	    0x16C0288700
+
+
+
+
+
+
+
+
+---[ getting rage ]---
+B5BD6B
+DE9A7F
+F0D555
+6ACA1D
+8B051E
+6ADAAF
+511FDA
+4858C6
+4836DC
+4000BF
+
+
+F0D53F
+rdi	    0x44DFC30
+rsi	    0x0                     X
+rdx	    0xFFFFFFFFFFFF F310     X
+rcx	    0xB12229AC3257 4500     X
+r8	    0x128028 87A0           X
+r9	    0x80006 1410            X
+r10	    0x124212 A490           X
+r11	    0x1242DC 6378           X
+r12	    0x10DBF22D67C 1449
+r13	    0x1242DC 6310           X
+r14	    0x0                     X
+r15	    0x0                     X
+rbp	    0x7EEFE20A0             X
+rbx	    0x128028 B3A0           X
+rax	    0x9B19DBE095711F08      X
+
+
+
+
+
+---[ rage going down ]---
+0xDE9D37
+ B5BD6B
+ DE9A7F
+1049C7A
+1049907
+ E47ED9
+ C53334
+ C3B441
+ 500352
+ 4858C6
+ 4836DC
+ 4000BF
+
+
+
+
+rdi	    0x1C802887A0            X
+rsi	    0x10C0FFD9C0            X
+rdx	    0x9B19DBE095711F00      X
+rcx	    0x17C364AF58            X
+r8	    0x1C802887A0            X
+r9	    0xCC85E7ECA92BB90D      X
+r10	    0x1
+r11	    0x2
+r12	    0x1C802887A0            X
+r13	    0x800061410             X
+r14	    0x10C0FFD9C0            X
+r15	    0x0                     X
+rbp	    0x7EEFDF870             X
+rbx	    0x1C8028B3A0            X
+rax	    0x1C8028C101            X
+
+
+
+
+
+
+
+---[ poison ]---
+0xDE9D30
+ B5BD6B
+ DE9A7F
+ ADD0DA
+ ADAEF3
+1049BAB
+1049907
+ E47ED9
+ C53334
+ C3B441
+ 500352
+ 4858C6
+ 4836DC
+ 4000BF
+
+
+0xB5BA4F
+
+rdi	    0x8A
+rsi	    0x16BFFEFFE375FFEE
+rdx	    0x0                 X
+rcx	    0x7EEFE14E0         X
+r8	    0x2380D61180        X
+r9	    0x0                 X
+r10	    0x0                 X
+r11	    0x23003DD180
+r12	    0x2380D61180        X
+r13	    0x0                 X
+r14	    0x1EC02B53D8
+r15	    0x148F9E7AA331A22E
+rbp	    0x7EEFE1170         X
+rbx	    0x310000008
+rax	    0x0                 X
+
+xmm0 -> new poison to add
+xmm2 -> current poison
+
+(nop both xmm2 & xmm0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---[ r3 ]---
+0xB5BA4F
+rdi	    0x29                X
+rsi	    0x656D1AF9232CA78B
+rdx	    0x0                 X
+rcx	    0x7EEFE14E0         X
+r8	    0x1EC02B1EF0        X
+r9	    0x0                 X
+r10	    0x0                 X
+r11	    0x1E8157AA10        X
+r12	    0x1EC02B1EF0        X
+r13	    0x0                 X
+r14	    0x2380D64668        X
+r15	    0x656D1AF9232CA78B
+rbp	    0x7EEFE1170         X
+rbx	    0x10200000100008    X
+rax	    0x0                 X
+
+xmm0 -> new r3 to add
+xmm2 -> current r3
+
+(set xmm0 100)
+
+
+
+
+
+
+
+
+
+
+
+
+
+---[ atreus arrows MC ]---
+(getting)
+B5BD6B
+DE9A7F
+C54387
+C3B441
+500352
+4858C6
+4836DC
+4000BF
+
+
+(throwing)
+B5BD6B
+A3E108  -> (top of function A3DE90)
+5F9554
+50353D
+4858C6
+4836DC
+4000BF
+
+503A24
+
+
+0xC5437A
+rdi	    0x1F402B 4B88       --> (4B88 - atreus)
+rsi	    0x0             X
+rdx	    0x0             X
+rcx	    0x1             X
+r8	    0x1F402B 1EF0   X
+r9	    0x114293 DE98   X
+r10	    0x1141FD E3F0   X
+r11	    0x14C191 AB58       --> (0x2 - flyingSword), 
+r12	    0x14C191 AA68
+r13	    0x14C191 A978
+r14	    0x1F402B 4800   X
+r15	    0x1F402B 4B88       --> (4B88 - atreus), 
+rbp	    0x7EEFE1A10     X
+rbx	    0x1F402B1EF0    X
+rax	    0x1F402B1E00    X
+
+
+0xC5437A (getting flyingSword)
+rdi	    0x1CC00F 9910
+rsi	    0x0             X
+rdx	    0x0             X
+rcx	    0x1             X
+r8	    0x0
+r9	    0x0             X
+r10	    0x1
+r11	    0x2
+r12	    0x20C017 9218
+r13	    0x20C017 9128
+r14	    0x1CC00F 9600
+r15	    0x1CC00F 9910
+rbp	    0x7EEFE22B0     X
+rbx	    0x1CC00F6D10
+rax	    0x16402B1E00    X
+
+
+
+0xC5437A (MC kratos / freya arrows)
+rdi	    0x194014 4830
+rsi	    0x0
+rdx	    0x0
+rcx	    0x1
+r8	    0x194014 1180
+r9	    0x2FEDA06DF499A6B2
+r10	    0x0
+r11	    0x190112 4D00
+r12	    0x190112 4E10
+r13	    0x190112 4D20
+r14	    0x194014 3B00
+r15	    0x194014 4830
+rbp	    0x7EEFE22B0
+rbx	    0x1940141180
+rax	    0x164028 8700
+
+
+
+
+
+
+
+
+
+
+
+
+---[ craft item down ]---
+0x101C956
+101FA30
+10208B7
+ DAE9D7
+1364A0D
+1381569
+ D83ED9
+ BC1F6A
+ BD951A
+ 4DE041
+ 4858C6
+ 4836DC
+ 4000BF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---[ picked up money ]---
+
+(hacksilver)
+0x101C984
+C96466
+C968EA
+6844D8
+5158E1
+4858C6
+4836DC
+4000BF
+
+rdi	    0x7FFFFFFF
+rsi	    0x10C348 D748
+rdx	    0x0
+rcx	    0x1A512
+r8	    0x1A350
+r9	    0x0
+r10	    0x80006 1410
+r11	    0x0
+r12	    0x4
+r13	    0x10C348 D700
+r14	    0x40
+r15	    0x10C348 D740
+rbp	    0x7EEFE 20F0
+rbx	    0x0
+rax	    0x4895C6432201
+
+
+
+(Dwarven Steel)
+0x101C97C
+C9545C
+6844D8
+5158E1
+4858C6
+4836DC
+4000BF
+
+rdi	    0x7FFFFFFF
+rsi	    0x10C348 D7B8
+rdx	    0x0
+rcx	    0x186A2
+r8	    0x186A1
+r9	    0x0
+r10	    0x80006 1410
+r11	    0x0
+r12	    0xB
+r13	    0x10C348 D700
+r14	    0xB0
+r15	    0x10C348 D7B0
+rbp	    0x7EEFE 21D0
+rbx	    0x0
+rax	    0x4895C6432201
+
+
+
+
+
+
+
+
+(hacksilver from shooting a vase with R1 arrow)
+0xC952A6
+C96466
+C968EA
+C0DA9F
+C0B9C9
+EAD03C
+EBA454
+AD356C
+4EDCD2
+4858C6
+4836DC
+4000BF
+
+
+
+
+(hacksilver from shooting a vase with R2 arrow)
+(more calls since it combined them all  OR  hitting vase)
+C96466
+C968EA
+C0DA9F
+C0B9C9
+ADD092
+AE3AC7
+AD46B7
+4EDCD2
+4858C6
+4836DC
+4000BF
+
+
+
+
+
+0xC952A6 - from chest
+C96466
+C968EA
+6844D8
+5158E1
+4858C6
+4836DC
+4000BF
+
+[2, but gave only 1]
+rdi	    0x10C348 D550
+rsi	    0x57366132328A1215
+rdx	    0x54
+rcx	    0x1FF
+r8	    0x16D
+r9	    0x46F9708
+r10	    0x0
+r11	    0x473AE00
+r12	    0x800061410
+r13	    0x10C353 5348
+r14	    0x10C348 D550
+r15	    0x7EEFE21C8
+rbp	    0x7EEFE20F0
+rbx	    0x57366132328A1215
+rax	    0x10C0E8 51A0
+
+
+
+[1]
+rdi	    0x10C348 D550
+rsi	    0xD37DF96D85271A34
+rdx	    0xE7
+rcx	    0x1FF
+r8	    0x10C353 51D8
+r9	    0xF
+r10	    0x10C353 51D8
+r11	    0x41
+r12	    0x800061410
+r13	    0x10C353 5420
+r14	    0x10C348 D550
+r15	    0x7EEFE21C8
+rbp	    0x7EEFE20F0
+rbx	    0xD37DF96D85271A34
+rax	    0x10C0E8 51A0
+
+
+
+[772]
+rdi	    0x10C348 D550
+rsi	    0x5AE80674D240529E
+rdx	    0xAD
+rcx	    0x1FF
+r8	    0x10C353 51D8
+r9	    0x18
+r10	    0x10C353 51D8
+r11	    0x41
+r12	    0x800061410
+r13	    0x10C353 5660
+r14	    0x10C348 D550
+r15	    0x7EEFE21C8
+rbp	    0x7EEFE20F0
+rbx	    0x5AE80674D240529E
+rax	    0x10C0E8 51A0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+observing resource item change when Restart Checkpoint from start menu
+
+0x DDFB3C  ->  sets all count to FF FF FF FF
+
+0x 101C5CC ->  real count was already in rcx and rax
+
+__________________________________________
+101C95A ---> this is where it gets set to the real value
+__________________________________________
+
+
+
+value of the item in the array is r14
+    ex: 0x750 -> Maximum Health Increased item
+
+
+
+
+
+
+
+0x DDFB3C
+DDEFA7
+F6944B
+BB478C
+887064
+8E5C56
+8E3DF2
+BC0F67
+BD951A
+4DE041
+4858C6
+4836DC
+4000BF
+
+
+0x 101C5CC
+101ED3E
+ E88AB4
+ FF6E4D
+ BDCD2E
+ 51A926
+ 4858C6
+ 4836DC
+ 4000BF
+
+
+0x 101C925
+101ED3E
+ E88AB4
+ FF6E4D
+ BDCD2E
+ 51A926
+ 4858C6
+ 4836DC
+ 4000BF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,45 @@
+{
+  "name": "Fobia - St. Dinfna Hotel",
+  "id": "CUSA30958",
+  "version": "01.03",
+  "process": "eboot.bin",
+  "mods": [
+    {
+      "name": "No Reload",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "57F7000",
+          "on": "4983FA01750D4983FF0075076681FBA897740D4883C2FC4883C704E92AF081FB418B03EBEE909090",
+          "off": "4983FA01750D4983FF0075076681FBA897740D4883C2FC4883C704E92AF081FB418B03EBEE909090"
+        },
+        {
+          "offset": "1016042",
+          "on": "E9B90F7E04909090",
+          "off": "4883C2FC4883C704"
+        }
+      ]
+    },
+    {
+      "name": "Infinite Upgrade Points",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "1016042",
+          "on": "E9B90F7E04909090",
+          "off": "4883C2FC4883C704"
+        },
+        {
+          "offset": "57F7000",
+          "on": "4983FA20750D4983F90075076681FB808D740D4883C2FC4883C704E92AF081FBB8E7030000EBEC90",
+          "off": "4983FA20750D4983F90075076681FB808D740D4883C2FC4883C704E92AF081FBB8E7030000EBEC90"
+        }
+      ]
+    }
+  ],
+  "credits": [
+    "JustGotenks"
+  ]
+}

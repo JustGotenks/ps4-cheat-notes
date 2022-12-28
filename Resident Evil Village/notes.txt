@@ -1,0 +1,426 @@
+
+------------------------Infinite Ammo------------------------
+on reloading ammo
+351D267
+
+on get Ammo
+3520959
+
+
+351D25B  39 CF         cmp    edi, ecx
+351D25D  41 89 CC      mov    r12d, ecx
+351D260  44 0F 4E E7   cmovle r12d, edi
+
+351D264  44 29 E1      sub    ecx, r12d
+
+351D267  89 48 4C      mov    dword ptr [rax + 0x4c], ecx
+351D26A  48 8B 42 50   mov    rax, qword ptr [rdx + 0x50]
+351D26E  48 8B 48 18   mov    rcx, qword ptr [rax + 0x18]
+
+source => 351D264
+return =>
+cave   =>
+
+
+|== default ==|
+sub ecx, r12d
+44 29 E1
+
+|== activated ==|
+sub ecx, 0
+83 E9 00
+
+
+------------------------No Reload [FAIL]------------------------
+on shoot
+0x351C6B7
+  possible full clip at [rcx + 0x188]
+0x351C679 (2nd option)
+
+on reload
+0x3524D16
+
+351C6A9  0F 85 12 02 00 00   jne  0x351c8c1
+351C6AF  48 85 C9            test rcx, rcx
+351C6B2  74 12               je   0x351c6c6
+
+351C6B4  29 59 58            sub  dword ptr [rcx + 0x58], ebx
+351C6B7  49 8B 47 50         mov  rax, qword ptr [r15 + 0x50]
+
+351C6BB  48 83 78 18 00      cmp  qword ptr [rax + 0x18], 0
+351C6C0  0F 85 FB 01 00 00   jne  0x351c8c1
+
+source => 351C6B4
+return => 351C6BB
+cave   !=> B59F098
+
+
+|== default ==|
+sub dword ptr [rcx + 0x58], ebx
+mov rax, qword ptr [r15 + 0x50]
+29 59 58 49 8B 47 50
+
+|== activated ==|
+jmp 0xB59F098
+nop
+nop
+E9 DF 29 08 08 90 90
+
+
+
+|== default ==|
+null
+
+|== activated ==|
+mov ebx, 0x0
+sub dword ptr [rcx + 0x58], ebx
+mov  rax, qword ptr [r15 + 0x50]
+jmp 0x351C6BB
+nop
+nop
+nop
+BB 00 00 00 00 29 59 58 49 8B 47 50 E9 12 D6 F7
+F7 90 90 90
+
+
+
+------------------------No Reload------------------------
+on shoot
+0x351C679
+
+4E98F9D   74 43                           je 0x4e98fe2
+4E98F9F   48 8B 50 10                     mov rdx, qword ptr [rax + 0x10]
+4E98FA3   4C 89 E7                        mov rdi, r12
+
+4E98FA6   B9 01 00 00 00                  mov ecx, 1
+
+4E98FAB   45 31 C0                        xor r8d, r8d
+4E98FAE   31 DB                           xor ebx, ebx
+4E98FB0   E8 AB 35 68 FE                  call 0x351c560
+
+
+|== default ==|
+mov ecx, 1
+B9 01 00 00 00
+
+|== activated ==|
+mov ecx, 0
+B9 00 00 00 00
+
+
+
+------------------------Max items (on get) [FAIL]------------------------
+
+352093D  48 8B 8D 50 FF FF FF      mov rcx, qword ptr [rbp - 0xb0]
+3520944  8B 7E 14                  mov edi, dword ptr [rsi + 0x14]
+3520947  8B 70 4C                  mov esi, dword ptr [rax + 0x4c]
+352094A  8B 09                     mov ecx, dword ptr [rcx]
+352094C  29 F7                     sub edi, esi
+352094E  85 FF                     test edi, edi
+3520950  7E 62                     jle 0x35209b4
+
+3520952  39 F9                     cmp ecx, edi
+3520954  0F 4E F9                  cmovle edi, ecx
+
+3520957  01 FE                     add esi, edi
+3520959  89 70 4C                  mov dword ptr [rax + 0x4c], esi
+352095C  49 8B 4F 50               mov rcx, qword ptr [r15 + 0x50]
+
+
+source => 3520952
+return => 3520957
+cave   !=> B59F098
+
+
+|== default ==|
+cmp ecx, edi
+cmovle edi, ecx
+39 F9 0F 4E F9
+
+|== activated ==|
+jmp 0xB59F098
+E9 41 E7 07 08
+
+
+
+|== default ==|
+null
+
+|== activated ==|
+cmp ecx, edi
+cmovle edi, ecx
+cmovg edi, ecx
+jmp 0x3520957
+nop
+nop
+nop
+39 F9 0F 4E F9 0F 4F F9 E9 B2 18 F8 F7 90 90 90
+
+
+------------------------Max Lei (1 million)------------------------
+
+0x211F26BC4 => 46C993D  X
+0x211F26DF4 => 46C9B78  X
+0x2121FD14C => none
+0x21AE420B0 => 46E739D  3
+0x21AE4CED8 => 46E6CB5  2
+0x21B4FA3E8 => 34ED404  1
+
+34ED3F1  4C 8B 68 18      mov  r13, qword ptr [rax + 0x18]
+34ED3F5  4D 85 ED         test r13, r13
+34ED3F8  75 1C            jne  0x34ed416
+
+34ED3FA  41 8B 4F 48      mov  ecx, dword ptr [r15 + 0x48]
+34ED3FE  01 D1            add  ecx, edx
+34ED400  41 89 4F 48      mov  dword ptr [r15 + 0x48], ecx
+
+34ED404  49 8B 44 24 50   mov  rax, qword ptr [r12 + 0x50]
+
+
+source => 34ED3FA
+return =>
+cave   =>
+
+
+|== default ==|
+mov ecx, dword ptr [r15 + 0x48]
+add ecx, edx
+mov dword ptr [r15 + 0x48], ecx
+41 8B 4F 48 01 D1 41 89 4F 48
+
+|== activated ==|
+mov ecx, 0xF4240
+mov dword ptr [r15 + 0x48], ecx
+nop
+B9 40 42 0F 00 41 89 4F 48 90
+
+
+
+------------------------Max Items (on craft)------------------------
+
+got item
+0x352095C
+
+removed item
+0x351D26A
+
+351D248   8B 48 4C              mov    ecx, dword ptr [rax + 0x4c]
+351D24B   8B BD 5C FF FF FF     mov    edi, dword ptr [rbp - 0xa4]
+351D251   4C 89 E2              mov    rdx, r12
+351D254   48 89 95 68 FF FF FF  mov    qword ptr [rbp - 0x98], rdx
+351D25B   39 CF                 cmp    edi, ecx
+351D25D   41 89 CC              mov    r12d, ecx
+
+351D260   44 0F 4E E7           cmovle r12d, edi
+351D264   44 29 E1              sub    ecx, r12d
+
+351D267   89 48 4C              mov    dword ptr [rax + 0x4c], ecx
+351D26A   48 8B 42 50           mov    rax, qword ptr [rdx + 0x50]
+351D26E   48 8B 48 18           mov    rcx, qword ptr [rax + 0x18]
+351D272   48 85 C9              test   rcx, rcx
+
+
+source => 351D260
+return =>
+cave   =>
+
+|== default ==|
+cmovle r12d, edi
+sub    ecx, r12d
+44 0F 4E E7 44 29 E1
+
+|== activated ==|
+mov ecx, dword ptr [rax + 0x188]
+nop
+8B 88 88 01 00 00 90
+
+
+
+------------------------Godmode------------------------
+2121FAC74 => 584B6A8  1
+
+219058918 => 813D870  X
+2198A4B64 => 3C9C9CE
+22C5C1F18 => 813D864
+
+584B6A8
+
+10 => max health
+14 => current health
+
+breakpoint ==> 0x584B690
+
+possible [rax] differences
+        player      enemy
+20	  0x1DB3CD78	 0x1D20E7E0
+3C        2           0   X <-- doesnt work with objects
+54        2           0
+5C        0           2   X <-- engineMan had 0 also
+7C        0           2
+88        1           0   X
+E8        1           0   X
+
+
+584B690   C5 FA 10 48 14  vmovss   xmm1, dword ptr [rax + 0x14]
+584B695   C5 F2 5C 4D D4  vsubss   xmm1, xmm1, dword ptr [rbp - 0x2c]
+584B69A   C5 FA 10 40 10  vmovss   xmm0, dword ptr [rax + 0x10]
+584B69F   C5 F8 2E C1     vucomiss xmm0, xmm1
+
+584B6A3   C5 FA 11 48 14  vmovss   dword ptr [rax + 0x14], xmm1
+584B6A8   72 0A           jb       0x584b6b4
+
+584B6AA   C5 F8 57 C0     vxorps   xmm0, xmm0, xmm0
+584B6AE   C5 F8 2E C8     vucomiss xmm1, xmm0
+
+source => 584B6A3
+return => 584B6A8
+cave   => B59F098
+
+
+|== default ==|
+vmovss dword ptr [rax + 0x14], xmm1
+jb     0x584b6b4
+C5 FA 11 48 14 72 0A
+
+|== activated ==|
+jmp 0xB59F098
+E9 F0 39 D5 05 90 90
+
+
+
+|== default ==|
+null
+
+|== activated ==|
+cmp dword ptr [rax + 0x20], 0x1DB3CD78
+jne original
+movss xmm1, dword ptr [rax + 0x10]
+original:
+  vmovss dword ptr [rax + 0x14], xmm1
+jmp 0x584B6AA
+nop
+nop
+nop
+
+81 78 20 78 CD B3 1D 75 05 F3 0F 10 48 10 C5 FA
+11 48 14 E9 FA C5 2A FA
+
+------------------------One-hit Kill------------------------
+584B690   C5 FA 10 48 14  vmovss   xmm1, dword ptr [rax + 0x14]
+
+584B695   C5 F2 5C 4D D4  vsubss   xmm1, xmm1, dword ptr [rbp - 0x2c]
+
+584B69A   C5 FA 10 40 10  vmovss   xmm0, dword ptr [rax + 0x10]
+584B69F   C5 F8 2E C1     vucomiss xmm0, xmm1
+584B6A3   C5 FA 11 48 14  vmovss   dword ptr [rax + 0x14], xmm1
+584B6A8   72 0A           jb       0x584b6b4
+584B6AA   C5 F8 57 C0     vxorps   xmm0, xmm0, xmm0
+584B6AE   C5 F8 2E C8     vucomiss xmm1, xmm0
+
+source => 584B695
+return => 584B69A
+cave   => B59F0E8
+
+
+|== default ==|
+vsubss xmm1, xmm1, dword ptr [rbp - 0x2c]
+C5 F2 5C 4D D4
+
+|== activated ==|
+jmp 0xB59F0E8
+E9 4E 3A D5 05
+
+
+
+|== default ==|
+null
+
+|== activated ==|
+cmp dword ptr [rax + 0x20], 0x1DB3CD78
+je original
+vxorps xmm1, xmm1, xmm1
+jmp 0x584B69A
+original:
+  vsubss xmm1, xmm1, dword ptr [rbp - 0x2c]
+jmp 0x584B69A
+
+81 78 20 78 CD B3 1D 74 09 C5 F0 57 C9 E9 A0 C5
+2A FA C5 F2 5C 4D D4 E9 96 C5 2A FA
+------------------------RAPID FIRE------------------------
+
+this sets to not shoot
+0x60C5E0D
+
+sets it back to shoot
+0x5D25B1A
+
+
+[rax]       => 0x21ACA4AD0
+currentAmmo => 0x21ACA4B28 (+0x58)
+
+
++0x20 away from [rax] MIGHT be flag for rapid fire
+
+w
+0x14C0384
+0x14C0344
+0x14C0354
+
+0x326B8A1
+
+
+
+0x14C0384
+[rsi + 0x10] => rapid fire
+0x21ACA49E0
+
+
+14C037D 90                        nop
+14C037E 90                        nop
+14C037F 90                        nop
+
+14C0380 C6 46 10 00               mov byte ptr [rsi + 0x10], 0
+
+14C0384 48 8B 47 50               mov rax, qword ptr [rdi + 0x50]
+14C0388 48 83 78 18 00            cmp qword ptr [rax + 0x18], 0
+14C038D 74 01                     je 0x14c0390
+
+======
+
+14C033D 90                        nop
+14C033E 90                        nop
+14C033F 90                        nop
+
+14C0340 C6 46 10 00               mov byte ptr [rsi + 0x10], 0
+
+14C0344 48 8B 47 50               mov rax, qword ptr [rdi + 0x50]
+14C0348 48 83 78 18 00            cmp qword ptr [rax + 0x18], 0
+14C034D 74 01                     je 0x14c0350
+
+======
+
+14C0344 48 8B 47 50               mov rax, qword ptr [rdi + 0x50]
+14C0348 48 83 78 18 00            cmp qword ptr [rax + 0x18], 0
+14C034D 74 01                     je 0x14c0350
+14C034F C3                        ret
+
+14C0350 C6 46 11 01               mov byte ptr [rsi + 0x11], 1
+
+14C0354 48 8B 47 50               mov rax, qword ptr [rdi + 0x50]
+14C0358 48 83 78 18 00            cmp qword ptr [rax + 0x18], 0
+14C035D 75 F0                     jne 0x14c034f
+
+======
+
+
+STEPS
+- find current ammo clip size (not magazine)
+  - keep address as reference
+- find flag to control rapid fire
+  - shoot, while you cant shoot do 4-byte unalignment unknown value
+  - when can shoot, exact value of zero
+  - repeat
+- narrow down address by looking for addresses close to the ammo clip size from step one
+- keep poke-ing to check if that is rapid fire
+- check the addresses that are writing to it
+  - rewrite to write as default instead of the value that makes it wait until shoot again

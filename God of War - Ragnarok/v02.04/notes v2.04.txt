@@ -1,0 +1,646 @@
+PS4Cheater filter before 11-09-22
+    anon, exe, Game, dlmalloc, SmallBlockAllocator
+
+
+cave start -->  1B2F000
+
+
+------------------------ Godmode ------------------------
+DE9D30
+
+
+ADCD8F  FF 50 20            call        qword ptr [rax + 0x20]
+ADCD92  48 85 C0            test        rax, rax
+ADCD95  0F 84 FC 02 00 00   je          0xadd097    <-- if equal then not MC (still do a cmp just in case)
+
+ADCD9B  C5 FA 10 4C 24 60   vmovss      xmm1, dword ptr [rsp + 0x60]
+
+ADCDA1  C5 FA 2C C1         vcvttss2si  eax, xmm1
+ADCDA5  01 05 C1 D8 DA 03   add         dword ptr [rip + 0x3dad8c1], eax
+ADCDAB  E9 F7 02 00 00      jmp         0xadd0a7
+
+source => ADCD9B
+return => ADCDA1
+cave   => 1B2F000
+
+
+|== default ==|
+vmovss xmm1, dword ptr [rsp + 0x60]
+C5 FA 10 4C 24 60
+
+
+|== activated ==|
+jmp 0x1B2F000
+E9 60 22 05 01 90
+
+
+|== default ==|
+
+|== activated ==|
+cmp rdi, 0x44DFC30
+je godmode
+original:
+    vmovss xmm1, dword ptr [rsp + 0x60]
+exit:
+    jmp 0xADCDA1
+godmode:
+    mov eax, -0x320                 // -800
+    cvtsi2ss xmm1, eax
+    vmovss dword ptr [rsp + 0x60], xmm1
+    jmp exit
+nop
+nop
+nop
+48 81 FF 30 FC 4D 04 74 0B C5 FA 10 4C 24 60 E9 
+8D DD FA FE B8 E0 FC FF FF F3 0F 2A C8 C5 FA 11 
+4C 24 60 EB EA 90 90 90
+
+
+
+
+
+------------------------ Damage Multiplier ------------------------
+
+ADB945  C5 FA 11 44 24 60     vmovss    dword ptr [rsp + 0x60], xmm0
+ADB94B  48 8B 88 80 00 00 00  mov       rcx, qword ptr [rax + 0x80]
+ADB952  E8 59 75 02 00        call      0xb02eb0
+ADB957  C5 FA 10 4C 24 60     vmovss    xmm1, dword ptr [rsp + 0x60]
+ADB95D  C5 F2 59 C8           vmulss    xmm1, xmm1, xmm0
+
+ADB961  C5 FA 11 4C 24 60     vmovss    dword ptr [rsp + 0x60], xmm1
+
+ADB967  C5 FA 10 44 24 60     vmovss    xmm0, dword ptr [rsp + 0x60]
+ADB96D  C4 C1 7A 11 04 24     vmovss    dword ptr [r12], xmm0
+ADB973  41 80 7C 24 1C 00     cmp       byte ptr [r12 + 0x1c], 0
+
+source => ADB961
+return => ADB967
+cave   => 1B2F050
+
+
+|== default ==|
+vmovss dword ptr [rsp + 0x60], xmm1
+C5 FA 11 4C 24 60
+
+
+|== activated ==|
+jmp 0x1B2F050
+E9 EA 36 05 01 90
+
+
+|== default ==|
+
+|== activated ==|
+cmp r11b, 0xF0
+jb mult_damage_check
+original:
+    vmovss dword ptr [rsp + 0x60], xmm1
+exit:
+    jmp 0xADB967
+mult_damage_check:
+    cmp byte ptr [0x1B2F500], 0x00
+    je original
+    vmulss xmm1, xmm1, dword ptr [0x1B2F510]
+    jmp original
+
+
+0x1B2F510
+    0000003F   (0.5x)
+    00000040   (2x)
+    00004040   (3x)
+    0000A040   (5x)
+
+
+
+
+
+------------------------ Instant R3 ------------------------
+
+B5BA28  74 07                 je        0xb5ba31
+B5BA2A  41 FF 86 90 00 00 00  inc       dword ptr [r14 + 0x90]
+B5BA31  C5 FA 59 C2           vmulss    xmm0, xmm0, xmm2
+
+B5BA35  C4 C1 7A 10 56 28     vmovss    xmm2, dword ptr [r14 + 0x28]
+
+B5BA3B  3C 01                 cmp       al, 1
+B5BA3D  74 14                 je        0xb5ba53
+B5BA3F  84 C0                 test      al, al
+B5BA41  75 32                 jne       0xb5ba75
+
+source => B5BA35
+return => B5BA3B
+cave   => 1B2F0A0
+
+
+|== default ==|
+vmovss xmm2, dword ptr [r14 + 0x28]
+C4 C1 7A 10 56 28
+
+
+|== activated ==|
+jmp 0x1B2F0A0
+E9 66 36 FD 00 90
+
+
+|== default ==|
+
+|== activated ==|
+push rsi
+cmp1:
+    cmp si, 0x656D1AF9232CA78B
+    je instant_r3
+original:
+    vmovss xmm2, dword ptr [r14 + 0x28]
+exit:
+    pop rsi
+    jmp 0xB5BA3B
+instant_r3:
+    mov esi, 0x64
+    cvtsi2ss xmm0, esi
+    jmp original
+nop
+56 66 81 FE 8B A7 74 0C C4 C1 7A 10 56 28 5E E9 
+87 C9 02 FF BE 64 00 00 00 F3 0F 2A C6 EB E9 90
+
+
+------------------------ Infinite Rage ------------------------
+
+(rage going up)
+F0D528  C5 FA 11 8D B0 FE FF FF   vmovss  dword ptr [rbp - 0x150], xmm1
+F0D530  E8 7B 59 BF FF            call    0xb02eb0
+F0D535  C5 FA 10 8D B0 FE FF FF   vmovss  xmm1, dword ptr [rbp - 0x150]
+F0D53D  EB 35                     jmp     0xf0d574
+
+F0D53F  C5 EA 58 43 28            vaddss  xmm0, xmm2, dword ptr [rbx + 0x28]
+
+F0D544  48 89 DF                  mov     rdi, rbx
+F0D547  B9 01 00 00 00            mov     ecx, 1
+F0D54C  31 F6                     xor     esi, esi
+F0D54E  31 D2                     xor     edx, edx
+
+source => F0D53F
+return => F0D544
+cave   => 1B2F0F0
+
+
+|== default ==|
+vaddss xmm0, xmm2, dword ptr [rbx + 0x28]
+C5 EA 58 43 28
+
+
+|== activated ==|
+jmp 0x1B2F0F0
+E9 AC 1B C2 00
+
+
+|== default ==|
+
+|== activated ==|
+cmp r12d, 0x10DBF22D67C1449
+je infinite_rage
+original:
+    vaddss xmm0, xmm2, dword ptr [rbx + 0x28]
+exit:
+    jmp 0xF0D544
+infinite_rage:
+    mov esi, 0x1F4
+    cvtsi2ss xmm0, esi
+    vmovss dword ptr [rbx + 0x28], xmm0
+    jmp original
+nop
+41 81 FC 49 14 7C D6 74 0A C5 EA 58 43 28 E9 41 
+E4 3D FF BE F4 01 00 00 F3 0F 2A C6 C5 FA 11 43 
+28 EB E6 90
+
+
+
+
+
+
+(rage going down)
+1049C4C  C5 F2 59 8D D0 FE FF FF   vmulss   xmm1, xmm1, dword ptr [rbp - 0x130]
+1049C54  C5 F2 59 C0               vmulss   xmm0, xmm1, xmm0
+1049C58  45 84 FF                  test     r15b, r15b
+1049C5B  75 05                     jne      0x1049c62
+
+1049C5D  C5 FA 58 43 28            vaddss   xmm0, xmm0, dword ptr [rbx + 0x28]
+
+1049C62  44 8B B5 EC FE FF FF      mov      r14d, dword ptr [rbp - 0x114]
+1049C69  48 89 DF                  mov      rdi, rbx
+1049C6C  B9 01 00 00 00            mov      ecx, 1
+1049C71  31 F6                     xor      esi, esi
+
+source => 1049C5D
+return => 1049C62
+cave   => 1B2F140
+
+
+|== default ==|
+vaddss xmm0, xmm0, dword ptr [rbx + 0x28]
+C5 FA 58 43 28
+
+
+|== activated ==|
+jmp 0x1B2F140
+E9 DE 54 AE 00
+
+
+|== default ==|
+
+|== activated ==|
+cmp r11, 0x2
+je infinite_rage
+original:
+    vaddss xmm0, xmm0, dword ptr [rbx + 0x28]
+exit:
+    jmp 0x1049C62
+infinite_rage:
+    mov r14d, 0x1F4
+    cvtsi2ss xmm0, r14d
+    vmovss dword ptr [rbx + 0x28], xmm0
+    jmp exit
+nop
+nop
+49 83 FB 02 74 0A C5 FA 58 43 28 E9 12 AB 51 FF 
+41 BE F4 01 00 00 F3 41 0F 2A C6 C5 FA 11 43 28 
+EB E9 90 90
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------No Cooldown------------------------
+
+Delete	17801E904A	2 bytes	X	17031	WAD_Char_HeroA00[0]-33-1780000000-2048KB	False	
+
+after r1 + after bringing back axe (hitting triangle)
+0xE48815
+
+regenerating
+0xE47129
+
+
+E47AF8  E8 B3 B3 CB FF        call  0xb02eb0
+E47AFD  C5 FA 59 45 80        vmulss    xmm0, xmm0, dword ptr [rbp - 0x80]
+
+E47B02  C4 C1 7A 10 4C 24 38  vmovss    xmm1, dword ptr [r12 + 0x38]
+
+E47B09  C5 E8 57 D2           vxorps    xmm2, xmm2, xmm2
+E47B0D  C5 F2 5C C0           vsubss    xmm0, xmm1, xmm0
+E47B11  C5 F0 57 C9           vxorps    xmm1, xmm1, xmm1
+E47B15  C5 F8 29 4D 80        vmovaps   xmmword ptr [rbp - 0x80], xmm1
+E47B1A  C5 F8 2E C2           vucomiss  xmm0, xmm2
+E47B1E  C5 FA 5F C2           vmaxss    xmm0, xmm0, xmm2
+E47B22  C4 C1 7A 11 44 24 38  vmovss    dword ptr [r12 + 0x38], xmm0
+E47B29  4D 63 6C 24 24        movsxd    r13, dword ptr [r12 + 0x24]
+E47B2E  4D 8B 74 24 18        mov   r14, qword ptr [r12 + 0x18]
+
+source => E47B02
+return => E47B09
+cave   => 1B2F260
+
+
+|== default ==|
+vmovss   xmm1, dword ptr [r12 + 0x38]
+C4 C1 7A 10 4C 24 38
+
+|== activated ==|
+vmovss xmm1, dword ptr [rbp - 0x80]
+nop
+nop
+C5 FA 10 4D 80 90 90
+
+
+
+
+
+
+
+
+
+------------------------ Reverse Crafting ------------------------
+
+101C943 8A 47 41             mov    al, byte ptr [rdi + 0x41]
+101C946  BF FF FF FF 7F      mov    edi, 0x7fffffff
+101C94B  0F 45 F9            cmovne edi, ecx
+101C94E  45 84 DB            test   r11b, r11b
+
+101C951  74 07               je     0x101c95a
+101C953  F0 01 16            lock   add dword ptr [rsi], edx
+
+101C956  8B 0E               mov    ecx, dword ptr [rsi]
+101C958  EB 04               jmp    0x101c95e
+101C95A  41 8D 0C 10         lea    ecx, [r8 + rdx]
+101C95E  89 CA               mov    edx, ecx
+101C960  89 BD E4 FE FF FF   mov    dword ptr [rbp - 0x11c], edi
+
+source => 101C951
+return => 101C956
+cave   => 1B2F190
+
+
+|== default ==|
+je 0x101c95a
+lock add dword ptr [rsi], edx
+74 07 F0 01 16
+
+|== activated ==|
+jmp 0x1B2F190
+E9 3A 28 B1 00
+
+
+|== default ==|
+
+|== activated ==|
+je 0x101c95a
+pushf
+test edx, edx
+js to_positive
+original:
+    lock add dword ptr [rsi], edx
+exit:
+    popf
+    jmp 0x101C956
+to_positive:
+    neg edx
+    jmp original
+nop
+nop
+0F 84 C4 D7 4E FF 66 9C 85 D2 78 0A F0 01 16 66 
+9D E9 B0 D7 4E FF F7 DA EB F2 90 90
+
+
+
+
+
+
+
+
+------------------------ Infinite Projectiles ------------------------
+
+(getting)
+C54038  0F 45 C1                  cmovne    eax, ecx
+C5403B  C5 F9 6E C0               vmovd     xmm0, eax
+C5403F  C4 E3 71 0A C9 09         vroundss  xmm1, xmm1, xmm1, 9
+C54045  C5 F2 59 D0               vmulss    xmm2, xmm1, xmm0
+
+C54049  C5 FA 10 8D 80 DF FF FF   vmovss    xmm1, dword ptr [rbp - 0x2080]     -> [rbp - 0x2090] is full capacity
+
+C54051  C5 E2 58 C1               vaddss    xmm0, xmm3, xmm1
+C54055  C5 FA 5D C2               vminss    xmm0, xmm0, xmm2
+C54059  C5 F8 2E C2               vucomiss  xmm0, xmm2
+C5405D  0F 82 78 02 00 00         jb        0xc542db
+
+source => C54049
+return => C54051
+cave   => 1B2F1D0
+
+
+|== default ==|
+vmovss xmm1, dword ptr [rbp - 0x2080]
+C5 FA 10 8D 80 DF FF FF
+
+|== activated ==|
+jmp 0x1B2F1D0
+E9 82 B1 ED 00 90 90 90
+
+
+|== default ==|
+
+|== activated ==|
+pushf
+cmp_flyingSword:
+    cmp r11, 0x2
+    je infinite
+cmp_main:
+    cmp r8w, 0x16402B1EF0
+    je infinite
+original:
+    vmovss xmm1, dword ptr [rbp - 0x2080]
+exit:
+    popf
+    jmp 0xC54051
+infinite:
+    vmovss xmm3, dword ptr [rbp - 0x2090]
+    jmp original
+nop
+nop
+nop
+66 9C 49 83 FB 02 74 17 66 41 81 F8 F0 1E 74 0F 
+C5 FA 10 8D 80 DF FF FF 66 9D E9 62 4E 12 FF C5 
+FA 10 8D 70 DF FF FF EB EF 90 90 90
+
+
+
+
+
+
+
+(throwing)
+- works with kratos/freyaArrowss
+A3E0BA 4C 89 EF         mov rdi, r13
+A3E0BD E8 7E 65 BC FF   call 0x604640
+A3E0C2 48 85 C0         test rax, rax
+A3E0C5 74 12            je 0xa3e0d9
+
+A3E0C7 48 89 C7         mov rdi, rax
+A3E0CA EB 24            jmp 0xa3e0f0
+
+A3E0CC 48 8B 43 28      mov rax, qword ptr [rbx + 0x28]
+A3E0D0 48 8B 55 80      mov rdx, qword ptr [rbp - 0x80]
+A3E0D4 E9 EA FE FF FF   jmp 0xa3dfc3
+A3E0D9 48 8D 7D 90      lea rdi, [rbp - 0x70]
+
+source => A3E0C7
+return => -NaN-
+cave   => 1B2F220
+
+
+|== default ==|
+mov rdi, rax
+jmp 0xa3e0f0
+48 89 C7 EB 24
+
+
+|== activated ==|
+jmp 0x1B2F220
+E9 54 11 0F 01
+
+
+|== default ==|
+
+|== activated ==|
+mov edi, 0x32   // 50
+cvtsi2ss xmm1, edi
+vmovss dword ptr [rax], xmm1
+original:
+    mov rdi, rax
+    jmp 0xa3e0f0
+nop
+nop
+nop
+
+
+
+
+
+r8w 1EF0
+0x16402B4B88    arrowLeft   1.174289/3
+0x16402B4AF0    30/30?
+0x1B43780608    down?       
+
+
+r11 0x2
+0x17C00F9910    arrowRight  30/30
+
+
+
+
+
+
+
+
+
+
+
+------------------------ XP/HS/Resources Multiplier ------------------------
+
+C9529C  5D               pop    rbp
+C9529D  E9 4E 5F 38 00   jmp    0x101b1f0
+C952A2  85 D2            test   edx, edx
+C952A4  78 62            js     0xc95308
+
+C952A6  89 D1            mov    ecx, edx
+C952A8  41 8B 55 08      mov    edx, dword ptr [r13 + 8]
+
+C952AC  48 C1 E1 04      shl    rcx, 4
+C952B0  8B 34 08         mov    esi, dword ptr [rax + rcx]
+C952B3  49 8B 04 24      mov    rax, qword ptr [r12]
+C952B7  48 3B 45 D0      cmp    rax, qword ptr [rbp - 0x30]
+
+source => C952A6
+return => C952AC
+cave   => 1B2F260
+
+
+|== default ==|
+mov ecx, edx
+mov edx, dword ptr [r13 + 8]
+89 D1 41 8B 55 08
+
+
+|== activated ==|
+jmp 0x1B2F260
+nop
+E9 B5 9F E9 00 90
+
+
+|== default ==|
+
+|== activated ==|
+mov ecx, dword ptr [0x1B2F520]
+imul ecx, dword ptr [r13 + 8]
+mov dword ptr [r13 + 8], ecx
+original:
+    mov ecx, edx
+    mov edx, dword ptr [r13 + 8]
+exit:
+    jmp 0xC952AC
+
+
+
+0x 1B2F520
+    03000000   (3x)
+    05000000   (5x)
+    0A000000   (10x)
+    19000000   (25x)
+
+
+
+
+
+
+
+1B2F600 -> all zeroes
+
+C952B0
+
+DE9D30
+
+0x10C348A200
+
+
+
+
+
+
+
+
+
+
+
+------------------------ Apple Fix TESTING ------------------------
+
+0x 10C348D700   <-- seems static
+
+
+101C970  C4 E2 68 F2 C9         andn    ecx, edx, ecx
+101C975  39 F9                  cmp     ecx, edi
+101C977  0F 4D CF               cmovge  ecx, edi
+101C97A  84 C0                  test    al, al
+
+101C97C  89 8D 40 FF FF FF      mov     dword ptr [rbp - 0xc0], ecx
+
+101C982  89 0E                  mov     dword ptr [rsi], ecx
+101C984  0F 84 F2 05 00 00      je      0x101cf7c
+101C98A  44 39 85 40 FF FF FF   cmp     dword ptr [rbp - 0xc0], r8d
+101C991  0F 84 E5 05 00 00      je      0x101cf7c
+101C997  48 8B 85 28 FF FF FF   mov     rax, qword ptr [rbp - 0xd8]
+
+source => 101C97C
+return => 101C982
+cave   => 1B2F2A0
+
+
+|== default ==|
+mov dword ptr [rbp - 0xc0], ecx
+89 8D 40 FF FF FF
+
+
+|== activated ==|
+jmp 0x1B2F2A0
+nop
+E9 1F 29 B1 00 90
+
+
+|== default ==|
+
+|== activated ==|
+pushf
+cmp r12, 0x19
+je set_amount
+cmp r12, 0x1A
+je set_amount
+original:
+    mov dword ptr [rbp - 0xc0], ecx
+popf
+jmp 0x101C982
+set_amount:
+    mov ecx, 0x64
+    jmp original
+
+
+
+
+
+
+

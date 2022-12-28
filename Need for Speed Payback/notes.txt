@@ -1,0 +1,173 @@
+------------------------Infinite Nitrous [ FAIL ]------------------------
+noz increasing
+0xE02EC0
+
+noz decreasing
+0xE02EC0
+
+[r14 + 0x18] => maybe nitrous max capacity
+
+
+E02EB4   48 01 F2        add rdx, rsi
+E02EB7   FF E2           jmp rdx
+
+E02EB9   41 8B 04 24     mov eax, dword ptr [r12]
+E02EBD   41 89 06        mov dword ptr [r14], eax
+
+E02EC0   E9 54 03 00 00  jmp 0xe03219
+E02EC5   41 8A 04 24     mov al, byte ptr [r12]
+E02EC9   41 88 06        mov byte ptr [r14], al
+
+
+source => E02EB9
+return =>
+cave   =>
+
+
+|== default ==|
+mov eax, dword ptr [r12]
+41 8B 04 24
+
+|== activated ==|
+mov eax, dword ptr [r14 + 0x18]
+41 8B 46 18
+
+
+
+------------------------Infinite Nitrous [ FAIL 2 ]------------------------
+
+10F74D4CA0 -> E02EC0 <-- froze on breakpoint
+10F75156B4 -> 28EB7D4, 28EBFA2
+10F7515830 -> 243BC4B
+
+
+10F75156B4
+  28EB7D4 up & down
+  28EBFA2 down
+
+
+28EB7D4
+[r13 + 0x218] -> possible max capacity
+
+28EB7B4   C5 E8 54 15 04 8F 24 01     vandps xmm2, xmm2, xmmword ptr [rip + 0x1248f04]
+28EB7BC   C5 EA C2 15 DF A0 26 01 01  vcmpltss xmm2, xmm2, dword ptr [rip + 0x126a0df]
+28EB7C5   C4 E3 79 4A C1 20           vblendvps xmm0, xmm0, xmm1, xmm2
+
+28EB7CB   C4 C1 7A 11 85 14 02 00 00  vmovss dword ptr [r13 + 0x214], xmm0
+
+28EB7D4   C4 C1 7A 10 85 30 04 00 00  vmovss xmm0, dword ptr [r13 + 0x430]
+28EB7DD   C4 C1 7A 10 8D 34 04 00 00  vmovss xmm1, dword ptr [r13 + 0x434]
+28EB7E6   C5 FA 58 D1                 vaddss xmm2, xmm0, xmm1
+
+
+source => 28EB7CB
+return => 28EB7D4
+cave   => 42D7000
+
+
+|== default ==|
+vmovss dword ptr [r13 + 0x214], xmm0
+C4 C1 7A 11 85 14 02 00 00
+
+|== activated ==|
+jmp 0x42D7000
+E9 30 B8 9E 01 90 90 90 90
+
+
+|== default ==|
+...
+
+|== activated ==|
+cmp dword ptr [r13 + 0x218], 0x0
+je original
+movss xmm0, dword ptr [r13 + 0x218]         -> crashed on vmovss
+original:
+  vmovss dword ptr [r13 + 0x214], xmm0
+jmp 0x28EB7D4
+nop
+nop
+nop
+
+41 83 BD 18 02 00 00 00 74 09 F3 41 0F 10 85 18
+02 00 00 C4 C1 7A 11 85 14 02 00 00 E9 B3 47 61
+FE 90 90 90
+
+
+------------------------Infinite Nitrous [ FAIL 3 ]------------------------
+28EB762   74 0A                       je      0x28eb76e
+28EB764   8B 4F 20                    mov     ecx, dword ptr [rdi + 0x20]
+28EB767   41 89 8D 14 02 00 00        mov     dword ptr [r13 + 0x214], ecx
+
+28EB76E   C4 C1 7A 10 85 14 02 00 00  vmovss  xmm0, dword ptr [r13 + 0x214]
+
+28EB777   C4 C1 7A 10 8D 18 02 00 00  vmovss  xmm1, dword ptr [r13 + 0x218]
+28EB780   41 0F B6 8D 0A 02 00 00     movzx   ecx, byte ptr [r13 + 0x20a]
+28EB788   48 8D 15 19 08 26 01        lea     rdx, [rip + 0x1260819]
+
+
+source => 28EB76E
+return => 28EB777
+cave   => 42D7000
+
+
+|== default ==|
+vmovss  xmm0, dword ptr [r13 + 0x214]
+C4 C1 7A 10 85 14 02 00 00
+
+|== activated ==|
+jmp 0x42D7000
+E9 8D B8 9E 01 90 90 90 90
+
+
+|== default ==|
+...
+
+|== activated ==|
+cmp dword ptr [r13 + 0x218], 0x0
+je original
+vmovss xmm0, dword ptr [r13 + 0x218]
+jmp 0x28EB777
+original:
+  vmovss xmm0, dword ptr [r13 + 0x214]
+jmp 0x28EB777
+nop
+nop
+
+41 83 BD 18 02 00 00 00 74 0E C4 C1 7A 10 85 18
+02 00 00 E9 5F 47 61 FE C4 C1 7A 10 85 14 02 00
+00 E9 51 47 61 FE 90 90
+
+
+
+
+28EBF7F   E9 E9 00 00 00              jmp 0x28ec06d
+28EBF84   C4 C1 7A 10 85 14 02 00 00  vmovss xmm0, dword ptr [r13 + 0x214]
+28EBF8D   C5 F0 57 C9                 vxorps xmm1, xmm1, xmm1
+
+28EBF91   C5 FA 5C C5                 vsubss xmm0, xmm0, xmm5
+
+28EBF95   C5 FA 5F C1                 vmaxss xmm0, xmm0, xmm1
+28EBF99   C4 C1 7A 11 85 14 02 00 00  vmovss dword ptr [r13 + 0x214], xmm0
+28EBFA2   C5 FA 10 57 20              vmovss xmm2, dword ptr [rdi + 0x20]
+
+
+source => 28EBF91
+return =>
+cave   =>
+
+
+|== default ==|
+vsubss xmm0, xmm0, xmm5
+C5 FA 5C C5
+
+|== activated ==|
+nopppppp
+90 90 90 90
+
+
+
+------------------------Infinite Nitrous------------------------
+
+10F75156B4 -> 28EB7D4, 28EBFA2
+
+simple as 2 nops

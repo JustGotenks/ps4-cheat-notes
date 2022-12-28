@@ -1,0 +1,127 @@
+{
+  "name": "The Survivalists",
+  "id": "CUSA16273",
+  "version": "01.06",
+  "process": "eboot.bin",
+  "mods": [
+    {
+      "name": "Godmode",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80FDC526",
+          "on": "E935EBD08090909090",
+          "off": "89F331F6E8011BA2FF"
+        },
+        {
+          "offset": "1CEB060",
+          "on": "664181FC50C377034489E689F331F6E8BC2FD17EE9B6142F7F909090",
+          "off": "00000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "Infinite Stamina",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80E0F601",
+          "on": "90909090",
+          "off": "C5F25CC8"
+        }
+      ]
+    },
+    {
+      "name": "One-hit Kill",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80DD553F",
+          "on": "E9EC5AF1809090",
+          "off": "8958204883C408"
+        },
+        {
+          "offset": "1CEB030",
+          "on": "BB000000008958204883C408E905A50E7F909090",
+          "off": "0000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "One-hit Destroy (trees, rocks, etc)",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80FDC52F",
+          "on": "E9CCEAD0809090",
+          "off": "8958204883C408"
+        },
+        {
+          "offset": "1CEB000",
+          "on": "664181FC50C37605BB000000008958204883C408E91D152F7F909090",
+          "off": "00000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "name": "No Hunger",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "8120626E",
+          "on": "83EA00",
+          "off": "2B5124"
+        }
+      ]
+    },
+    {
+      "name": "No Item Damage",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "8120F856",
+          "on": "836CC82C00",
+          "off": "44297CC82C"
+        }
+      ]
+    },
+    {
+      "name": "Max Coins (on get)",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "80B4E5A3",
+          "on": "C743303F420F00",
+          "off": "41037620897330"
+        }
+      ]
+    },
+    {
+      "name": "Lock Item (buggy)",
+      "hint": "Item count doesnt go down and dropped item is duplicated. Best to use when duplicating since it can cause problems if always on.",
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "8120C47D",
+          "on": "E97EEBAD80909090909090",
+          "off": "29D84189070F8497000000"
+        },
+        {
+          "offset": "1CEB000",
+          "on": "41837F0400740529D8418907E97714527F909090",
+          "off": "0000000000000000000000000000000000000000"
+        }
+      ]
+    }
+  ],
+  "credits": [
+    "JustGotenks"
+  ]
+}

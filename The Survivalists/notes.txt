@@ -1,0 +1,464 @@
+------------------------Lock Item------------------------
+items
+Delete	2CAF88040	4 bytes	X	17	[0]-33-2CA340000-16400KB	False	
+
+removing
+0x8120C482
+
+adding
+0x80CACC0F
+
+
+8120C46E   E8 5D C0 EF 01     call      0x831084d0
+8120C473   41 8B 07           mov       eax, dword ptr [r15]
+8120C476   41 39 DE           cmp       r14d, ebx
+8120C479   41 0F 4E DE        cmovle    ebx, r14d
+
+8120C47D   29 D8              sub       eax, ebx
+8120C47F   41 89 07           mov       dword ptr [r15], eax
+8120C482   0F 84 97 00 00 00  je        0x8120c51f
+
+8120C488   85 DB              test      ebx, ebx
+8120C48A   0F 8E A8 00 00 00  jle       0x8120c538
+8120C490   48 8B 44 24 10     mov       rax, qword ptr [rsp + 0x10]
+8120C495   48 8B 4C 24 18     mov       rcx, qword ptr [rsp + 0x18]
+
+source => 8120C47D
+return => 8120C488
+cave   => 1CEB000   X
+
+
+|== default ==|
+sub       eax, ebx
+mov       dword ptr [r15], eax
+je        0x8120c51f
+29 D8 41 89 07 0F 84 97 00 00 00
+
+|== activated ==|
+jmp 0x1CEB000
+E9 7E EB AD 80 90 90 90 90 90 90
+
+
+|== default ==|
+...
+
+|== activated ==|
+cmp dword ptr [r15 + 0x4], 0x00
+je exit
+original:
+    sub eax, ebx
+    mov dword ptr [r15], eax
+exit:
+    jmp 0x8120C488
+nop
+nop
+nop
+41 83 7F 04 00 74 05 29 D8 41 89 07 E9 77 14 52
+7F 90 90 90
+
+
+------------------------One-hit Destroy (shares player/enemy/tree health)------------------------
+tree health
+2A6B44BA0	4 bytes	X	1000	[0]-33-2A2D40000-79888KB
+
+hit
+0x80FDC532
+
+80FDC520   55              push rbp
+80FDC521   48 89 E5        mov  rbp, rsp
+80FDC524   53              push rbx
+80FDC525   50              push rax
+80FDC526   89 F3           mov  ebx, esi
+80FDC528   31 F6           xor  esi, esi
+80FDC52A   E8 01 1B A2 FF  call 0x809fe030
+
+80FDC52F   89 58 20        mov  dword ptr [rax + 0x20], ebx
+80FDC532   48 83 C4 08     add  rsp, 8
+
+80FDC536   5B              pop  rbx
+80FDC537   5D              pop  rbp
+80FDC538   C3              ret  
+
+source => 80FDC52F
+return => 80FDC536
+cave   => 1CEB000
+
+
+|== default ==|
+mov  dword ptr [rax + 0x20], ebx
+add  rsp, 8
+89 58 20 48 83 C4 08
+
+|== activated ==|
+jmp 0x1CEB000
+nop
+nop
+E9 CC EA D0 80 90 90
+
+
+|== default ==|
+...
+
+|== activated ==|
+cmp r12w, 0xC350
+jbe original
+mov ebx, 0x0
+original:
+    mov dword ptr [rax + 0x20], ebx
+    add rsp, 8
+jmp 0x80FDC536
+nop
+nop
+nop
+66 41 81 FC 50 C3 76 05 BB 00 00 00 00 89 58 20 
+48 83 C4 08 E9 1D 15 2F 7F 90 90 90
+
+
+cmp r12w, 0xC350
+jbe original_two
+mov ebx, 0x0
+original:
+    mov dword ptr [rax + 0x20], ebx
+    add rsp, 8
+jmp 0x80FDC536
+original_two:
+    mov dword ptr [rax + 0x20], ebx
+    add rsp, 8
+jmp 0x80FDC536
+nop
+nop
+nop
+
+
+
+
+------------------------No Item Damage------------------------
+axe health
+2CAF88134	4 bytes	X	4900	[0]-33-2CA340000-16400KB
+
+hit
+0x8120F85B
+8120F842   4D 85 F6                 test    r14, r14
+8120F845   0F 84 8A 02 00 00        je      0x8120fad5
+8120F84B   41 83 7E 4C 00           cmp     dword ptr [r14 + 0x4c], 0
+8120F850   0F 8E 7F 02 00 00        jle     0x8120fad5
+
+8120F856   44 29 7C C8 2C           sub     dword ptr [rax + rcx*8 + 0x2c], r15d
+
+8120F85B   C5 F8 57 C0              vxorps  xmm0, xmm0, xmm0
+8120F85F   4C 8D 64 C8 20           lea     r12, [rax + rcx*8 + 0x20]
+8120F864   4C 8D BC 24 E8 00 00 00  lea     r15, [rsp + 0xe8]
+8120F86C   41 8B 55 14              mov     edx, dword ptr [r13 + 0x14]
+
+source => 8120F856
+return => 
+cave   => 
+
+|== default ==|
+sub     dword ptr [rax + rcx*8 + 0x2c], r15d
+44 29 7C C8 2C
+
+|== activated ==|
+sub dword ptr [rax + rcx*8 + 0x2c], 0x0
+83 6C C8 2C 00
+
+
+
+
+------------------------No Hunger------------------------
+hunger
+Delete	2A83EC2B4	4 bytes	X	55	[0]-33-2A7B80000-16400KB	False	
+
+hunger down
+0x8120627E
+
+8120625F   48 8B 4F 38     mov  rcx, qword ptr [rdi + 0x38]
+81206263   48 89 FB        mov  rbx, rdi
+81206266   48 85 C9        test rcx, rcx
+81206269   74 5B           je   0x812062c6
+8120626B   8B 50 14        mov  edx, dword ptr [rax + 0x14]
+
+8120626E   2B 51 24        sub  edx, dword ptr [rcx + 0x24]
+
+81206271   89 D1           mov  ecx, edx
+81206273   C1 F9 1F        sar  ecx, 0x1f
+81206276   C4 E2 70 F2 CA  andn ecx, ecx, edx
+8120627B   89 48 14        mov  dword ptr [rax + 0x14], ecx
+
+
+source => 8120626E
+return => 
+cave   => 
+
+
+|== default ==|
+sub  edx, dword ptr [rcx + 0x24]
+2B 51 24
+
+|== activated ==|
+sub edx, 0x0
+83 EA 00
+
+
+
+hunger up
+0x81206584
+
+
+
+
+------------------------Infinite Stamina------------------------
+stamina
+Delete	2ADEFA694	float	X	120	[0]-33-2ADCC0000-16400KB	False	
+
+running
+0x80E0F60E
+
+generating
+0x80E0F2D2
+
+
+
+80E0F5F9   C5 FA 10 4B 34     vmovss    xmm1, dword ptr [rbx + 0x34]
+80E0F5FE   41 B6 01           mov       r14b, 1
+
+80E0F601   C5 F2 5C C8        vsubss    xmm1, xmm1, xmm0
+
+80E0F605   C5 F8 2E D1        vucomiss  xmm2, xmm1
+80E0F609   C5 FA 11 4B 34     vmovss    dword ptr [rbx + 0x34], xmm1
+80E0F60E   0F 82 AC 00 00 00  jb        0x80e0f6c0
+
+source => 80E0F601
+return => 
+cave   => 
+
+
+|== default ==|
+vsubss    xmm1, xmm1, xmm0
+C5 F2 5C C8
+
+|== activated ==|
+nop
+90 90 90 90
+
+
+
+
+
+------------------------Godmode------------------------
+health
+Delete	2A6BE6D10	4 bytes	X	10000	[0]-33-2A2D40000-79888KB	False	health
+
+attacked
+0x80FDC532
+0x80FDC532
+gain
+0x80FDC532
+0x80FDC532
+
+80FDC520 55              push   rbp
+80FDC521 48 89 E5        mov    rbp, rsp
+80FDC524 53              push   rbx
+80FDC525 50              push   rax
+
+80FDC526 89 F3           mov    ebx, esi
+80FDC528 31 F6           xor    esi, esi
+80FDC52A E8 01 1B A2 FF  call   0x809fe030
+
+80FDC52F 89 58 20        mov    dword ptr [rax + 0x20], ebx
+80FDC532 48 83 C4 08     add    rsp, 8
+80FDC536 5B              pop    rbx
+80FDC537 5D              pop    rbp
+80FDC538 C3              ret
+
+source => 80FDC526
+return => 80FDC52F
+cave   => 1CEB060
+
+
+|== default ==|
+mov    ebx, esi
+xor    esi, esi
+call   0x809fe030
+89 F3 31 F6 E8 01 1B A2 FF
+
+
+|== activated ==|
+jmp 0x1CEB060
+E9 35 EB D0 80 90 90 90 90
+
+
+|== default ==|
+...
+
+|== activated ==|
+cmp r12w, 0xC350
+ja original
+mov esi, r12d
+original:
+    mov  ebx, esi
+    xor  esi, esi
+    call 0x809fe030
+jmp 0x80FDC52F
+nop
+nop
+nop
+66 41 81 FC 50 C3 77 03 44 89 E6 89 F3 31 F6 E8 
+BC 2F D1 7E E9 B6 14 2F 7F 90 90 90
+
+
+cave   => 1CEB060
+
+cmp r12w, 0xC350
+ja original_two
+original:
+    mov  ebx, esi
+    xor  esi, esi
+    call 0x809fe030
+jmp 0x80FDC52F
+original_two:
+    mov  ebx, esi
+    xor  esi, esi
+    call 0x809fe030
+jmp 0x80FDC52F
+
+
+
+
+
+player getting hit
+r12	0xFFFFFDA8000024B8
+r12	0xFFFFFDA800002260
+r12	0xFFFFFA24000025E4
+r12	0xFFFFFA2400002008
+
+player gaining health from eating berries
+r12	0x2710
+
+hitting objects
+r12	0x2A83AC370     --> changes on game restart
+
+
+
+------------------------One-hit Kill------------------------
+
+enemy health
+Delete	2A6C85B18	4 bytes	X	13000	[0]-33-2A2C40000-80912KB	False	
+
+attack
+0x80DD5542
+    returned to 0x812028E5
+
+
+80DD5530   55              push rbp
+80DD5531   48 89 E5        mov  rbp, rsp
+80DD5534   53              push rbx
+80DD5535   50              push rax
+80DD5536   89 F3           mov  ebx, esi
+80DD5538   31 F6           xor  esi, esi
+80DD553A   E8 F1 8A C2 FF  call 0x809fe030
+
+80DD553F   89 58 20        mov  dword ptr [rax + 0x20], ebx
+80DD5542   48 83 C4 08     add  rsp, 8
+
+80DD5546   5B              pop  rbx
+80DD5547   5D              pop  rbp
+80DD5548   C3              ret
+
+source => 80DD553F
+return => 80DD5546
+cave   => 1CEB030
+
+
+|== default ==|
+mov  dword ptr [rax + 0x20], ebx
+add  rsp, 8
+89 58 20 48 83 C4 08
+
+|== activated ==|
+jmp 0x1CEB030
+E9 EC 5A F1 80 90 90
+
+
+|== default ==|
+...
+
+|== activated ==|
+mov ebx, 0x0
+original:
+    mov dword ptr [rax + 0x20], ebx
+    add rsp, 8
+jmp 0x80DD5546
+nop
+BB 00 00 00 00 89 58 20 48 83 C4 08 E9 05 A5 0E
+7F 90 90 90
+
+
+
+------------------------Max Coins (on get)------------------------
+Delete	2AD2D09F0	4 bytes	X	1000010	[0]-33-2AD080000-16400KB	False	
+
+added
+0x80B4E5AA
+
+
+80B4E59E   74 47        je   0x80b4e5e7
+80B4E5A0   8B 73 30     mov  esi, dword ptr [rbx + 0x30]
+
+80B4E5A3   41 03 76 20  add  esi, dword ptr [r14 + 0x20]
+80B4E5A7   89 73 30     mov  dword ptr [rbx + 0x30], esi
+
+80B4E5AA   48 8B 43 18  mov  rax, qword ptr [rbx + 0x18]
+80B4E5AE   48 85 C0     test rax, rax
+80B4E5B1   74 34        je   0x80b4e5e7
+
+source => 80B4E5A3
+return => 
+cave   => 
+
+
+|== default ==|
+add  esi, dword ptr [r14 + 0x20]
+mov  dword ptr [rbx + 0x30], esi
+41 03 76 20 89 73 30
+
+|== activated ==|
+mov dword ptr [rbx + 0x30], 0xF423F
+C7 43 30 3F 42 0F 00
+
+
+
+------------------------        ------------------------
+Delete	2CA037498	float	X	0.8878906	[0]-33-2C9040000-16400KB	False	
+
+crafting speed
+0x820474B8
+
+
+xmm0	334B2C3F000000000000000000000000		0.6730224
+
+
+
+
+------------------------No Crafting requirements------------------------
+Delete	2A6CC71D4	4 bytes	X	2	[0]-33-2A2D80000-79888KB	False	
+Delete	2A6CC71DC	4 bytes	X	2	[0]-33-2A2D80000-79888KB	False	
+Delete	2A6CC71EC	4 bytes	X	33621148	[0]-33-2A2D80000-79888KB	False	
+Delete	2A7D071D4	4 bytes	X	2	[0]-33-2A7BC0000-16400KB	False	
+Delete	2A7D071DC	4 bytes	X	2	[0]-33-2A7BC0000-16400KB	False	
+Delete	2A7D071EC	4 bytes	X	33555612	[0]-33-2A7BC0000-16400KB	False	
+Delete	2C94CBDA4	4 bytes	X	2	[0]-33-2C9180000-16400KB	False	
+Delete	2C94CBDA8	4 bytes	X	1	[0]-33-2C9180000-16400KB	False	
+
+
+
+
+
+2A6CC71D4 -> 
+2A6CC71DC -> 
+2A6CC71EC -> 
+2A7D071D4 -> 0x8114309A                             0x80B5A252
+2A7D071DC -> 0x80B5A77F,0x80B5A2C0                  0x80B5A59A
+2A7D071EC -> 0x80B5A2C9,0x80B5A343,0x80B5A347       0x80B5A1C2,0x81144A62,0x83216300,0x80B5A505,0x811454FC
+2C94CBDA4 -> 0x82F07CDD                             0x801D29AF
+2C94CBDA8 -> 0x82F07CDD                             0x801D29AF

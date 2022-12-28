@@ -1,0 +1,136 @@
+============| Godmode |============
+
+9584A3   45 8A 7E 74         mov        r15b, byte ptr [r14 + 0x74]
+9584A7   C4 C1 7A 10 4E 54   vmovss     xmm1, dword ptr [r14 + 0x54]
+9584AD   C5 FA 11 4D D4      vmovss     dword ptr [rbp - 0x2c], xmm1
+
+9584B2   C4 C1 7A 11 56 54   vmovss     dword ptr [r14 + 0x54], xmm2
+
+9584B8   C4 C1 7A 10 4E 58   vmovss     xmm1, dword ptr [r14 + 0x58]
+9584BE   C5 F8 2E CA         vucomiss   xmm1, xmm2
+9584C2   76 0F               jbe        0x9584d3
+
+source => 9584B2
+return => 9584B8
+cave   => 16B3000
+
+[r14 + 0x44]
+  player = 0x00
+
+[r14 + 0x5C]
+  full health
+
+cmp dword ptr [r14 + 0x44], 0x00
+jne original
+movss xmm2, dword ptr [r14 + 0x54]
+original:
+  vmovss dword ptr [r14 + 0x54], xmm2
+jmp 0x9584B8
+
+41 83 7E 44 00 75 06 F3 41 0F 10 56 54 C4 C1 7A
+11 56 54 E9 90 54 2A FF
+
+============| OHK |============
+
+
+95848D   50                 push      rax
+95848E   49 89 FE           mov       r14, rdi
+
+958491   C5 FA 2A CE        vcvtsi2ss xmm1, xmm0, esi
+958495   C5 F8 57 C0        vxorps    xmm0, xmm0, xmm0
+
+958499   C5 F2 5F C8        vmaxss    xmm1, xmm1, xmm0
+95849D   C4 C1 72 5D 56 5C  vminss    xmm2, xmm1, dword ptr [r14 + 0x5c]
+9584A3   45 8A 7E 74        mov       r15b, byte ptr [r14 + 0x74]
+9584A7   C4 C1 7A 10 4E 54  vmovss    xmm1, dword ptr [r14 + 0x54]
+
+source => 958491
+return => 958499
+cave   => 16B3020
+
+cmp dword ptr [r14 + 0x44], 0x00
+je original
+mov esi, 0x0
+cvtsi2ss xmm0, esi
+original:
+  vcvtsi2ss xmm1, xmm0, esi
+  vxorps xmm0, xmm0, xmm0
+jmp 0x958499
+nop
+nop
+nop
+
+41 83 7E 44 00 74 09 BE 00 00 00 00 F3 0F 2A C6
+C5 FA 2A CE C5 F8 57 C0 E9 7C 54 2A FF 90 90 90
+
+
+
+============| Max Cash (on spend/get) |============
+
+when spending inside t-shirt place
+0x89A6AC
+
+89A694   41 F6 86 48 18 00 00 01  test byte ptr [r14 + 0x1848], 1
+89A69C   75 24                     jne 0x89a6c2
+89A69E   49 8B 86 10 18 00 00      mov rax, qword ptr [r14 + 0x1810]
+
+89A6A5   44 29 A0 C4 03 00 00      sub dword ptr [rax + 0x3c4], r12d
+
+89A6AC   48 8D 05 BD 0F 1C 01      lea rax, [rip + 0x11c0fbd]
+89A6B3   80 38 00                  cmp byte ptr [rax], 0
+89A6B6   74 0A                      je 0x89a6c2
+
+source => 89A6A5
+return => 89A6AC
+cave   => 16B3040
+
+mov r12d, 0x3B9ACA00
+mov dword ptr [rax + 0x3c4], r12d
+jmp 0x89A6AC
+
+41 BC 00 CA 9A 3B 44 89 A0 C4 03 00 00 E9 5A 76
+1E FF 90 90
+
+
+when spending on street
+0x8BB9D4
+8BB9C3   41 F6 85 48 18 00 00 01  test  byte ptr [r13 + 0x1848], 1
+8BB9CB   75 24                    jne   0x8bb9f1
+8BB9CD   49 8B 85 10 18 00 00     mov   rax, qword ptr [r13 + 0x1810]
+
+8BB9D4   44 29 B0 C4 03 00 00     sub   dword ptr [rax + 0x3c4], r14d
+
+8BB9DB   48 8D 05 8E FC 19 01     lea   rax, [rip + 0x119fc8e]
+8BB9E2   80 38 00                 cmp   byte ptr [rax], 0
+8BB9E5   74 0A                    je    0x8bb9f1
+
+source => 8BB9D4
+return => 8BB9DB
+cave   => 16B3060
+
+mov r14d, 0x3B9ACA00
+mov dword ptr [rax + 0x3c4], r14d
+jmp 0x8BB9DB
+
+41 BE 00 CA 9A 3B 44 89 B0 C4 03 00 00 E9 69 89
+20 FF 90 90
+
+
+============| Yellow meter |============
+Yellow meter (up to 100.0)
+
+getting/removing
+0x8B621C
+
+
+============| clip |============
+when shooting
+0x969724
+
+============| ammo |============
+0x969E43
+
+
+============| when not in on ground |============
+75983A
+
