@@ -50,7 +50,7 @@ If you're completely lost don't worry, check out [Helpful](#helpful) below for s
     * Newer version is Beginning C++20: From Novice to Professional
 * Reverse Engineering for Beginners (Understanding Assembly Language) by Dennis Yurichev
 
-The books are recommended by Pharaoh2k, who is one, of many, top developers in the PS4 jailbreak scene. Pharaoh2k has made plenty of cheats, which I have no idea how he is able to come up with some cheats as they are really advanced. Pharaoh2k (like the devs mentioned in [Programs](#programs)), are amazing developers all around not just in making cheats. If a top dev recommends something, might be for a good reason. I'm halfway through the first book and can say it has helped me understand assembly and making cheats better.
+The books are recommended by [Pharaoh2k](https://github.com/Pharaoh2k), who is one, of many, top developers in the PS4 jailbreak scene. [Pharaoh2k](https://github.com/Pharaoh2k) has made plenty of cheats, which I have no idea how he is able to come up with some cheats as they are really advanced. [Pharaoh2k](https://github.com/Pharaoh2k) (like the devs mentioned in [Programs](#programs)), are amazing developers all around not just in making cheats. If a top dev recommends something, might be for a good reason. I'm halfway through the first book and can say it has helped me understand assembly and making cheats better.
 
 ### You
 Don't forget to have fun along the way!
