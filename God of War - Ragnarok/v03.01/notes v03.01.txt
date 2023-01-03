@@ -1,0 +1,814 @@
+====================================
+===== Code cave start: 1B6B000 =====
+====================================
+
+
+------------------------ Godmode ------------------------
+
+(attack from swing)
+AF0E67
+AE0BE2
+4EF11E
+4858D6
+4836DC
+4000BF
+
+
+
+AEA750  FF 50 20            call qword ptr [rax + 0x20]
+AEA753  48 85 C0            test rax, rax
+AEA756  0F 84 6F 02 00 00   je 0xaea9cb
+
+AEA75C  C5 FA 10 4C 24 60   vmovss xmm1, dword ptr [rsp + 0x60]
+
+AEA762  C5 FA 2C C1         vcvttss2si eax, xmm1
+AEA766  01 05 C0 25 DA 03   add dword ptr [rip + 0x3da25c0], eax
+AEA76C  E9 6A 02 00 00      jmp 0xaea9db
+
+source => AEA75C
+return => AEA762
+cave   => 1B6B000
+
+
+|== original ==|
+vmovss xmm1, dword ptr [rsp + 0x60]
+C5 FA 10 4C 24 60
+
+
+|== activated ==|
+jmp 0x1B6B000
+E9 9F 08 08 01 90
+
+
+|== original ==|
+
+|== activated ==|
+cmp rdi, 0x44E2190
+jne original
+godmode:
+    mov dword ptr [rsp + 0x60], 0xC47A0000  //-> -1000 (will subtract -1000 to current health)
+original:
+    vmovss xmm1, dword ptr [rsp + 0x60]
+exit:
+    jmp 0xAEA762
+48 81 FF 90 21 4E 04 75 08 C7 44 24 60 00 00 7A 
+C4 C5 FA 10 4C 24 60 E9 46 F7 F7 FE
+
+
+------------------------ Instant R3 ------------------------
+
+
+0x B71E95
+(attack NME)
+AE9908
+AF0E67
+AE0BE2
+4EF11E
+4858D6
+4836DC
+4000BF
+
+
+B71E88  74 07                  je 0xb71e91
+B71E8A  41 FF 86 90 00 00 00   inc dword ptr [r14 + 0x90]
+B71E91  C5 FA 59 C2            vmulss xmm0, xmm0, xmm2
+
+B71E95  C4 C1 7A 10 56 28      vmovss xmm2, dword ptr [r14 + 0x28]
+
+B71E9B  3C 01                  cmp al, 1
+B71E9D  74 14                  je 0xb71eb3
+B71E9F  84 C0                  test al, al
+B71EA1  75 32                  jne 0xb71ed5
+
+source => B71E95
+return => B71E9B
+cave   => 1B6B030
+
+
+|== original ==|
+vmovss xmm2, dword ptr [r14 + 0x28]
+C4 C1 7A 10 56 28
+
+
+|== activated ==|
+jmp 0x1B6B030
+E9 96 91 FF 00 90
+
+
+|== original ==|
+
+|== activated ==|
+push rsi
+original:
+    vmovss xmm2, dword ptr [r14 + 0x28]
+cmp:
+    cmp si, 0x656D1AF9232CA78B
+    jnz exit
+instant_r3:
+    mov esi, 0x64
+    cvtsi2ss xmm0, esi
+exit:
+    pop rsi
+    jmp 0xB71E9B
+56 C4 C1 7A 10 56 28 66 81 FE 8B A7 75 09 BE 64 
+00 00 00 F3 0F 2A C6 5E E9 4E 6E 00 FF 90 90 90
+
+
+
+
+------------------------ Damage Multiplier ------------------------
+
+AE8FAC  C5 FA 11 44 24 60      vmovss dword ptr [rsp + 0x60], xmm0
+AE8FB2  48 8B 88 80 00 00 00   mov rcx, qword ptr [rax + 0x80]
+AE8FB9  E8 F2 73 02 00         call 0xb103b0
+AE8FBE  C5 FA 10 4C 24 60      vmovss xmm1, dword ptr [rsp + 0x60]
+AE8FC4  C5 F2 59 C8            vmulss xmm1, xmm1, xmm0
+
+AE8FC8  C5 FA 11 4C 24 60      vmovss dword ptr [rsp + 0x60], xmm1
+
+AE8FCE  C5 FA 10 44 24 60      vmovss xmm0, dword ptr [rsp + 0x60]
+AE8FD4  C4 C1 7A 11 04 24      vmovss dword ptr [r12], xmm0
+AE8FDA  41 80 7C 24 1C 00      cmp byte ptr [r12 + 0x1c], 0
+AE8FE0  75 59                  jne 0xae903b
+
+source => AE8FC8
+return => AE8FCE
+cave   => 1B6B070
+
+
+|== original ==|
+vmovss dword ptr [rsp + 0x60], xmm1
+C5 FA 11 4C 24 60
+
+
+|== activated ==|
+jmp 0x1B6B070
+E9 A3 20 08 01 90
+
+
+|== original ==|
+
+|== activated ==|
+cmp r11b, 0xF0
+jae original        // if jae (above or equal), then MC so original
+multiplier:
+    vmulss xmm1, xmm1, dword ptr [0x1B6B300]
+original:
+    vmovss dword ptr [rsp + 0x60], xmm1
+exit:
+    jmp 0xAE8FCE
+41 80 FB F0 73 08 C5 F2 59 0D 82 02 00 00 C5 FA
+11 4C 24 60 E9 45 DF F7 FE 90 90 90
+
+0x 1B6B300
+    0000003F   (0.5x)
+    00000040   (2x)
+    0000A040   (5x)
+    00002041   (10x)
+    0000C841   (25x)
+
+
+
+
+------------------------ Resources up (on craft/sell) ------------------------
+
+102A62D  8A 47 41            mov al, byte ptr [rdi + 0x41]
+102A630  BF FF FF FF 7F      mov edi, 0x7fffffff
+102A635  0F 45 F9            cmovne edi, ecx
+102A638  45 84 DB            test r11b, r11b
+
+102A63B  74 07               je 0x102a644
+102A63D  F0 01 16            lock add dword ptr [rsi], edx
+
+102A640  8B 0E               mov ecx, dword ptr [rsi]
+102A642  EB 04               jmp 0x102a648
+102A644  41 8D 0C 10         lea ecx, [r8 + rdx]
+102A648  89 CA               mov edx, ecx
+102A64A  89 BD EC FE FF FF   mov dword ptr [rbp - 0x114], edi
+
+source => 102A63B
+return => 102A640
+cave   => 1B6B0B0
+
+|== original ==|
+je 0x102a564
+lock add dword ptr [rsi], edx
+74 07 F0 01 16
+
+|== activated ==|
+jmp 0x1B6B0B0
+E9 70 0A B4 00
+
+
+|== original ==|
+
+|== activated ==|
+je 0x102a564
+pushf
+test edx, edx
+jns original    // if jns (NotSigned ~ positive), then original
+to_positive:
+    neg edx
+original:
+    lock add dword ptr [rsi], edx
+exit:
+    popf
+    jmp 0x102A640
+0F 84 AE F4 4B FF 66 9C 85 D2 79 02 F7 DA F0 01 
+16 66 9D E9 78 F5 4B FF
+
+
+
+
+------------------------ XP/HS/Resources Multiplier ------------------------
+
+CAA4DC  5D               pop rbp
+CAA4DD  E9 4E E9 37 00   jmp 0x1028e30
+CAA4E2  85 D2            test edx, edx
+CAA4E4  78 62            js 0xcaa548
+
+CAA4E6  89 D1            mov ecx, edx
+CAA4E8  41 8B 55 08      mov edx, dword ptr [r13 + 8]
+
+CAA4EC  48 C1 E1 04      shl rcx, 4
+CAA4F0  8B 34 08         mov esi, dword ptr [rax + rcx]
+CAA4F3  49 8B 04 24      mov rax, qword ptr [r12]
+CAA4F7  48 3B 45 D0      cmp rax, qword ptr [rbp - 0x30]
+
+source => CAA4E6
+return => CAA4EC
+cave   => 1B6B0F0
+
+
+|== original ==|
+mov ecx, edx
+mov edx, dword ptr [r13 + 8]
+89 D1 41 8B 55 08
+
+
+|== activated ==|
+jmp 0x1B6B0F0
+E9 05 0C EC 00 90
+
+
+|== original ==|
+
+|== activated ==|
+original:
+    mov ecx, edx
+    mov edx, dword ptr [r13 + 8]
+multiplier:
+    imul edx, dword ptr [0x1B6B310]
+exit:
+    jmp 0xCAA4EC
+89 D1 41 8B 55 08 0F AF 15 13 02 00 00 E9 EA F3 
+13 FF 90 90
+
+
+
+0x 1B6B310
+    02000000   (2x)
+    0A000000   (10x)
+    32000000   (50x)
+    64000000   (100x)
+
+
+------------------------ Apple Fix ------------------------
+
+102A65A  C4 E2 68 F2 C9         andn ecx, edx, ecx
+102A65F  39 F9                  cmp ecx, edi
+102A661  0F 4D CF               cmovge ecx, edi
+102A664  84 C0                  test al, al
+
+102A666  89 8D 40 FF FF FF      mov dword ptr [rbp - 0xc0], ecx
+
+102A66C  89 0E                  mov dword ptr [rsi], ecx
+102A66E  0F 84 E8 05 00 00      je 0x102ac5c
+102A674  44 39 85 40 FF FF FF   cmp dword ptr [rbp - 0xc0], r8d
+102A67B  0F 84 DB 05 00 00      je 0x102ac5c
+102A681  48 8B 85 10 FF FF FF   mov rax, qword ptr [rbp - 0xf0]
+
+
+
+------------------------ Infinite Rage ------------------------
+
+(rage going up)
+F18398  C5 FA 11 8D B0 FE FF FF   vmovss dword ptr [rbp - 0x150], xmm1
+F183A0  E8 0B 80 BF FF            call 0xb103b0
+F183A5  C5 FA 10 8D B0 FE FF FF   vmovss xmm1, dword ptr [rbp - 0x150]
+F183AD  EB 35                     jmp 0xf183e4
+
+F183AF  C5 EA 58 43 28            vaddss xmm0, xmm2, dword ptr [rbx + 0x28]
+
+F183B4  48 89 DF                  mov rdi, rbx
+F183B7  B9 01 00 00 00            mov ecx, 1
+F183BC  31 F6                     xor esi, esi
+F183BE  31 D2                     xor edx, edx
+
+source => F183AF
+return => F183B4
+cave   => 1B6B130
+
+
+|== original ==|
+vaddss xmm0, xmm2, dword ptr [rbx + 0x28]
+C5 EA 58 43 28
+
+
+|== activated ==|
+jmp 0x1B6B130
+E9 7C 2D C5 00
+
+
+|== original ==|
+
+|== activated ==|
+cmp r12d, 0x10DBF22D67C1449
+jne original
+infinite_rage:
+    mov dword ptr [rbx + 0x28], 0x43FA0000      // 500
+original:
+    vaddss xmm0, xmm2, dword ptr [rbx + 0x28]
+exit:
+    jmp 0xF183B4
+41 81 FC 49 14 7C D6 75 07 C7 43 28 00 00 FA 43 
+C5 EA 58 43 28 E9 6A D2 3A FF 90 90
+
+
+
+
+(rage going down)
+1057B3C  C5 F2 59 8D D0 FE FF FF   vmulss xmm1, xmm1, dword ptr [rbp - 0x130]
+1057B44  C5 F2 59 C0               vmulss xmm0, xmm1, xmm0
+1057B48  45 84 FF                  test r15b, r15b
+1057B4B  75 05                     jne 0x1057b52
+
+1057B4D  C5 FA 58 43 28            vaddss xmm0, xmm0, dword ptr [rbx + 0x28]
+
+1057B52  44 8B B5 EC FE FF FF      mov r14d, dword ptr [rbp - 0x114]
+1057B59  48 89 DF                  mov rdi, rbx
+1057B5C  B9 01 00 00 00            mov ecx, 1
+1057B61  31 F6                     xor esi, esi
+
+source => 1057B4D
+return => 1057B52
+cave   => 1B6B170
+
+
+|== original ==|
+vaddss xmm0, xmm0, dword ptr [rbx + 0x28]
+C5 FA 58 43 28
+
+
+|== activated ==|
+jmp 0x1B6B170
+E9 1E 36 B1 00
+
+
+|== original ==|
+
+|== activated ==|
+cmp r11, 0x2
+jne original
+infinite_rage:
+    mov dword ptr [rbx + 0x28], 0x43FA0000      // 500
+original:
+    vaddss xmm0, xmm0, dword ptr [rbx + 0x28]
+exit:
+    jmp 0x1057B52
+49 83 FB 02 75 07 C7 43 28 00 00 FA 43 C5 FA 58 
+43 28 E9 CB C9 4E FF 90
+
+------------------------ Infinite Projectiles ------------------------
+
+
+
+
+(regenerating)
+0x E00377
+B721CB
+E000BF
+C69947
+50335A
+4858D6
+4836DC
+4000BF
+
+
+C695F8  0F 45 C1                  cmovne eax, ecx
+C695FB  C5 F9 6E C0               vmovd xmm0, eax
+C695FF  C4 E3 71 0A C9 09         vroundss xmm1, xmm1, xmm1, 9
+C69605  C5 F2 59 D0               vmulss xmm2, xmm1, xmm0
+
+C69609  C5 FA 10 8D 90 DF FF FF   vmovss xmm1, dword ptr [rbp - 0x2070]
+
+C69611  C5 E2 58 C1               vaddss xmm0, xmm3, xmm1
+C69615  C5 FA 5D C2               vminss xmm0, xmm0, xmm2
+C69619  C5 F8 2E C2               vucomiss xmm0, xmm2
+C6961D  0F 82 78 02 00 00         jb 0xc6989b
+
+source => C69609
+return => C69611
+cave   => 1B6B200
+
+
+|== original ==|
+vmovss xmm1, dword ptr [rbp - 0x2070]
+C5 FA 10 8D 90 DF FF FF
+
+|== activated ==|
+jmp 0x1B6B200
+E9 F2 1B F0 00 90 90 90
+
+
+|== original ==|
+
+|== activated ==|
+original:
+    vmovss xmm1, dword ptr [rbp - 0x2070]
+compare_current_to_max:
+    vucomiss xmm1, dword ptr [r15 + 0x88]
+    jb max_val                              // if current < max, then add max to xmm3
+exit:
+    jmp 0xC69611
+max_val:
+    vmovss xmm3, dword ptr [r15 + 0x88]
+    jmp exit
+C5 FA 10 8D 90 DF FF FF C4 C1 78 2E 8F 88 00 00 
+00 72 05 E9 F9 E3 0F FF C4 C1 7A 10 8F 88 00 00 
+00 EB F0 90
+
+
+
+
+(throwing)
+A4B47A  4C 89 EF         mov rdi, r13
+A4B47D  E8 2E A7 BB FF   call 0x605bb0
+A4B482  48 85 C0         test rax, rax
+A4B485  74 12            je 0xa4b499
+
+A4B487  48 89 C7         mov rdi, rax
+A4B48A  EB 24            jmp 0xa4b4b0
+
+A4B48C  48 8B 43 28      mov rax, qword ptr [rbx + 0x28]
+A4B490  48 8B 55 80      mov rdx, qword ptr [rbp - 0x80]
+A4B494  E9 EA FE FF FF   jmp 0xa4b383
+A4B499  48 8D 7D 90      lea rdi, [rbp - 0x70]
+
+source => A4B487
+return => 
+cave   => 1B6B250
+
+
+|== original ==|
+mov rdi, rax
+jmp 0xa4b4b0
+48 89 C7 EB 24
+
+|== activated ==|
+jmp 0x1B6B250
+E9 C4 FD 11 01
+
+
+|== original ==|
+
+|== activated ==|
+vmovss xmm1, dword ptr [rbx + 0x88]
+vmovss dword ptr [rax], xmm1
+original:
+    mov rdi, rax
+    jmp 0xa4b4b0
+
+
+
+0x A4B487
+[rbx + 0x88] -> max value
+
+
+------------------------ No Cooldown ------------------------
+
+E5DDCE  31 F6                  xor esi, esi
+E5DDD0  31 C9                  xor ecx, ecx
+E5DDD2  45 31 C0               xor r8d, r8d
+E5DDD5  45 31 C9               xor r9d, r9d
+E5DDD8  E8 D3 25 CB FF         call 0xb103b0
+E5DDDD  C5 FA 59 45 80         vmulss xmm0, xmm0, dword ptr [rbp - 0x80]
+
+E5DDE2  C4 C1 7A 10 4C 24 38   vmovss xmm1, dword ptr [r12 + 0x38]
+
+E5DDE9  C5 E8 57 D2            vxorps xmm2, xmm2, xmm2
+E5DDED  C5 F2 5C C0            vsubss xmm0, xmm1, xmm0
+E5DDF1  C5 F0 57 C9            vxorps xmm1, xmm1, xmm1
+E5DDF5  C5 F8 29 4D 80         vmovaps xmmword ptr [rbp - 0x80], xmm1
+
+source => E5DDE2
+return => 
+cave   => 
+
+
+|== original ==|
+vmovss xmm1, dword ptr [r12 + 0x38]
+C4 C1 7A 10 4C 24 38
+
+|== activated ==|
+vmovss xmm1, dword ptr [rbp - 0x80]
+C5 FA 10 4D 80 90 90
+
+
+
+
+
+
+
+------------------------ Speed Hack? ------------------------
+
+standing  -> 0.0
+walking   -> 1.5
+jogging   -> 4.0
+sprinting -> 8.0
+
+16C005C920	float	X	4	WAD_Char_HeroA00[0]-33-16C0000000-2048KB
+^the only one that glitched MC
+
+read/writes
+0x C700F2   (vmovss dword ptr [rbx + 0xf70], xmm0)
+
+
+
+
+( vmovss xmm0, dword ptr [r15 + 0x7b6c] ) -> writes xmm0 which is 1 address above
+now checking what read/writes to [r15 + 0x7b6c]
+[r15]          -> 16C02887E0      STATIC
+[r15 + 0x7B6C] -> 16C029034C
+
+writes
+0x C6F4EE   (vmovss dword ptr [r13 + 0x7b6c], xmm0)
+
+reads
+0x C700EA   (of course)
+
+
+
+
+( vmovss xmm0, dword ptr [rax + 0xa34] )
+now checking what read/writes to [rax + 0xa34]
+[rax]         -> 16C005F9B0      STATIC
+[rax + 0xA34] -> 16C00603E4
+
+
+writes
+0x B3FA30   (vmovss dword ptr [r13 + 0xa34], xmm9)
+
+reads       -> a bunch of reads, might be it?
+0x B3A14F
+0x C6F4E1
+0x C62311
+0x C64831
+0x 4EBC6D   -> only reads when standing still
+0x 1075221
+0x B3E2CF
+0x B3F76F
+
+
+yoooooooooooooooooooooooooo my first ever possible speed hack!
+
+modifying 16C00603E4 to 20 made MC go really fast!
+
+after many crashes later ill try B3F8E6
+
+
+---- [ FAIL 1 ] ----
+-> speed wasnt working like i wanted...
+
+B3F8D6  C5 E2 58 C0            vaddss xmm0, xmm3, xmm0
+B3F8DA  76 0A                  jbe 0xb3f8e6
+B3F8DC  C4 41 7A 5D C9         vminss xmm9, xmm0, xmm9
+B3F8E1  E9 41 01 00 00         jmp 0xb3fa27
+
+B3F8E6  C4 41 7A 5F C9         vmaxss xmm9, xmm0, xmm9
+
+B3F8EB  E9 37 01 00 00         jmp 0xb3fa27
+B3F8F0  49 63 85 00 04 00 00   movsxd rax, dword ptr [r13 + 0x400]
+B3F8F7  48 85 C0               test rax, rax
+B3F8FA  74 13                  je 0xb3f90f
+B3F8FC  48 C1 E0 05            shl rax, 5
+
+source => B3F8E6
+return => 
+cave   => 1B6B260
+
+
+|== original ==|
+vmaxss xmm9, xmm0, xmm9
+C4 41 7A 5F C9
+
+|== activated ==|
+jmp 0x1B6B260
+E9 75 B9 02 01
+
+
+|== original ==|
+
+|== activated ==|
+original:
+    vmaxss xmm9, xmm0, xmm9
+speed_hack:
+    vmulss xmm9, xmm9, dword ptr [0x1B6B320]
+exit:
+    jmp 0xb3fa27    // jumped here since the next instruction is this so might as well
+C4 41 7A 5F C9 C5 32 59 0D B3 00 00 00 E9 B5 47 
+FD FE 90 90
+
+
+0x 1B6B320
+    00000040   (2x)
+    00004040   (3x)
+    0000A040   (5x)
+
+
+
+
+
+
+---- [ FAIL 2 ] ----
+-> speed still wasnt working like i wanted...
+-> speed would go above the limits (1.5, 4.0, ...). if speed was 4, then 2x = 8, BUT then new speed would be 8
+
+
+B3FA19  C5 FA 10 2D 47 5D D4 00      vmovss xmm5, dword ptr [rip + 0xd45d47]
+B3FA21  C5 F8 2E E8                  vucomiss xmm5, xmm0
+B3FA25  76 28                        jbe 0xb3fa4f
+
+B3FA27  C4 41 7A 11 8D 34 0A 00 00   vmovss dword ptr [r13 + 0xa34], xmm9
+
+B3FA30  49 8B 06                     mov rax, qword ptr [r14]
+B3FA33  48 3B 45 D0                  cmp rax, qword ptr [rbp - 0x30]
+B3FA37  0F 85 9C 01 00 00            jne 0xb3fbd9
+
+source => B3FA27
+return => B3FA30
+cave   => 1B6B260
+
+
+|== original ==|
+vmovss dword ptr [r13 + 0xa34], xmm9
+C4 41 7A 11 8D 34 0A 00 00
+
+|== activated ==|
+jmp 0x1B6B260
+E9 34 B8 02 01 90 90 90 90
+
+
+|== original ==|
+
+|== activated ==|
+speed_hack:
+    vmulss xmm2, xmm2, dword ptr [0x1B6B320]
+original:
+    vmovss dword ptr [r13 + 0xa34], xmm2
+exit:
+    jmp 0xB3FA30
+C5 32 59 0D B8 00 00 00 C4 41 7A 11 8D 34 0A 00 
+00 E9 BA 47 FD FE 90 90
+
+0x 1B6B320
+    00000040   (2x)
+    00004040   (3x)
+    0000A040   (5x)
+
+
+
+
+
+
+
+---- [ FAIL 3 ] ----
+
+
+
+both didnt work so now i try the READS
+
+first read
+0x B3A14F
+
+
+B3A133  48 89 45 D0               mov qword ptr [rbp - 0x30], rax
+B3A137  C5 FA 10 87 F8 09 00 00   vmovss xmm0, dword ptr [rdi + 0x9f8]
+B3A13F  C5 FA 11 87 70 04 00 00   vmovss dword ptr [rdi + 0x470], xmm0
+
+B3A147  C5 FA 10 8F 34 0A 00 00   vmovss xmm1, dword ptr [rdi + 0xa34]
+
+B3A14F  C5 FA 11 8F 74 04 00 00   vmovss dword ptr [rdi + 0x474], xmm1
+B3A157  0F B7 87 4D 0B 00 00      movzx eax, word ptr [rdi + 0xb4d]
+B3A15E  89 C1                     mov ecx, eax
+
+source => B3A147
+return => B3A14F
+cave   => 1B6B260
+
+
+|== original ==|
+vmovss xmm1, dword ptr [rdi + 0xa34]
+C5 FA 10 8F 34 0A 00 00
+
+|== activated ==|
+jmp 0x1B6B260
+E9 14 11 03 01 90 90 90
+
+
+|== original ==|
+
+|== activated ==|
+original:
+    vmovss xmm1, dword ptr [rdi + 0xa34]
+pushf                       // pushing Flags just in case.
+cmp di, 0x16C005F9B0
+jnz exit
+speed_hack:
+    //vmulss xmm1, xmm1, dword ptr [0x1B6B320]
+    //vmulss xmm9, xmm9, dword ptr [0x1B6B320]
+
+    vmovss xmm1, dword ptr [0x1B6B320]
+    vmovss xmm1, dword ptr [r12 + 0xa34]
+    vmovss dword ptr [rdi + 0xa34], xmm1
+exit:
+    popf
+    jmp 0xB3A14F
+
+
+0x 1B6B320
+    00000040   (2x)
+    00004040   (3x)
+    0000A040   (5x)
+
+
+
+0xB34058
+
+
+
+16C005F9B0
+16C00603E4
+
+
+
+
+
+
+---- [ FAIL 4 ] ----
+
+
+B3A133  48 89 45 D0               mov qword ptr [rbp - 0x30], rax
+B3A137  C5 FA 10 87 F8 09 00 00   vmovss xmm0, dword ptr [rdi + 0x9f8]
+
+B3A13F  C5 FA 11 87 70 04 00 00   vmovss dword ptr [rdi + 0x470], xmm0
+
+B3A147  C5 FA 10 8F 34 0A 00 00   vmovss xmm1, dword ptr [rdi + 0xa34]
+B3A14F  C5 FA 11 8F 74 04 00 00   vmovss dword ptr [rdi + 0x474], xmm1
+B3A157  0F B7 87 4D 0B 00 00      movzx eax, word ptr [rdi + 0xb4d]
+B3A15E  89 C1                     mov ecx, eax
+
+source => B3A13F
+return => B3A147
+cave   => 1B6B260
+
+
+|== original ==|
+vmovss dword ptr [rdi + 0x470], xmm0
+C5 FA 11 87 70 04 00 00
+
+|== activated ==|
+jmp 0x1B6B260
+E9 1C 11 03 01 90 90 90
+
+
+|== original ==|
+
+|== activated ==|
+original:
+    vmovss dword ptr [rdi + 0x470], xmm0
+pushf
+cmp di, 0x16C005F9B0
+jnz exit
+vxorps xmm1, xmm1, xmm1
+vucomiss xmm0, xmm1
+jz exit
+vucomiss xmm0, xmm1
+jz exit
+speed_hack:
+    vmulss xmm0, xmm0, dword ptr [0x1B6B320]
+    vmovss xmm1, dword ptr [rdi + 0xa34]
+    vmulss xmm1, xmm1, dword ptr [0x1B6B320]
+    vmovss dword ptr [rdi + 0xa34], xmm1
+exit:
+    popf
+    jmp 0xB3A147
+
+
+
+
+wayyyyy too many crashes...
+giving up for now, but if someone figures it out 
+please shoot me a DM with a hint of how to go about it. 
+
+Thanks!
