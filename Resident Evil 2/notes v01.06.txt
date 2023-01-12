@@ -1,0 +1,261 @@
+====================================
+===== Code cave start: 66C7000 =====
+====================================
+
+
+------------------------ No Reload ------------------------
+
+20D17D6C0	4 bytes	X	20	[1]-33-208200000-97664KB
+
+shoot
+0x 23DE0BF
+
+
+23DE0B7  45 89 F4         mov r12d, r14d
+23DE0BA  39 D0            cmp eax, edx
+23DE0BC  0F 4E D0         cmovle edx, eax
+
+23DE0BF  89 51 20         mov dword ptr [rcx + 0x20], edx
+
+23DE0C2  E9 F7 FE FF FF   jmp 0x23ddfbe
+23DE0C7  31 C0            xor eax, eax
+23DE0C9  45 85 F6         test r14d, r14d
+
+source => 23DE0BF
+return => 
+cave   => 
+
+
+|== original ==|
+mov dword ptr [rcx + 0x20], edx
+89 51 20
+
+
+|== activated ==|
+nopppp
+90 90 90
+
+
+
+
+------------------------ Max Item Count (on use/combine/reload) ------------------------
+
+remaining ammo
+20D08E590	4 bytes	X	47	[1]-33-208200000-97664KB
+
+(on reload)
+0x 23DCD9D
+23DCD8D  48 85 C9      test rcx, rcx
+23DCD90  74 16         je 0x23dcda8
+23DCD92  44 39 F0      cmp eax, r14d
+
+23DCD95  44 0F 4E F0   cmovle r14d, eax
+
+23DCD99  44 89 71 20   mov dword ptr [rcx + 0x20], r14d
+23DCD9D  48 83 C4 08   add rsp, 8
+23DCDA1  5B            pop rbx
+23DCDA2  41 5E         pop r14
+23DCDA4  41 5F         pop r15
+
+source => 23DCD95
+return => 
+cave   => 
+
+
+|== original ==|
+cmovle r14d, eax
+44 0F 4E F0
+
+|== activated ==|
+mov r14d, eax
+nop
+41 89 C6 90
+
+
+
+
+Wooden Boards
+20D08EC80	4 bytes	X	6	[1]-33-208200000-97664KB
+
+(on use)
+0x 23DE038
+23DE01D  49 8B 4D 10          mov rcx, qword ptr [r13 + 0x10]
+23DE021  48 85 C9             test rcx, rcx
+23DE024  0F 84 3E 01 00 00    je 0x23de168
+23DE02A  44 29 F2             sub edx, r14d
+23DE02D  39 D0                cmp eax, edx
+
+23DE02F  0F 4E D0             cmovle edx, eax
+
+23DE032  44 89 F0             mov eax, r14d
+23DE035  89 51 20             mov dword ptr [rcx + 0x20], edx
+23DE038  89 C3                mov ebx, eax
+23DE03A  E9 FA FE FF FF       jmp 0x23ddf39
+23DE03F  31 C0                xor eax, eax
+
+source => 23DE02F
+return => 
+cave   => 
+
+
+|== original ==|
+cmovle edx, eax
+0F 4E D0
+
+|== activated ==|
+mov edx, eax
+nop
+89 C2 90
+
+
+
+
+------------------------ Godmode ------------------------
+
+20C636428	4 bytes	X	112	[1]-33-208200000-97664KB
+
+damaged MC
+0x 6F1C9C
+  1DFC2D6
+  1A1EDE0   <-- nop this call for godmode
+   5C8D75   <- splits after
+   5C8489
+   5C58D4
+  2581F28
+  2555D41
+  25F17EE
+8000075C2
+
+
+damaged NME
+0x 6F1C8D
+  1573A6B
+   5C8D75   <- splits after
+   5C8489
+   5C58D4
+  2581F28
+  2555D41
+  25F17EE
+8000075C2
+
+
+1A1EDCA  49 8B 45 50         mov rax, qword ptr [r13 + 0x50]
+1A1EDCE  48 83 78 18 00      cmp qword ptr [rax + 0x18], 0
+1A1EDD3  0F 85 2C 07 00 00   jne 0x1a1f505
+1A1EDD9  EB 14               jmp 0x1a1edef
+
+1A1EDDB  E8 90 D4 3D 00      call 0x1dfc270
+
+1A1EDE0  49 8B 45 50         mov rax, qword ptr [r13 + 0x50]
+1A1EDE4  48 83 78 18 00      cmp qword ptr [rax + 0x18], 0
+1A1EDE9  0F 85 16 07 00 00   jne 0x1a1f505
+1A1EDEF  4C 89 EF            mov rdi, r13
+
+source => 1A1EDDB
+return => 
+cave   => 
+
+
+|== original ==|
+call 0x1dfc270
+E8 90 D4 3D 00
+
+|== activated ==|
+nopppppp
+90 90 90 90 90
+
+
+
+
+------------------------ One-hit Kill ------------------------
+
+6F1C81  75 19            jne 0x6f1c9c
+6F1C83  8B 46 58         mov eax, dword ptr [rsi + 0x58]
+6F1C86  89 D1            mov ecx, edx
+6F1C88  F7 D9            neg ecx
+
+6F1C8A  0F 4C CA         cmovl ecx, edx
+6F1C8D  29 C8            sub eax, ecx
+
+6F1C8F  89 C1            mov ecx, eax
+6F1C91  C1 F9 1F         sar ecx, 0x1f
+6F1C94  C4 E2 70 F2 C0   andn eax, ecx, eax
+6F1C99  89 46 58         mov dword ptr [rsi + 0x58], eax
+
+source => 6F1C8A
+return => 6F1C8F
+cave   => 66C7000
+
+
+|== original ==|
+cmovl ecx, edx
+sub eax, ecx
+0F 4C CA 29 C8
+
+|== activated ==|
+jmp 0x66C7000
+E9 71 53 FD 05
+
+
+|== original ==|
+
+|== activated ==|
+pushf
+jmp_if_dmg_is_zero:
+    test ecx, ecx
+    jz original_half_1
+jmp_if_1_1:
+    cmp rdx, rax
+    je original_half_1
+jmp_if_MC:
+    cmp dword ptr [rsi], 0xF089E80
+    je original_half_1
+one_hit_kill:
+    mov ecx, 0x2710     //=> 10,000 damage
+    jmp original_half_2
+original_half_1:
+    cmovl ecx, edx
+original_half_2:
+    sub eax, ecx
+exit:
+    popf
+    jmp 0x6F1C8F
+66 9C 85 C9 74 14 48 39 C2 74 0F 81 3E 80 9E 08 
+0F 74 07 B9 10 27 00 00 EB 03 0F 4C CA 29 C8 66 
+9D E9 69 AC 02 FA 90 90
+
+
+
+0x 6F1C8A
+
+Offset	MC          NME
+0x00	0xF089E80	0xF332950
+0x08	0x03		0x06
+0x10	0xBF560C0	0xC7147E0   X
+0x18	0xC4E78A0	0xC71F370   X
+0x20	0xC4E76B0	0xC71F200   X
+0x28	0xC4E78A0	0xC71F370   X
+0x34	0xC40000	0x1EB0000
+0x54	0x4B0		0x370       X
+0x58	0x4B0		0x2EB       X
+0x60	0x0E		0x0F        MC-same NME-changed
+0x68	0x20800000	0xC71E4E0   X
+0x6C	0x30000000	0x02
+0x70	0xEF28910	0xC70C7F0
+0x78	0x04		0x00        MC-same NME-changed
+0x80	0xBF560C0	0x0E        X
+0x84	0x02		0x00        
+0x88	0xC4E7980	0x20800000
+0x8C	0x02		0x30000000
+0x90	0xC4E7830	0xF261C20
+0x98	0xC4E7980	0x06
+0x9C	0x02		0x00
+0xA0	0xE4010100	0xC7147E0
+0xA4	0x00		0x02
+0xA8	0x00		0xC71F450
+0xAC	0x00		0x02
+0xB0	0x00		0xC71F2E0
+0xB4	0x00		0x02
+0xB8	0x00		0xC71F450
+0xBC	0x00		0x02
+0xC0	0x01		0xE7010100
