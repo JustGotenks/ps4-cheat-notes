@@ -1,0 +1,1118 @@
+====================================
+===== Code cave start: 81E7694 =====
+====================================
+
+
+
+
+
+------------------------ Infinite Ammo/Throwables ------------------------
+
+174A067  75 10         jne 0x174a079
+174A069  8B 43 54      mov eax, dword ptr [rbx + 0x54]
+174A06C  44 39 F0      cmp eax, r14d
+174A06F  44 0F 46 F0   cmovbe r14d, eax
+
+174A073  44 29 F0      sub eax, r14d
+
+174A076  89 43 54      mov dword ptr [rbx + 0x54], eax
+174A079  45 85 F6      test r14d, r14d
+174A07C  74 15         je 0x174a093
+
+source => 174A073
+return => 
+cave   => 
+
+
+|== original ==|
+sub eax, r14d
+44 29 F0
+
+|== activated ==|
+nopppppp
+90 90 90
+
+
+
+dismissing throwable
+0x1749FFC
+  1730065
+  172F4CA
+  172F3C1
+  4BB87A3
+  1AC5A6E
+  1AC563E
+  37B840E
+  37B942D
+  37BA658
+  37BD62B
+  37BE8AC
+  37BDE47
+  37C4E0F
+  4C84818
+  1549602
+   9A71F7
+   9A9998
+   9A864A
+   9E40F4
+   C6DDB5
+  529114C
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+
+
+
+------------------------ No Reload ------------------------
+
+51652BA  45 85 FF               test r15d, r15d
+51652BD  74 43                  je 0x5165302
+51652BF  44 8B B3 7C 01 00 00   mov r14d, dword ptr [rbx + 0x17c]
+51652C6  48 89 DF               mov rdi, rbx
+51652C9  44 89 F6               mov esi, r14d
+
+51652CC  44 29 FE               sub esi, r15d
+
+51652CF  73 47                  jae 0x5165318
+51652D1  31 F6                  xor esi, esi
+51652D3  E8 18 8B FC FF         call 0x512ddf0
+51652D8  E8 D3 DE C8 FF         call 0x4df31b0
+51652DD  84 C0                  test al, al
+51652DF  75 4C                  jne 0x516532d
+
+source => 51652CC
+return => 
+cave   => 
+
+
+|== original ==|
+sub esi, r15d
+44 29 FE
+
+|== activated ==|
+nopppp
+90 90 90
+
+
+
+
+
+------------------------ No Overheat ------------------------
+
+52397D6  41 56                  push r14
+52397D8  41 54                  push r12
+52397DA  53                     push rbx
+52397DB  48 83 EC 10            sub rsp, 0x10
+52397DF  48 89 FB               mov rbx, rdi
+52397E2  48 81 C7 98 02 00 00   add rdi, 0x298
+
+52397E9  C5 FA 11 45 DC         vmovss dword ptr [rbp - 0x24], xmm0
+
+52397EE  E8 AD C9 FF FF         call 0x52361a0
+52397F3  80 7B 08 00            cmp byte ptr [rbx + 8], 0
+52397F7  0F 84 43 02 00 00      je 0x5239a40
+52397FD  48 8B 83 40 02 00 00   mov rax, qword ptr [rbx + 0x240]
+5239804  48 85 C0               test rax, rax
+5239807  0F 84 33 02 00 00      je 0x5239a40
+
+source => 52397E9
+return => 52397EE
+cave   => 81E7724
+
+
+|== original ==|
+vmovss dword ptr [rbp - 0x24], xmm0
+C5 FA 11 45 DC
+
+|== activated ==|
+jmp 0x81E7724
+E9 36 DF FA 02
+
+
+|== original ==|
+|== activated ==|
+vxorps xmm0, xmm0, xmm0
+vxorps xmm1, xmm1, xmm1
+original:
+    vmovss dword ptr [rbp - 0x24], xmm0
+jmp 0x52397EE
+C5 F8 57 C0 C5 F0 57 C9 C5 FA 11 45 DC E9 B8 20 
+05 FD 90 90
+
+
+
+
+
+------------------------ No Recoil ------------------------
+
+5161C7E  C5 FA 10 0D 46 FA 6F 01   vmovss xmm1, dword ptr [rip + 0x16ffa46]
+5161C86  4C 89 FF                  mov rdi, r15
+5161C89  C5 F2 5E C0               vdivss xmm0, xmm1, xmm0
+5161C8D  C5 FA 11 83 14 08 00 00   vmovss dword ptr [rbx + 0x814], xmm0
+5161C95  C5 FA 10 45 E4            vmovss xmm0, dword ptr [rbp - 0x1c]
+
+5161C9A  E8 41 78 11 00            call 0x52794e0
+
+5161C9F  48 89 DF                  mov rdi, rbx
+5161CA2  E8 69 92 00 00            call 0x516af10
+5161CA7  0F B6 C0                  movzx eax, al
+5161CAA  48 89 DF                  mov rdi, rbx
+5161CAD  8D 34 40                  lea esi, [rax + rax*2]
+5161CB0  48 83 C4 08               add rsp, 8
+
+source => 5161C9A
+return =>
+cave   =>
+
+
+|== original ==|
+call 0x52794e0
+E8 41 78 11 00
+
+|== activated ==|
+nopppp
+90 90 90 90 90
+
+
+
+
+
+------------------------ Super Accuracy ------------------------
+
+5191B45  C4 C1 7A 10 86 F0 0E 00 00   vmovss xmm0, dword ptr [r14 + 0xef0]
+5191B4E  C4 C1 7A 58 86 04 0F 00 00   vaddss xmm0, xmm0, dword ptr [r14 + 0xf04]
+5191B57  49 8B 46 50                  mov rax, qword ptr [r14 + 0x50]
+5191B5B  C4 C1 7A 58 86 18 0F 00 00   vaddss xmm0, xmm0, dword ptr [r14 + 0xf18]
+
+5191B64  C5 FA 11 88 E0 0A 00 00      vmovss dword ptr [rax + 0xae0], xmm1
+
+5191B6C  C5 F8 28 4D 90               vmovaps xmm1, xmmword ptr [rbp - 0x70]
+5191B71  C5 FA 11 88 E8 0A 00 00      vmovss dword ptr [rax + 0xae8], xmm1
+5191B79  C5 FA 11 90 E4 0A 00 00      vmovss dword ptr [rax + 0xae4], xmm2
+5191B81  C5 FA 11 80 EC 0A 00 00      vmovss dword ptr [rax + 0xaec], xmm0
+
+source => 5191B64
+return => 5191B6C
+cave   => 81E7694
+
+
+|== original ==|
+vmovss dword ptr [rax + 0xae0], xmm1
+C5 FA 11 88 E0 0A 00 00
+
+|== activated ==|
+jmp 0x81E7694
+E9 2B 5B 05 03 90 90 90
+
+
+|== original ==|
+|== activated ==|
+original:
+    mov dword ptr [rax + 0xae0], 0x0
+return:
+    jmp 0x5191B6C
+C7 80 E0 0A 00 00 00 00 00 00 E9 C9 A4 FA FC 90
+
+
+
+
+0x 5191B64
+  51927E3
+  5196D8E
+  516A864
+  5161BC7
+   9A71F7
+   9A9998
+   9AA15A
+   9A8680
+   9E40F4
+   C6E57A
+  52912EB
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+
+0x 5279448
+  515ED4F
+  1AF5A84
+  37BF93B
+  37BDE47
+  37C4E0F
+  4C84818
+  1549602
+   9A71F7
+   9A9998
+   9A864A
+   9E40F4
+   C6DDB5
+  529114C
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+
+
+
+------------------------ Teleport to sky ------------------------
+
+568B6FD  48 81 EC C8 00 00 00   sub rsp, 0xc8
+568B704  48 8B 05 5D B4 31 03   mov rax, qword ptr [rip + 0x331b45d]
+568B70B  4C 89 85 20 FF FF FF   mov qword ptr [rbp - 0xe0], r8
+
+568B712  48 89 8D 28 FF FF FF   mov qword ptr [rbp - 0xd8], rcx
+
+568B719  49 89 F5               mov r13, rsi
+568B71C  48 89 FB               mov rbx, rdi
+568B71F  48 8D B7 F0 00 00 00   lea rsi, [rdi + 0xf0]
+568B726  4C 8D 75 B0            lea r14, [rbp - 0x50]
+568B72A  49 89 D4               mov r12, rdx
+
+source => 568B712
+return => 568B719
+cave   => 81E76D4
+
+
+|== original ==|
+mov qword ptr [rbp - 0xd8], rcx
+48 89 8D 28 FF FF FF
+
+|== activated ==|
+jmp 0x81E76D4
+E9 BD BF B5 02 90 90
+
+
+|== original ==|
+|== activated ==|
+original:
+    mov qword ptr [rbp - 0xd8], rcx
+push rax
+mov eax, 0x447A0000
+mov dword ptr [rsi + 0x8], eax
+mov dword ptr [rsi + 0xD8], eax
+pop rax
+return:
+    jmp 0x568B719
+
+48 89 8D 28 FF FF FF 50 B8 00 00 7A 44 89 46 08 
+89 86 D8 00 00 00 58 E9 29 40 4A FD
+
+
+
+
+
+------------------------ Super Jump ------------------------
+
+4C8C3CF  C3                        ret 
+4C8C3D0  48 8B 87 D8 2A 00 00      mov rax, qword ptr [rdi + 0x2ad8]
+4C8C3D7  BE 8C 00 00 00            mov esi, 0x8c
+4C8C3DC  31 D2                     xor edx, edx
+
+4C8C3DE  C5 FA 10 80 30 12 00 00   vmovss xmm0, dword ptr [rax + 0x1230]
+
+4C8C3E6  48 8B 38                  mov rdi, qword ptr [rax]
+4C8C3E9  48 83 C7 18               add rdi, 0x18
+4C8C3ED  E9 2E 02 2D FF            jmp 0x3f5c620
+4C8C3F2  90                        nop 
+
+source => 4C8C3DE
+return => 4C8C3E6
+cave   => 81E7774
+
+
+|== original ==|
+vmovss xmm0, dword ptr [rax + 0x1230]
+C5 FA 10 80 30 12 00 00
+
+|== activated ==| + |== new original ==|
+jmp 0x81E7774
+E9 91 B3 55 03 90 90 90
+
+
+|== original ==|
+|== activated ==|
+vmovss xmm0, [0x81E7B94]
+vmovss dword ptr [rax + 0x1230], xmm0
+vmovss xmm0, dword ptr [rax + 0x1230]
+jmp 0x4C8C3E6
+
+C5 FA 10 05 18 04 00 00 C5 FA 11 80 30 12 00 00 
+C5 FA 10 80 30 12 00 00 E9 55 4C AA FC 90 90 90
+
+0x81E7B94
+    on  => 00000041 => 8.00
+    off => 0000A03F => 1.25
+
+
+
+
+
+------------------------ Health, Underwater, Sprint debug start ------------------------
+
+
+[rdi + 0x18]
+3B1CFE1  0F 84 2B 02 00 00   je 0x3b1d212
+3B1CFE7  48 89 FB            mov rbx, rdi
+3B1CFEA  84 D2               test dl, dl
+
+3B1CFEC  C5 FA 11 4F 18      vmovss dword ptr [rdi + 0x18], xmm1
+
+3B1CFF1  0F 85 1B 02 00 00   jne 0x3b1d212
+3B1CFF7  48 8B 43 08         mov rax, qword ptr [rbx + 8]
+3B1CFFB  48 85 C0            test rax, rax
+
+
+------------------------ Infinite Sprint/Swim ------------------------
+
+3CAC74D  4C 8B 3D 14 A4 CF 04      mov r15, qword ptr [rip + 0x4cfa414]
+3CAC754  48 89 FB                  mov rbx, rdi
+3CAC757  49 8B 07                  mov rax, qword ptr [r15]
+3CAC75A  48 89 45 E0               mov qword ptr [rbp - 0x20], rax
+3CAC75E  C5 FA 11 45 D4            vmovss dword ptr [rbp - 0x2c], xmm0
+
+3CAC763  E8 88 AD FE FF            call 0x3c974f0
+
+3CAC768  48 89 DF                  mov rdi, rbx
+3CAC76B  E8 C0 00 00 00            call 0x3cac830
+3CAC770  C5 FA 10 8B D0 F8 00 00   vmovss xmm1, dword ptr [rbx + 0xf8d0]
+3CAC778  C5 F8 57 C0               vxorps xmm0, xmm0, xmm0
+3CAC77C  C5 F8 2E C1               vucomiss xmm0, xmm1
+
+source => 3CAC763
+return => 
+cave   => 
+
+
+|== original ==|
+call 0x3c974f0
+E8 88 AD FE FF
+
+|== activated ==|
+nopppppp
+90 90 90 90 90
+
+
+
+(sprinting)
+0x 3B1CFEC
+  3C98599
+  3C975D1
+  3CAC768   <-- nop call for sprint/swim/no drown
+   9A71F7
+   9A9998
+   9A864A
+   9E40F4
+   C6DDB5
+  529114C
+  5365881
+   493430
+   492C49
+8000075C2
+
+(swimming)
+0x 3B1CFEC
+  3C987D7
+  3C975DE
+  3CAC768   <-- nop call for sprint/swim/no drown
+   9A71F7
+   9A9998
+   9A864A
+   9E40F4
+   C6DDB5
+  529114C
+  5365881
+   493430
+   492C49
+8000075C2
+
+(death by drowning)
+0x 3B1CFF1
+  3C9CC26
+  3CA2923
+  3C9BAC9
+  3C9B80A
+  3CB3EA8
+  3C975C4
+  3CAC768   <-- nop call for sprint/swim/no drown
+   9A71F7
+   9A9998
+   9A864A
+   9E40F4
+   C6DDB5
+  529114C
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+
+
+
+------------------------ No Damage ------------------------
+
+(( fall damage ))
+
+3C93B07  45 31 F6            xor r14d, r14d
+3C93B0A  EB 23               jmp 0x3c93b2f
+3C93B0C  48 8B 03            mov rax, qword ptr [rbx]
+3C93B0F  48 89 DF            mov rdi, rbx
+3C93B12  4C 89 FE            mov rsi, r15
+
+3C93B15  FF 90 60 05 00 00   call qword ptr [rax + 0x560]
+
+3C93B1B  EB 0F               jmp 0x3c93b2c
+3C93B1D  48 8B 03            mov rax, qword ptr [rbx]
+3C93B20  48 89 DF            mov rdi, rbx
+3C93B23  4C 89 FE            mov rsi, r15
+3C93B26  FF 90 A8 04 00 00   call qword ptr [rax + 0x4a8]
+
+source => 3C93B15
+return => 
+cave   => 
+
+
+|== original ==|
+call qword ptr [rax + 0x560]
+FF 90 60 05 00 00
+
+|== activated ==|
+nopppppp
+90 90 90 90 90 90
+
+
+(fall damage)
+0x 3B1CFEC
+  3C9CC26
+  3CA2F4C
+  3C93B1B <-- nop call
+   4FC34E
+   9B67CE
+  4C84EF5
+  19F6705
+  19F5D8C
+  37B840E
+  37B942D
+  37BA658
+  37BD62B
+  37BE8AC
+  37BDE47
+  37C4E0F
+  4C84818
+  1549602
+   9A71F7
+   9A9998
+   9A864A
+   9E40F4
+   C6DDB5
+  529114C
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+
+
+(( shot, burned ))
+
+3C93AF2  84 C0               test al, al
+3C93AF4  74 57               je 0x3c93b4d
+3C93AF6  48 8B 03            mov rax, qword ptr [rbx]
+3C93AF9  48 89 DF            mov rdi, rbx
+3C93AFC  4C 89 FE            mov rsi, r15
+
+3C93AFF  FF 90 48 05 00 00   call qword ptr [rax + 0x548]
+
+3C93B05  EB 25               jmp 0x3c93b2c
+3C93B07  45 31 F6            xor r14d, r14d
+3C93B0A  EB 23               jmp 0x3c93b2f
+3C93B0C  48 8B 03            mov rax, qword ptr [rbx]
+3C93B0F  48 89 DF            mov rdi, rbx
+3C93B12  4C 89 FE            mov rsi, r15
+
+source => 3C93AFF
+return => 
+cave   => 
+
+
+|== original ==|
+call qword ptr [rax + 0x548]
+FF 90 48 05 00 00
+
+|== activated ==|
+nopppppp
+90 90 90 90 90 90
+
+(got shot)
+0x 3B1CFEC
+  3C9CC26
+  3CA4AB5
+  3CB3B44
+  3CB05A4
+  3C9EC2C
+  3C93B05 <-- nop call
+   4FC34E
+   9B67CE
+   9BEA2E
+  5198819
+  51943A5
+  51924B0
+  5196D8E
+  516A864
+  5161BC7
+   9A71F7
+   9A9998
+   9AA15A
+   9A8680
+   9E40F4
+   C6E57A
+  52912EB
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+
+
+
+(( hard hit by animal ))
+
+3C93BEA  E9 40 FF FF FF      jmp 0x3c93b2f
+3C93BEF  48 8B 03            mov rax, qword ptr [rbx]
+3C93BF2  48 89 DF            mov rdi, rbx
+3C93BF5  4C 89 FE            mov rsi, r15
+
+3C93BF8  FF 90 58 05 00 00   call qword ptr [rax + 0x558]
+
+3C93BFE  E9 29 FF FF FF      jmp 0x3c93b2c
+3C93C03  E8 38 DE 90 FD      call 0x15a1a40
+3C93C08  8B 40 20            mov eax, dword ptr [rax + 0x20]
+3C93C0B  48 8D 75 D0         lea rsi, [rbp - 0x30]
+
+source => 3C93BF8
+return => 
+cave   => 
+
+
+|== original ==|
+call qword ptr [rax + 0x558]
+FF 90 58 05 00 00
+
+|== activated ==|
+nopppppp
+90 90 90 90 90 90
+
+
+
+
+
+(( hit by vehicle ))
+
+3C93B1B  EB 0F               jmp 0x3c93b2c
+3C93B1D  48 8B 03            mov rax, qword ptr [rbx]
+3C93B20  48 89 DF            mov rdi, rbx
+3C93B23  4C 89 FE            mov rsi, r15
+
+3C93B26  FF 90 A8 04 00 00   call qword ptr [rax + 0x4a8]
+
+3C93B2C  41 B6 01            mov r14b, 1
+3C93B2F  49 8B 04 24         mov rax, qword ptr [r12]
+3C93B33  48 3B 45 D8         cmp rax, qword ptr [rbp - 0x28]
+3C93B37  0F 85 B9 01 00 00   jne 0x3c93cf6
+
+source => 3C93B26
+return => 
+cave   => 
+
+
+|== original ==|
+call qword ptr [rax + 0x4a8]
+FF 90 A8 04 00 00
+
+|== activated ==|
+nopppppp
+90 90 90 90 90 90
+
+
+
+
+
+
+    {{ TESTING }}
+
+4FC339  F6 C1 01                  test cl, 1
+4FC33C  74 08                     je 0x4fc346
+4FC33E  48 8B 03                  mov rax, qword ptr [rbx]
+4FC341  48 8B 4C 01 FF            mov rcx, qword ptr [rcx + rax - 1]
+4FC346  48 89 DF                  mov rdi, rbx
+
+4FC349  4C 89 E6                  mov rsi, r12
+4FC34C  FF D1                     call rcx
+
+4FC34E  EB 84                     jmp 0x4fc2d4
+4FC350  C4 81 78 10 44 3E 18      vmovups xmm0, xmmword ptr [r14 + r15 + 0x18]
+4FC357  49 8B 04 24               mov rax, qword ptr [r12]
+4FC35B  4C 89 E7                  mov rdi, r12
+4FC35E  4D 89 E5                  mov r13, r12
+4FC361  C5 F8 29 85 60 FF FF FF   vmovaps xmmword ptr [rbp - 0xa0], xmm0
+
+source => 4FC349
+return => 4FC34E
+cave   => 81E78B4
+
+
+|== original ==|
+mov rsi, r12
+call rcx
+4C 89 E6 FF D1
+
+|== activated ==|
+jmp 0x81E78B4
+E9 66 B5 CE 07
+
+
+|== original ==|
+|== activated ==|
+cmp rcx, 0x3C93A20      //=> 0x3C93A20 is the start of the damage(?) function
+je break
+original:
+    mov rsi, r12
+    call rcx
+return:
+    jmp 0x4FC34E
+break:
+    jmp original        //=> software breakpoint here
+48 81 F9 20 3A C9 03 74 0A 4C 89 E6 FF D1 E9 87 
+4A 31 F8 EB F4 90 90 90
+
+
+
+
+
+(( No damage for everything! (hopefully) ))
+
+|== original ==|
+|== activated ==|
+original_1_2:
+    mov rsi, r12
+cmp rcx, 0x3C93A20
+je return
+original_2_2:
+    call rcx
+return:
+    jmp 0x4fc2d4
+4C 89 E6 48 81 F9 20 3A C9 03 74 02 FF D1 E9 0D 
+4A 31 F8 90
+
+
+
+
+
+------------------------ One-hit Kill Animals ------------------------
+
+3C8E3CF  48 8B 08                  mov rcx, qword ptr [rax]
+3C8E3D2  48 89 C7                  mov rdi, rax
+3C8E3D5  4C 89 F6                  mov rsi, r14
+3C8E3D8  FF 91 00 02 00 00         call qword ptr [rcx + 0x200]
+3C8E3DE  49 8B 7C 24 48            mov rdi, qword ptr [r12 + 0x48]
+
+3C8E3E3  C5 FA 10 85 24 FF FF FF   vmovss xmm0, dword ptr [rbp - 0xdc]
+
+3C8E3EB  4C 89 F6                  mov rsi, r14
+3C8E3EE  31 D2                     xor edx, edx
+3C8E3F0  48 8B 07                  mov rax, qword ptr [rdi]
+3C8E3F3  FF 50 40                  call qword ptr [rax + 0x40]
+
+source => 3C8E3E3
+return => 3C8E3EB
+cave   => 81E7814
+
+
+|== original ==|
+vmovss xmm0, dword ptr [rbp - 0xdc]
+C5 FA 10 85 24 FF FF FF
+
+|== activated ==|
+jmp 0x81E7814
+E9 2C 94 55 04 90 90 90
+
+
+|== original ==|
+|== activated ==|
+mov dword ptr [rbp - 0xdc], 0x0
+original:
+    vmovss xmm0, dword ptr [rbp - 0xdc]
+return:
+    jmp 0x3C8E3EB
+C7 85 24 FF FF FF 00 00 00 00 C5 FA 10 85 24 FF 
+FF FF E9 C0 6B AA FB 90
+
+
+
+(shoot animal)
+0x 3B1CFEC
+  3C8E3F6
+  3C8ACB7
+   4FC34E
+   9B67CE
+   9BEA2E
+  5198819
+  51943A5
+  51924B0
+  5196D8E
+  516A864
+  5161BC7
+   9A71F7
+   9A9998
+   9AA15A
+   9A8680
+   9E40F4
+   C6E57A
+  52912EB
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+
+
+
+------------------------ One-hit Kill ------------------------
+
+3C8618A  C5 FA 10 85 E8 FE FF FF   vmovss xmm0, dword ptr [rbp - 0x118]
+3C86192  4C 8B BD A8 FE FF FF      mov r15, qword ptr [rbp - 0x158]
+3C86199  8B 8B 58 EF 00 00         mov ecx, dword ptr [rbx + 0xef58]
+3C8619F  88 C2                     mov dl, al
+3C861A1  48 89 DF                  mov rdi, rbx
+3C861A4  4C 89 FE                  mov rsi, r15
+3C861A7  E8 34 02 FE FF            call 0x3c663e0
+3C861AC  48 8B 7B 48               mov rdi, qword ptr [rbx + 0x48]
+
+3C861B0  C5 FA 10 85 E0 FE FF FF   vmovss xmm0, dword ptr [rbp - 0x120]
+
+3C861B8  4C 89 FE                  mov rsi, r15
+3C861BB  31 D2                     xor edx, edx
+3C861BD  48 8B 07                  mov rax, qword ptr [rdi]
+3C861C0  FF 50 40                  call qword ptr [rax + 0x40]
+3C861C3  80 BB F8 63 01 00 00      cmp byte ptr [rbx + 0x163f8], 0
+3C861CA  0F 85 02 01 00 00         jne 0x3c862d2
+3C861D0  4C 8B A5 F0 FE FF FF      mov r12, qword ptr [rbp - 0x110]
+3C861D7  49 8B BC 24 38 EF 00 00   mov rdi, qword ptr [r12 + 0xef38]
+
+source => 3C861B0
+return => 3C861B8
+cave   => 81E77C4
+
+
+|== original ==|
+vmovss xmm0, dword ptr [rbp - 0x120]
+C5 FA 10 85 E0 FE FF FF
+
+|== activated ==|
+jmp 0x81E77C4
+E9 0F 16 56 04 90 90 90
+
+
+|== original ==|
+|== activated ==|
+one_hit:
+    mov dword ptr [rbp - 0x120], 0xC47A0000     //=> -1000
+original:
+    vmovss xmm0, dword ptr [rbp - 0x120]
+return:
+    jmp 0x3C861B8
+C7 85 E0 FE FF FF 00 00 7A C4 C5 FA 10 85 E0 FE 
+FF FF E9 DD E9 A9 FB 90
+
+
+
+
+
+(NME - sneak kill)
+0x 3B1CFEC
+  3C861C3
+  3C822F7
+  3C7FE4F
+   4FC34E
+   9B67CE
+  4C8095D
+   4FC34E
+   9B67CE
+  1A473A7
+  1A46AB9
+  37C15AA
+   9A71F7
+   9A9998
+   9A864A
+   9E40F4
+   C6DDB5
+  529114C
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+(NME - headshot)
+0x 3B1CFEC
+  3C861C3
+  3C822F7
+  3C7FE4F
+   4FC34E
+   9B67CE
+   9BEA2E
+  5198819
+  51943A5
+  51924B0
+  5196D8E
+  516A864
+  5161BC7
+   9A71F7
+   9A9998
+   9AA15A
+   9A8680
+   9E40F4
+   C6E57A
+  52912EB
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+(NME - thrown knife kill)
+0x 3B1CFEC
+  3C861C3
+  3C822F7
+  3C7FE4F
+   4FC34E
+   9B67CE
+  510EED5
+  510828B
+  5106405
+  50FFA62
+   4FC34E
+   9B67CE
+  50ED58D
+  50EE2AC
+  50EA917
+   4FC34E
+   9B67CE
+   7CBD59
+   7D3D1D
+   7D3E76
+   9A71F7
+   9A9998
+   9A864A
+   9E40F4
+   C6E57A
+  52912EB
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+
+
+
+------------------------ Max Resources (on get) ------------------------
+
+1749FD9  E8 72 9E FE FF   call 0x1733e50
+1749FDE  8B 4B 54         mov ecx, dword ptr [rbx + 0x54]
+1749FE1  89 C6            mov esi, eax
+1749FE3  31 D2            xor edx, edx
+1749FE5  29 CE            sub esi, ecx
+1749FE7  0F 42 F2         cmovb esi, edx
+1749FEA  44 39 F6         cmp esi, r14d
+1749FED  44 0F 46 F6      cmovbe r14d, esi
+1749FF1  44 01 F1         add ecx, r14d
+1749FF4  39 C1            cmp ecx, eax
+
+1749FF6  0F 43 C8         cmovae ecx, eax
+
+1749FF9  89 4B 54         mov dword ptr [rbx + 0x54], ecx
+1749FFC  45 85 F6         test r14d, r14d
+1749FFF  74 14            je 0x174a015
+
+source => 1749FF6
+return => 
+cave   => 
+
+
+|== original ==|
+cmovae ecx, eax
+0F 43 C8
+
+|== activated ==|
+mov ecx, eax
+89 C1 90
+
+
+(meat)
+0x 1749FF1
+  1730065
+  172F4CA
+  172F3C1
+  45E945E
+  45E885D
+  17705EF
+  1770267
+  47C9859
+  176F4A8
+  45DA3A6
+  37BD6D4
+  37BE8AC
+  37BDE47
+  37C4E0F
+  4C84818
+  1549602
+   9A71F7
+   9A9998
+   9A864A
+   9E40F4
+   C6DDB5
+  529114C
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+(gas)
+0x 1749FF1
+  1730065
+  172F4CA
+  172F3C1
+  45E945E
+  45E885D
+  17705EF
+  1770267
+  47C9859
+  176F4A8
+  3AFC6ED
+  3AF9E7E
+   4FC34E
+   9B67CE
+  1948683
+  45D7CCE
+  47B9258
+  45A2C54
+  45D773E
+  47B835C
+  45A2B34
+  45DA6D3
+  37BD6BB
+  37BE8AC
+  37BDE47
+  37C4E0F
+  4C84818
+  1549602
+   9A71F7
+   9A9998
+   9A864A
+   9E40F4
+   C6DDB5
+  529114C
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+(scraps)
+0x 1749FF1
+  1730065
+  172F4CA
+  172F3C1
+  45E945E
+  45E885D
+  17705EF
+  1770267
+  47C9859
+  176F4A8
+  3AFC6ED
+  3AF9E7E
+   4FC34E
+   9B67CE
+  1948683
+  45D7CCE
+  47B9258
+  45A2C54
+  45D773E
+  47B835C
+  45A2B34
+  45DA6D3
+  37BD6BB
+  37BE8AC
+  37BDE47
+  37C4E0F
+  4C84818
+  1549602
+   9A71F7
+   9A9998
+   9A864A
+   9E40F4
+   C6DDB5
+  529114C
+  5365881
+   493430
+   492C49
+8000075C2
+
+
+
+
+
+------------------------ Wanted Level ------------------------
+
+C352E0  C5 FA 10 4F 40            vmovss xmm1, dword ptr [rdi + 0x40]
+C352E5  C5 F2 5C C8               vsubss xmm1, xmm1, xmm0
+C352E9  C5 F0 54 0D 6F 1B C2 05   vandps xmm1, xmm1, xmmword ptr [rip + 0x5c21b6f]
+C352F1  C5 F8 2E 0D 5B 82 C2 05   vucomiss xmm1, dword ptr [rip + 0x5c2825b]
+C352F9  76 24                     jbe 0xc3531f
+
+C352FB  C5 FA 11 47 40            vmovss dword ptr [rdi + 0x40], xmm0
+
+C35300  C6 47 45 01               mov byte ptr [rdi + 0x45], 1
+C35304  48 8B 47 10               mov rax, qword ptr [rdi + 0x10]
+C35308  48 85 C0                  test rax, rax
+C3530B  74 12                     je 0xc3531f
+
+source => C352FB
+return => C35300
+cave   => 81E7864
+
+
+|== original ==|
+vmovss dword ptr [rdi + 0x40], xmm0
+C5 FA 11 47 40
+
+|== activated ==|
+jmp 0x81E7864
+E9 64 25 5B 07
+
+
+|== original ==|
+|== activated ==|
+vmovss xmm0, dword ptr [0x81E7BA4]
+original:
+    vmovss dword ptr [rdi + 0x40], xmm0
+return:
+    jmp 0xC35300
+C5 FA 10 05 38 03 00 00 C5 FA 11 47 40 E9 8A DA 
+A4 F8 90 90
+
+0x81E7BA4
+    never wanted  -> 00000000
+    always wanted -> 0000F042   (120.0)
