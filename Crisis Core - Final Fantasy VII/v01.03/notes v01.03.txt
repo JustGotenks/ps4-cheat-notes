@@ -1,0 +1,618 @@
+====================================
+===== Code cave start: 63BB000 =====
+====================================
+
+
+
+------------------------ Godmode [FAIL] ------------------------
+- wasnt even the correct type lmao
+
+
+1003272334	float	X	1	(NoName)eboot.bin[0]-33-1000000000-131072KB
+10032772B4	float	X	1	(NoName)eboot.bin[0]-33-1000000000-131072KB
+1015BD06B0	float	X	1	(NoName)eboot.bin[2]-33-1010000000-131072KB
+1015BD0750	float	X	1	(NoName)eboot.bin[2]-33-1010000000-131072KB <--
+
+
+health loss (shot)
+0x 361B66F - vmovss dword ptr [rsi + 0x10], xmm0
+361DF7F
+ F4E054 <--
+ F6AC3B
+ EDDA66
+ EDD76C
+123ACB5
+109B15B
+109AA55
+109C385
+124D237
+1053A90
+1053BDD
+ D48AEC
+ D4A587
+314EB17
+314C6BB
+3A01E0E
+142B254
+142AE80
+142A54B
+39FDEED
+39FAD2A
+35C59D5
+348C8F0
+ 4046E8
+ 4027A8
+ 400237
+4223C0F
+
+
+0xF4E043
+[r14 + 0xE8] has player address
+
+then player addresses compare diff
+
+0x28	0x00	0x2F0073	0x740061
+0x2C	0x00	0x690054	0x540061
+0x30	0x00	0x730070	0x620061
+0x38	0x00	0x77006F	0x2F0073
+0x3C	0x00	0x69004D	0x690054
+0x40	0x00	0x730073	0x730070
+0x4C	0x10	0x410044	0x69004D
+0x54	0x70	0x690061	0x6F0069
+0x58	0x64	0x540072	0x2F006E
+0x5C	0x00	0x700069	0x410044
+0x60	0x00	0x530073	0x46005F
+0x64	0x00	0x6F0068	0x690061
+0x6C	0x10	0x730069	0x700069
+0x70	0x01	0x690073	0x530073
+0x74	0x01	0x6E006F	0x6F0068
+0x78	0x00	0x69004C	0x4D0077
+0x7C	0x00	0x740073	0x730069
+0xA4	0x00	0x02	    0x02
+
+361B5DE  39 16                  cmp dword ptr [rsi], edx
+361B5E0  75 EE                  jne 0x361b5d0
+361B5E2  39 5E 0C               cmp dword ptr [rsi + 0xc], ebx
+361B5E5  75 E9                  jne 0x361b5d0
+361B5E7  44 38 4E 08            cmp byte ptr [rsi + 8], r9b
+361B5EB  75 E3                  jne 0x361b5d0
+
+361B5ED  C5 F8 2E 46 10         vucomiss xmm0, dword ptr [rsi + 0x10]
+
+361B5F2  75 78                  jne 0x361b66c
+361B5F4  E9 80 00 00 00         jmp 0x361b679
+361B5F9  41 FF C0               inc r8d
+361B5FC  45 89 87 F0 00 00 00   mov dword ptr [r15 + 0xf0], r8d
+361B603  45 3B AF F4 00 00 00   cmp r13d, dword ptr [r15 + 0xf4]
+
+source => 361B5ED
+return => 
+cave   => 63BB000   X
+
+
+|== original ==|
+vucomiss xmm0, dword ptr [rsi + 0x10]
+C5 F8 2E 46 10
+
+|== activated ==|
+jmp 0x63BB000
+E9 0E FA D9 02
+
+
+|== original ==|
+|== activated ==|
+cmp dword ptr [rsi + 0xA4], 0x0
+je no_hit
+original:
+    vucomiss xmm0, dword ptr [rsi + 0x10]
+hit:
+    jne 0x361b66c
+no_hit:
+    jmp 0x361b679
+83 BE A4 00 00 00 00 74 0B C5 F8 2E 46 10 0F 85 
+58 06 26 FD E9 60 06 26 FD 90 90 90
+
+
+
+
+
+
+
+------------------------ No Damage ------------------------
+- my first time seeing a health address in the exec
+
+
+8F16878	4 bytes	X	393	executable[0]-3-6E00000-39616KB
+
+
+
+111C2CB  C5 FA 10 8D A8 FE FF FF   vmovss xmm1, dword ptr [rbp - 0x158]
+111C2D3  4C 89 EF                  mov rdi, r13
+111C2D6  4C 89 FE                  mov rsi, r15
+
+111C2D9  E8 F2 26 01 00            call 0x112e9d0
+
+111C2DE  84 C0                     test al, al
+111C2E0  0F 84 3A FF FF FF         je 0x111c220
+111C2E6  45 85 F6                  test r14d, r14d
+111C2E9  75 07                     jne 0x111c2f2
+111C2EB  45 8B B5 30 06 00 00      mov r14d, dword ptr [r13 + 0x630]
+111C2F2  41 8B B5 A8 06 00 00      mov esi, dword ptr [r13 + 0x6a8]
+111C2F9  44 89 A5 CC FE FF FF      mov dword ptr [rbp - 0x134], r12d
+111C300  44 89 B5 F8 FE FF FF      mov dword ptr [rbp - 0x108], r14d
+111C307  83 FE 0F                  cmp esi, 0xf
+
+source => 111C2D9
+return => 111C2DE
+cave   => 63BB000
+
+
+|== original ==|
+call 0x112e9d0
+E8 F2 26 01 00
+
+|== activated ==|
+jmp 0x63BB000
+E9 22 ED 29 05
+
+
+|== original ==|
+|== activated ==|
+original:
+    call 0x112e9d0
+cmp dword ptr [rbx + 0x204], 0x0
+jnz return
+xor eax, eax
+return:
+    jmp 0x111C2DE
+E8 CB 39 D7 FA 83 BB 04 02 00 00 00 75 02 31 C0 
+E9 C9 12 D6 FA 90 90 90
+
+
+
+
+MC- health loss (shot)
+0x 1121B01 - mov dword ptr [r14 + 0x1e8], eax
+11214AE
+111C3E3 <--
+108A3F5 <-
+1172603
+11709D6
+111B885
+112D327
+1119E95
+110B3BB
+1095BE6
+109B0BC
+109AA55
+109C385
+124D237
+1053A90
+1053BDD
+ D48AEC
+ D4A587
+314EB17
+314C6BB
+3A01E0E
+142B254
+142AE80
+142A54B
+39FDEED
+39FAD2A
+35C59D5
+348C8F0
+ 4046E8
+ 4027A8
+ 400237
+4223C0F
+
+0x1121B01
+[r14]
+        MC      NME
+0x88	0x00	0x113F	0x113F
+0xBC	0x00	0x10	0x10
+0xD4	0x00	0x10	0x10
+0xF4	0x00	0x10	0x10
+0xF8	0x00	0x13F	0x13F
+0x1B0	0x00	0x05	0x05
+0x1B4	0x00	0x05	0x05
+0x204	0x00	0x01	0x01
+0x2F8	0x00	0xFF	0xFF
+
+
+NME- health loss (slash)
+0x 1121B01
+11214AE
+111C3E3
+ D5642F
+31B56EF
+31B36F8
+31B333D
+338BE13
+37A5862
+3386FFC
+338BA08
+33927E2
+142B254
+142AE80
+142A54B
+39FDEED
+39FAD2A
+35C59D5
+348C8F0
+ 4046E8
+ 4027A8
+ 400237
+4223C0F
+
+
+
+
+111C2E0
+r13 -> hitter
+rbx -> getting hit
+
+
+
+
+------------------------ Hit from anywhere ------------------------
+
+111C2CB  C5 FA 10 8D A8 FE FF FF   vmovss xmm1, dword ptr [rbp - 0x158]
+111C2D3  4C 89 EF                  mov rdi, r13
+111C2D6  4C 89 FE                  mov rsi, r15
+111C2D9  E8 F2 26 01 00            call 0x112e9d0
+
+111C2DE  84 C0                     test al, al
+111C2E0  0F 84 3A FF FF FF         je 0x111c220
+
+111C2E6  45 85 F6                  test r14d, r14d
+111C2E9  75 07                     jne 0x111c2f2
+111C2EB  45 8B B5 30 06 00 00      mov r14d, dword ptr [r13 + 0x630]
+111C2F2  41 8B B5 A8 06 00 00      mov esi, dword ptr [r13 + 0x6a8]
+111C2F9  44 89 A5 CC FE FF FF      mov dword ptr [rbp - 0x134], r12d
+111C300  44 89 B5 F8 FE FF FF      mov dword ptr [rbp - 0x108], r14d
+111C307  83 FE 0F                  cmp esi, 0xf
+
+source => 111C2DE
+return => 111C2E6
+cave   => 63BB050
+
+
+|== original ==|
+test al, al
+je 0x111c220
+84 C0 0F 84 3A FF FF FF
+
+|== activated ==|
+jmp 0x63BB050
+E9 6D ED 29 05 90 90 90
+
+
+|== original ==|
+|== activated ==|
+cmp dword ptr [rbx + 0x204], 0x0
+je original
+mov eax, 0x1
+original:
+    test al, al
+    je 0x111c220
+return:
+    jmp 0x111C2E6
+83 BB 04 02 00 00 00 75 05 B8 01 00 00 00 84 C0 
+0F 84 BA 11 D6 FA E9 7B 12 D6 FA 90
+
+
+
+
+------------------------ Max MP ------------------------
+
+loss
+0x 1120892 - mov dword ptr [r13 + 0x1f0], eax
+1129CCC
+1086286
+1172603
+11709D6
+111B885
+112D327
+1119E95
+110B1CD
+1095BE6
+109B0BC
+109AA55
+109C385
+124D237
+1053A90
+1053BDD
+ D48AEC
+ D4A587
+314EB17
+314C6BB
+3A01E0E
+142B254
+142AE80
+142A54B
+39FDEED
+39FAD2A
+35C59D5
+348C8F0
+ 4046E8
+ 4027A8
+ 400237
+4223C0F
+
+112087E  68 0F 27 00 00         push 0x270f
+1120883  68 E7 03 00 00         push 0x3e7
+1120888  50                     push rax
+1120889  E8 92 17 FD FF         call 0x10f2020
+112088E  48 83 C4 20            add rsp, 0x20
+
+1120892  41 89 85 F0 01 00 00   mov dword ptr [r13 + 0x1f0], eax
+
+1120899  EB 76                  jmp 0x1120911
+112089B  41 8B 8D E8 01 00 00   mov ecx, dword ptr [r13 + 0x1e8]
+11208A2  85 C9                  test ecx, ecx
+11208A4  7E 6B                  jle 0x1120911
+11208A6  41 0F B6 46 20         movzx eax, byte ptr [r14 + 0x20]
+
+source => 1120892
+return => 
+cave   => 63BB0A0
+
+
+|== original ==|
+mov dword ptr [r13 + 0x1f0], eax
+41 89 85 F0 01 00 00
+
+|== activated ==|
+jmp 0x63BB0A0
+E9 09 A8 29 05 90 90
+
+
+|== original ==|
+|== activated ==|
+cmp dword ptr [r13 + 0x204], 0x0
+jnz original
+max_mp:
+    mov eax, dword ptr [r13 + 0x1f4]
+original:
+    mov dword ptr [r13 + 0x1f0], eax
+return:
+    jmp 0x1120911
+83 BB 04 02 00 00 00 75 07 41 8B 85 F4 01 00 00 
+41 89 85 F0 01 00 00 E9 55 58 D6 FA
+
+
+
+
+
+
+gain
+0x 11278C6 - mov dword ptr [rbx + 0x1f0], eax
+ EF7B90
+ EEEA35
+ EF16EA
+123AC99
+109B15B
+109AA55
+109C385
+124D237
+1053A90
+1053BDD
+ D48AEC
+ D4A587
+314EB17
+314C6BB
+3A01E0E
+142B254
+142AE80
+142A54B
+39FDEED
+39FAD2A
+35C59D5
+348C8F0
+ 4046E8
+ 4027A8
+ 400237
+4223C0F
+
+
+
+
+
+------------------------ Max AP ------------------------
+
+0x 1120962 - mov dword ptr [r13 + 0x1f8], eax
+1138067
+111DF81
+ D57E46
+31B56EF
+31B36F8
+31B333D
+338BE13
+37A5862
+3386FFC
+338BA08
+33927E2
+142B254
+142AE80
+142A54B
+39FDEED
+39FAD2A
+35C5A7C
+348C8F0
+ 4046E8
+ 4027A8
+ 400237
+4223C0F
+
+
+
+
+------------------------ Shop for free ------------------------
+
+8F5FCB0	4 bytes	X	950	executable[0]-3-6E00000-39616KB
+
+
+100EFAD  48 63 CE                  movsxd rcx, esi
+100EFB0  48 8D 0C 89               lea rcx, [rcx + rcx*4]
+100EFB4  80 7C C8 20 00            cmp byte ptr [rax + rcx*8 + 0x20], 0
+100EFB9  0F 84 93 01 00 00         je 0x100f152
+
+100EFBF  8B 54 C8 0C               mov edx, dword ptr [rax + rcx*8 + 0xc]
+
+100EFC3  BB 01 00 00 00            mov ebx, 1
+100EFC8  41 89 94 24 F4 02 00 00   mov dword ptr [r12 + 0x2f4], edx
+100EFD0  8B 04 C8                  mov eax, dword ptr [rax + rcx*8]
+100EFD3  41 39 84 24 04 03 00 00   cmp dword ptr [r12 + 0x304], eax
+
+source => 100EFBF
+return => 
+cave   => 
+
+
+|== original ==|
+mov edx, dword ptr [rax + rcx*8 + 0xc]
+8B 54 C8 0C
+
+|== activated ==|
+xor edx, edx
+31 D2 90 90
+
+
+
+
+
+gain gil (buy)
+0x 115A5E0 - mov dword ptr [rcx + 0x8590], eax
+100FA43
+100E331
+1048D4E
+1048BA4
+100DE63
+2DF3991
+18FC338
+18FEAF0
+18FC712
+18FBE65
+1A89FCA
+18FC712
+18FEAF0
+18FC712
+18FBE65
+1A89FCA
+18FC712
+1A8D9D5
+18FC712
+18FBE65
+2DF39F4
+18FC712
+1A8D9D5
+18FC712
+18FEAF0
+18FC712
+18FEAF0
+18FC712
+18FF3FF
+18FBA5A
+18FC712
+18FF3FF
+18FBA5A
+18FC712
+18FBE65
+3925521
+18FC712
+18FBE65
+1AF757A
+18FC712
+18FF3FF
+18FBA5A
+18FC712
+18FEAF0
+18FC712
+18FBE65
+190FF81
+18FC712
+190FACE
+190FB10
+1851081
+190FEEB
+195A23E
+1959EDB
+195B7A0
+195B29C
+ 4048AD
+ 4027A8
+ 400237
+4223C0F
+
+
+
+gain gil (sell)
+0x 115A5E0 - mov dword ptr [rcx + 0x8590], eax
+100FADB
+100E331
+1048D4E
+1048BA4
+100DE63
+2DF3991
+18FC338
+18FEAF0
+18FC712
+18FBE65
+1A89FCA
+18FC712
+18FEAF0
+18FC712
+18FBE65
+1A89FCA
+18FC712
+1A8D9D5
+18FC712
+18FBE65
+2DF39F4
+18FC712
+1A8D9D5
+18FC712
+18FEAF0
+18FC712
+18FEAF0
+18FC712
+18FF3FF
+18FBA5A
+18FC712
+18FF3FF
+18FBA5A
+18FC712
+18FBE65
+3925521
+18FC712
+18FBE65
+1AF757A
+18FC712
+18FF3FF
+18FBA5A
+18FC712
+18FEAF0
+18FC712
+18FBE65
+190FF81
+18FC712
+190FACE
+190FB10
+1851081
+190FEEB
+195A23E
+1959EDB
+195B7A0
+195B29C
+04048AD
+04027A8
+0400237
+4223C0F
+
+
+
+
+
+
+

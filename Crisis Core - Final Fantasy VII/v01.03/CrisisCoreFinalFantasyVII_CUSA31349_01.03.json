@@ -1,0 +1,74 @@
+{
+  "name": "Crisis Core: Final Fantasy VII",
+  "id": "CUSA31349",
+  "version": "01.03",
+  "process": "eboot.bin",
+  "mods": [
+    {
+      "name": "No Damage",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "63BB000",
+          "on": "E8CB39D7FA83BB0402000000750231C0E9C912D6FA909090",
+          "off": "E8CB39D7FA83BB0402000000750231C0E9C912D6FA909090"
+        },
+        {
+          "offset": "111C2D9",
+          "on": "E922ED2905",
+          "off": "E8F2260100"
+        }
+      ]
+    },
+    {
+      "name": "Hit from anywhere",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "63BB050",
+          "on": "83BB04020000007405B80100000084C00F84BA11D6FAE97B12D6FA90",
+          "off": "83BB04020000007405B80100000084C00F84BA11D6FAE97B12D6FA90"
+        },
+        {
+          "offset": "111C2DE",
+          "on": "E96DED2905909090",
+          "off": "84C00F843AFFFFFF"
+        }
+      ]
+    },
+    {
+      "name": "Max MP",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "63BB0A0",
+          "on": "4183BD04020000007507418B85F4010000418985F0010000E95458D6FA909090",
+          "off": "4183BD04020000007507418B85F4010000418985F0010000E95458D6FA909090"
+        },
+        {
+          "offset": "1120892",
+          "on": "E909A829059090",
+          "off": "418985F0010000"
+        }
+      ]
+    },
+    {
+      "name": "Shop for free",
+      "hint": null,
+      "type": "checkbox",
+      "memory": [
+        {
+          "offset": "100EFBF",
+          "on": "31D29090",
+          "off": "8B54C80C"
+        }
+      ]
+    }
+  ],
+  "credits": [
+    "JustGotenks"
+  ]
+}
