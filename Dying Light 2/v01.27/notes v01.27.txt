@@ -1,0 +1,382 @@
+====================================
+===== Code cave start: 6477000 =====
+====================================
+
+
+
+------------------------ Infinite Stamina ------------------------
+
+332184C  C5 FA 59 45 B0               vmulss xmm0, xmm0, dword ptr [rbp - 0x50]
+3321851  C5 FA 11 45 B0               vmovss dword ptr [rbp - 0x50], xmm0
+3321856  FF 90 20 07 00 00            call qword ptr [rax + 0x720]
+332185C  C5 FA 10 45 B0               vmovss xmm0, dword ptr [rbp - 0x50]
+3321861  C5 FA 59 90 D8 36 00 00      vmulss xmm2, xmm0, dword ptr [rax + 0x36d8]
+
+3321869  C5 FA 10 45 C0               vmovss xmm0, dword ptr [rbp - 0x40]
+
+332186E  C5 FA 10 4D D4               vmovss xmm1, dword ptr [rbp - 0x2c]
+3321873  E8 18 28 1E FD               call 0x504090
+3321878  C5 FA C2 0D 87 32 EE 01 01   vcmpltss xmm1, xmm0, dword ptr [rip + 0x1ee3287]
+3321881  C5 F0 55 C0                  vandnps xmm0, xmm1, xmm0
+3321885  C4 C1 7A 11 44 24 10         vmovss dword ptr [r12 + 0x10], xmm0
+332188C  C5 F8 2E 05 7C 32 EE 01      vucomiss xmm0, dword ptr [rip + 0x1ee327c]
+3321894  75 7F                        jne 0x3321915
+3321896  49 8B 7C 24 08               mov rdi, qword ptr [r12 + 8]
+332189B  80 BF 30 2E 00 00 00         cmp byte ptr [rdi + 0x2e30], 0
+33218A2  74 71                        je 0x3321915
+
+source => 3321869
+return => 
+cave   => 
+
+
+|== original ==|
+vmovss xmm0, dword ptr [rbp - 0x40]
+C5 FA 10 45 C0
+
+|== activated ==|
+vmovss xmm0, dword ptr [rbp - 0x50]
+C5 FA 10 45 B0
+
+
+
+
+
+------------------------ Keep Items (on use|craft) ------------------------
+
+329A946  48 83 C0 08         add rax, 8
+329A94A  48 39 C2            cmp rdx, rax
+329A94D  75 F1               jne 0x329a940
+329A94F  EB 42               jmp 0x329a993
+329A951  44 8B 2B            mov r13d, dword ptr [rbx]
+329A954  45 85 ED            test r13d, r13d
+329A957  7E 3A               jle 0x329a993
+329A959  44 89 EE            mov esi, r13d
+
+329A95C  44 29 E6            sub esi, r12d
+
+329A95F  0F 8E EF 00 00 00   jle 0x329aa54
+329A965  48 89 DF            mov rdi, rbx
+329A968  E8 C3 5A D4 FF      call 0x2fe0430
+329A96D  41 C6 47 30 01      mov byte ptr [r15 + 0x30], 1
+329A972  44 89 65 D0         mov dword ptr [rbp - 0x30], r12d
+329A976  49 8B 47 20         mov rax, qword ptr [r15 + 0x20]
+329A97A  48 89 C1            mov rcx, rax
+329A97D  48 C1 E9 38         shr rcx, 0x38
+
+source => 329A95C
+return => 
+cave   => 
+
+
+|== original ==|
+sub esi, r12d
+44 29 E6
+
+|== activated ==|
+noppppp
+90 90 90
+
+
+
+
+329AC58  48 21 C8                        and rax, rcx
+329AC5B  48 8B 7C 18 F8                  mov rdi, qword ptr [rax + rbx - 8]
+329AC60  8B 47 10                        mov eax, dword ptr [rdi + 0x10]
+329AC63  83 F8 02                        cmp eax, 2
+329AC66  7C 45                           jl 0x329acad
+
+329AC68  FF C8                           dec eax
+
+329AC6A  48 83 C7 10                     add rdi, 0x10
+329AC6E  89 C6                           mov esi, eax
+329AC70  E8 BB 57 D4 FF                  call 0x2fe0430
+329AC75  49 8B 45 38                     mov rax, qword ptr [r13 + 0x38]
+329AC79  49 BC FF FF FF FF FF FF 00 00   movabs r12, 0xffffffffffff
+
+source => 329AC68
+return => 
+cave   => 
+
+
+|== original ==|
+dec eax
+FF C8
+
+|== activated ==|
+noppppp
+90 90
+
+
+
+
+
+------------------------ Max Item (on get|buy|craft) ------------------------
+
+329C2F5  FF 91 40 06 00 00   call qword ptr [rcx + 0x640]
+329C2FB  48 8B 4D B8         mov rcx, qword ptr [rbp - 0x48]
+329C2FF  41 8B 75 10         mov esi, dword ptr [r13 + 0x10]
+329C303  48 89 DF            mov rdi, rbx
+329C306  48 89 5D C0         mov qword ptr [rbp - 0x40], rbx
+
+329C30A  03 31               add esi, dword ptr [rcx]
+
+329C30C  89 C1               mov ecx, eax
+329C30E  29 F1               sub ecx, esi
+329C310  0F 48 F0            cmovs esi, eax
+329C313  89 4D C8            mov dword ptr [rbp - 0x38], ecx
+329C316  E8 15 41 D4 FF      call 0x2fe0430
+329C31B  41 C6 47 30 01      mov byte ptr [r15 + 0x30], 1
+
+source => 329C30A
+return => 
+cave   => 
+
+
+|== original ==|
+add esi, dword ptr [rcx]
+03 31
+
+|== activated ==|
+mov esi, eax
+89 C6
+
+
+
+
+
+------------------------ Max Weapon Durability ------------------------
+
+2FA0F43  C5 F0 57 C9                  vxorps xmm1, xmm1, xmm1
+2FA0F47  C5 F8 2E C1                  vucomiss xmm0, xmm1
+2FA0F4B  0F 86 EF 00 00 00            jbe 0x2fa1040
+2FA0F51  48 8B 03                     mov rax, qword ptr [rbx]
+2FA0F54  48 89 DF                     mov rdi, rbx
+2FA0F57  FF 90 80 0B 00 00            call qword ptr [rax + 0xb80]
+2FA0F5D  C5 F8 28 4D D0               vmovaps xmm1, xmmword ptr [rbp - 0x30]
+
+2FA0F62  C5 FA 5D C1                  vminss xmm0, xmm0, xmm1
+
+2FA0F66  C5 F2 C2 0D 11 44 23 02 01   vcmpltss xmm1, xmm1, dword ptr [rip + 0x2234411]
+2FA0F6F  C5 F0 55 C0                  vandnps xmm0, xmm1, xmm0
+2FA0F73  C5 FA 11 83 A8 00 00 00      vmovss dword ptr [rbx + 0xa8], xmm0
+2FA0F7B  48 83 7B 08 00               cmp qword ptr [rbx + 8], 0
+2FA0F80  0F 84 E2 00 00 00            je 0x2fa1068
+2FA0F86  48 8B 03                     mov rax, qword ptr [rbx]
+
+source => 2FA0F62
+return => 
+cave   => 
+
+
+|== original ==|
+vminss xmm0, xmm0, xmm1
+C5 FA 5D C1
+
+|== activated ==|
+vmaxss xmm0, xmm0, xmm1
+C5 FA 5F C1
+
+
+
+
+
+------------------------ Godmode ------------------------
+
+278CB11  4C 89 F7         mov rdi, r14
+278CB14  C5 FA 11 45 C8   vmovss dword ptr [rbp - 0x38], xmm0
+278CB19  E8 32 3F 9E FF   call 0x2170a50
+278CB1E  C5 FA 5C 45 D4   vsubss xmm0, xmm0, dword ptr [rbp - 0x2c]
+278CB23  4C 89 F7         mov rdi, r14
+
+278CB26  E8 15 3F 9E FF   call 0x2170a40
+
+278CB2B  49 8D 7C 1C 08   lea rdi, [r12 + rbx + 8]
+278CB30  E8 1B 3F 9E FF   call 0x2170a50
+278CB35  83 7D 94 00      cmp dword ptr [rbp - 0x6c], 0
+278CB39  C5 FA 11 45 D4   vmovss dword ptr [rbp - 0x2c], xmm0
+278CB3E  74 1D            je 0x278cb5d
+
+source => 278CB26
+return => 278CB2B
+cave   => 6477000
+
+
+|== original ==|
+call 0x2170a40
+E8 15 3F 9E FF
+
+|== activated ==|
+jmp 0x6477000
+E9 D5 A4 CE 03
+
+
+|== original ==|
+|== activated ==|
+cmp dword ptr [r14 + 0x34], 0x00
+je return
+original:
+    call 0x2170a40
+return:
+    jmp 0x278CB2B
+41 83 7E 34 00 74 05 E8 34 9A CF FB E9 1A 5B 31 
+FC 90 90 90
+
+
+
+
+
+------------------------ One-hit Kill ------------------------
+
+278CACE  48 8B BD 78 FF FF FF   mov rdi, qword ptr [rbp - 0x88]
+278CAD5  C5 F8 28 C8            vmovaps xmm1, xmm0
+278CAD9  C5 FA 10 45 D4         vmovss xmm0, dword ptr [rbp - 0x2c]
+278CADE  48 8D 35 94 ED B2 04   lea rsi, [rip + 0x4b2ed94]
+278CAE5  48 8B 4D C8            mov rcx, qword ptr [rbp - 0x38]
+278CAE9  4C 89 EA               mov rdx, r13
+278CAEC  48 8B 07               mov rax, qword ptr [rdi]
+278CAEF  FF 50 10               call qword ptr [rax + 0x10]
+278CAF2  C5 F0 57 C9            vxorps xmm1, xmm1, xmm1
+278CAF6  C5 FA 5F C9            vmaxss xmm1, xmm0, xmm1
+278CAFA  48 8D 7C 1D A8         lea rdi, [rbp + rbx - 0x58]
+
+278CAFF  C5 FA 11 4D D4         vmovss dword ptr [rbp - 0x2c], xmm1
+
+278CB04  E8 37 3F 9E FF         call 0x2170a40
+278CB09  4C 89 F7               mov rdi, r14
+278CB0C  E8 3F 3F 9E FF         call 0x2170a50
+278CB11  4C 89 F7               mov rdi, r14
+278CB14  C5 FA 11 45 C8         vmovss dword ptr [rbp - 0x38], xmm0
+278CB19  E8 32 3F 9E FF         call 0x2170a50
+
+source => 278CAFF
+return => 278CB04
+cave   => 6477050
+
+
+|== original ==|
+vmovss dword ptr [rbp - 0x2c], xmm1
+C5 FA 11 4D D4
+
+|== activated ==|
+jmp 0x6477050
+E9 4C A5 CE 03
+
+
+|== original ==|
+|== activated ==|
+cmp dword ptr [r14 + 0x34], 0x00
+je original
+one_hit_kill:
+    mov dword ptr [rbp - 0x2c], 0x461C4000
+    vmovss xmm0, dword ptr [rbp - 0x2c]
+    jmp return
+original:
+    vmovss dword ptr [rbp - 0x2c], xmm1
+return:
+    jmp 0x278CB04
+41 83 7E 34 00 74 0E C7 45 D4 00 40 1C 46 C5 FA 
+10 45 D4 EB 05 C5 FA 11 4D D4 E9 95 5A 31 FC 90
+
+
+
+
+
+------------------------ 25x Money Multiplier ------------------------
+
+32A8DD6  41 56            push r14
+32A8DD8  41 55            push r13
+32A8DDA  41 54            push r12
+32A8DDC  53               push rbx
+32A8DDD  48 83 EC 18      sub rsp, 0x18
+32A8DE1  89 D3            mov ebx, edx
+
+32A8DE3  41 89 F4         mov r12d, esi
+32A8DE6  49 89 FF         mov r15, rdi
+
+32A8DE9  E8 B2 F6 FE FF   call 0x32984a0
+32A8DEE  49 89 C6         mov r14, rax
+32A8DF1  E8 0A 96 6F FF   call 0x29a2400
+32A8DF6  83 FB 05         cmp ebx, 5
+32A8DF9  74 5B            je 0x32a8e56
+32A8DFB  48 89 C7         mov rdi, rax
+32A8DFE  E8 4D 4A C3 FE   call 0x1edd850
+
+source => 32A8DE3
+return => 32A8DE9
+cave   => 64770A0
+
+
+|== original ==|
+mov r12d, esi
+mov r15, rdi
+41 89 F4 49 89 FF
+
+|== activated ==|
+jmp 0x64770A0
+E9 B8 E2 1C 03 90
+
+
+|== original ==|
+|== activated ==|
+test esi, esi
+jz original
+test r9, r9
+jnz original
+multiplier:
+    imul esi, 0x19      //=> 0x19 = 25
+    mov dword ptr [r13], esi
+original:
+    mov r12d, esi
+    mov r15, rdi
+return:
+    jmp 0x32A8DE9
+85 F6 74 0C 4D 85 C9 75 07 6B F6 19 41 89 75 00 
+41 89 F4 49 89 FF E9 2E 1D E3 FC 90
+
+
+
+
+
+------------------------ 25x Skill/Legend Points Multiplier ------------------------
+
+34F1EBA  75 0B                  jne 0x34f1ec7
+34F1EBC  84 D2                  test dl, dl
+34F1EBE  75 07                  jne 0x34f1ec7
+34F1EC0  31 C0                  xor eax, eax
+34F1EC2  E9 11 04 00 00         jmp 0x34f22d8
+
+34F1EC7  4D 8B 6E 18            mov r13, qword ptr [r14 + 0x18]
+34F1ECB  48 89 F1               mov rcx, rsi
+
+34F1ECE  49 8B 7E 20            mov rdi, qword ptr [r14 + 0x20]
+34F1ED2  48 C7 C0 FF FF FF FF   mov rax, -1
+34F1ED9  4C 01 E9               add rcx, r13
+34F1EDC  4D 89 EC               mov r12, r13
+34F1EDF  49 F7 D4               not r12
+
+source => 34F1EC7
+return => 34F1ECE
+cave   => 64770F0
+
+
+|== original ==|
+mov r13, qword ptr [r14 + 0x18]
+mov rcx, rsi
+4D 8B 6E 18 48 89 F1
+
+|== activated ==|
+jmp 0x64770F0
+E9 24 52 F8 02 90 90
+
+
+|== original ==|
+|== activated ==|
+multiplier:
+    imul esi, 0x19       //=> 0x19 = 25
+original:
+    mov r13, qword ptr [r14 + 0x18]
+    mov rcx, rsi
+return:
+    jmp 0x34F1ECE
+6B F6 19 4D 8B 6E 18 48 89 F1 E9 CF AD 07 FD 90
