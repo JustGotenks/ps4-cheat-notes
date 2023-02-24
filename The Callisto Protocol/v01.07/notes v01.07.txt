@@ -1,0 +1,412 @@
+====================================
+===== Code cave start: 7703000 =====
+====================================
+
+
+
+------------------------ Godmode ------------------------
+
+103CACD478	float	X	100	(NoName)eboot.bin[7]-33-1038000000-131072KB
+
+
+loss (hit)
+0x 2B3CAAF - vmovss dword ptr [rbx + 0x118], xmm2
+28865A8
+2DF809F
+32B80F5
+1225F15
+4B43DC8
+2836CCB
+27B5600
+27B161B
+27F01AB
+2C9A75B
+32B80F5
+1225F15
+2838A94
+283248F
+4BCC787
+4BDC846
+4BD9F2E
+4BAD06B
+4B9F033
+4D6B456
+4D6D89C
+4D6E02C
+28E0873
+53D44FE
+2F5D3DB
+2F60DE3
+53D2AFA
+53D00C0
+4FA0B19
+4E4DC74
+11F4A69
+11FEAE4
+11FDE57
+ 4000BF
+
+
+
+2B3CAAF
+[rbx]   
+        MC          NME
+0x1C0	0x4D42F600	0x00        X
+0x1C4	0x10	    0x00
+0x1C8	0x01	    0x00        X
+0x1CC	0x04	    0x00
+0x1E0	0x00	    0x1B10D280
+0x1E4	0x00	    0x10        X
+
+
+
+2886561  48 8B 49 30                     mov rcx, qword ptr [rcx + 0x30]
+2886565  48 83 C0 30                     add rax, 0x30
+2886569  48 39 04 D1                     cmp qword ptr [rcx + rdx*8], rax
+288656D  0F 84 16 01 00 00               je 0x2886689
+2886573  C4 C1 7A 10 8C 24 18 01 00 00   vmovss xmm1, dword ptr [r12 + 0x118]
+
+288657D  C5 F2 5C 44 24 20               vsubss xmm0, xmm1, dword ptr [rsp + 0x20]
+
+2886583  C5 E8 57 D2                     vxorps xmm2, xmm2, xmm2
+2886587  C5 F8 2E C2                     vucomiss xmm0, xmm2
+288658B  0F 86 8A 00 00 00               jbe 0x288661b
+
+source => 288657D
+return => 2886583
+cave   => 7703000
+
+
+|== original ==|
+vsubss xmm0, xmm1, dword ptr [rsp + 0x20]
+C5 F2 5C 44 24 20
+
+|== activated ==|
+jmp 0x7703000
+E9 7E CA E7 04 90
+
+
+|== original ==|
+|== activated ==|
+cmp dword ptr [r12 + 0x1C4], 0x10
+jnz original
+full_health:
+    vmovss xmm1, dword ptr [r12 + 0x11C]
+    vmovss dword ptr [r12 + 0x118], xmm1
+    mov dword ptr [rsp + 0x20], 0x0
+original:
+    vsubss xmm0, xmm1, dword ptr [rsp + 0x20]
+return:
+    jmp 0x2886583
+41 83 BC 24 C4 01 00 00 10 75 1C C4 C1 7A 10 8C 
+24 1C 01 00 00 C4 C1 7A 11 8C 24 18 01 00 00 C7 
+44 24 20 00 00 00 00 C5 F2 5C 44 24 20 E9 51 35 
+18 FB 90 90
+
+
+
+
+------------------------ One-hit Kill ------------------------
+
+2886561  48 8B 49 30                     mov rcx, qword ptr [rcx + 0x30]
+2886565  48 83 C0 30                     add rax, 0x30
+2886569  48 39 04 D1                     cmp qword ptr [rcx + rdx*8], rax
+288656D  0F 84 16 01 00 00               je 0x2886689
+
+2886573  C4 C1 7A 10 8C 24 18 01 00 00   vmovss xmm1, dword ptr [r12 + 0x118]
+
+288657D  C5 F2 5C 44 24 20               vsubss xmm0, xmm1, dword ptr [rsp + 0x20]
+2886583  C5 E8 57 D2                     vxorps xmm2, xmm2, xmm2
+2886587  C5 F8 2E C2                     vucomiss xmm0, xmm2
+288658B  0F 86 8A 00 00 00               jbe 0x288661b
+
+source => 2886573
+return => 288657D
+cave   => 7703060
+
+
+|== original ==|
+vmovss xmm1, dword ptr [r12 + 0x118]
+C4 C1 7A 10 8C 24 18 01 00 00
+
+|== activated ==|
+jmp 0x7703060
+E9 E8 CA E7 04 90 90 90 90 90
+
+
+|== original ==|
+|== activated ==|
+cmp dword ptr [r12 + 0x1C4], 0x10
+jz original
+10k_damage:
+    mov dword ptr [rsp + 0x20], 0x461C4000      //=> 0x461C4000 = 10000.0
+original:
+    vmovss xmm1, dword ptr [r12 + 0x118]
+return:
+    jmp 0x288657D
+41 83 BC 24 C4 01 00 00 10 74 08 C7 44 24 20 00 
+40 1C 46 C4 C1 7A 10 8C 24 18 01 00 00 E9 FB 34 
+18 FB 90 90
+
+
+
+
+------------------------ Callisto Credits 10x (pickup/sell) ------------------------
+
+104F4836D0	4 bytes	X	34	(NoName)eboot.bin[9]-33-1048000000-131072KB
+1054FB6550	4 bytes	X	36	(NoName)eboot.bin[10]-33-1050000000-131072KB
+103F22F0D0	4 bytes	X	29	(NoName)eboot.bin[7]-33-1038000000-131072KB
+
+
+gain 
+0x 2976062 - mov dword ptr [rsi - 8], edi
+2978A4D
+2A5B9B8
+2A021A6
+2DCFCD3
+32B80F5
+1225F15
+2A21E3A
+2CDBBEB
+32B80F5
+1225F15
+2838A94
+2831FCF
+4BA5DBE
+4BA4C73
+4BA40CA
+4D78F62
+517F283
+4D7320C
+4D78B7D
+4D73AB0
+2F5D136
+2F60DE3
+53D2AFA
+53D00C0
+4FA0B19
+4E4DC74
+11F4A69
+11FEAE4
+11FDE57
+ 4000BF
+
+
+
+
+2976048  75 E6               jne 0x2976030
+297604A  EB 1B               jmp 0x2976067
+297604C  8B 7E F8            mov edi, dword ptr [rsi - 8]
+297604F  3B 3E               cmp edi, dword ptr [rsi]
+2976051  7D E7               jge 0x297603a
+
+2976053  44 01 FF            add edi, r15d
+2976056  41 89 FF            mov r15d, edi
+
+2976059  41 29 CF            sub r15d, ecx
+297605C  0F 8F FA 01 00 00   jg 0x297625c
+2976062  89 7E F8            mov dword ptr [rsi - 8], edi
+2976065  EB 05               jmp 0x297606c
+
+source => 2976053
+return => 2976059
+cave   => 77030C0
+
+
+|== original ==|
+add edi, r15d
+mov r15d, edi
+44 01 FF 41 89 FF
+
+|== activated ==|
+jmp 0x77030C0
+E9 68 D0 D8 04 90
+
+
+|== original ==|
+|== activated ==|
+multiplier:
+    imul r15d, 0xA
+test r8d, r8d
+jz on_sell
+on_pickup:
+    mov dword ptr [rsp + 0x128], r15d
+    jmp original
+on_sell:
+    mov dword ptr [rbx + 0x10], r15d
+original:
+    add edi, r15d
+    mov r15d, edi
+return:
+    jmp 0x2976059
+45 6B FF 0A 45 85 C0 74 0A 44 89 BC 24 28 01 00 
+00 EB 04 44 89 7B 10 44 01 FF 41 89 FF E9 77 2F 
+27 FB 90 90
+
+
+
+
+------------------------ No Reload ------------------------
+
+1053C54390	4 bytes	X	3	(NoName)eboot.bin[10]-33-1050000000-131072KB
+1066807D18	4 bytes	X	3	(NoName)eboot.bin[12]-33-1060000000-131072KB    <--
+1067BF23A0	4 bytes	X	3	(NoName)eboot.bin[12]-33-1060000000-131072KB
+
+
+loss (shoot)
+0x 295EC8B - mov dword ptr [rdi + 0xb8], esi
+2981084
+29859F2
+2981F65
+2979FE0
+280C6D4
+280C02A
+2BDAE30
+2BDAD67
+27AC340
+2BD797A
+27A09D3
+2BD7BFD
+2BD79A0
+27A09D3
+2BD7A52
+27A09D3
+2BD7BFD
+2BD79A0
+27C73C3
+2802ABB
+53D44FE
+2F5D3DB
+2F60DE3
+53D2AFA
+53D00C0
+4FA0B19
+4E4DC74
+11F4A69
+11FEAE4
+11FDE57
+ 4000BF
+
+
+298106A  49 8B 04 24               mov rax, qword ptr [r12]
+298106E  4C 89 E7                  mov rdi, r12
+2981071  FF 90 90 07 00 00         call qword ptr [rax + 0x790]
+2981077  31 F6                     xor esi, esi
+
+2981079  2B 70 44                  sub esi, dword ptr [rax + 0x44]
+
+298107C  4C 89 F7                  mov rdi, r14
+298107F  E8 DC DB FD FF            call 0x295ec60
+2981084  41 8B 84 24 94 09 00 00   mov eax, dword ptr [r12 + 0x994]
+298108C  85 C0                     test eax, eax
+
+source => 2981079
+return => 
+cave   => 
+
+
+|== original ==|
+sub esi, dword ptr [rax + 0x44]
+2B 70 44
+
+|== activated ==|
+noppppp
+90 90 90
+
+
+
+
+------------------------ Infinite GRP ------------------------
+
+104E27DB18	float	X	59.39089	(NoName)eboot.bin[9]-33-1048000000-131072KB
+
+loss
+0x 2959C08 - vmovss dword ptr [r15 + 0xb8], xmm3
+0x 2959CAC - vmovss dword ptr [r15 + 0xb8], xmm3
+295B821
+280C6D4
+280C02A
+2BDAE30
+2BDAD67
+2BD74E4
+27A3EE8
+2805BEE
+2BDAE30
+2BDAD67
+27AC340
+2BD797A
+27A09D3
+2BD7BFD
+2BD79A0
+27A09D3
+2BD7A52
+27A09D3
+2BD7BFD
+2BD79A0
+27C73C3
+2802ABB
+53D44FE
+2F5D3DB
+2F60DE3
+53D2AFA
+53D00C0
+4FA0B19
+4E4DC74
+11F4A69
+11FEAE4
+11FDE57
+ 4000BF
+
+
+2959BE1  C5 FA 10 45 D4               vmovss xmm0, dword ptr [rbp - 0x2c]
+2959BE6  C4 C1 7A 10 9F B8 00 00 00   vmovss xmm3, dword ptr [r15 + 0xb8]
+2959BEF  C5 E8 57 D2                  vxorps xmm2, xmm2, xmm2
+2959BF3  C5 FA 10 88 D0 05 00 00      vmovss xmm1, dword ptr [rax + 0x5d0]
+
+2959BFB  C5 E2 5C D8                  vsubss xmm3, xmm3, xmm0
+
+2959BFF  C4 C1 7A 11 8F BC 00 00 00   vmovss dword ptr [r15 + 0xbc], xmm1
+2959C08  C4 C1 7A 11 9F B8 00 00 00   vmovss dword ptr [r15 + 0xb8], xmm3
+2959C11  49 8B 87 B0 00 00 00         mov rax, qword ptr [r15 + 0xb0]
+2959C18  4C 8B B0 F0 05 00 00         mov r14, qword ptr [rax + 0x5f0]
+
+source => 2959BFB
+return => 
+cave   => 
+
+
+|== original ==|
+vsubss xmm3, xmm3, xmm0
+C5 E2 5C D8
+
+|== activated ==|
+noppppp
+90 90 90 90
+
+
+
+
+2959C88  E8 23 92 05 00               call 0x29b2eb0
+2959C8D  C5 FA 10 5D D4               vmovss xmm3, dword ptr [rbp - 0x2c]
+2959C92  C5 E8 57 D2                  vxorps xmm2, xmm2, xmm2
+2959C96  C5 F0 57 C9                  vxorps xmm1, xmm1, xmm1
+
+2959C9A  C5 E2 5D C0                  vminss xmm0, xmm3, xmm0
+
+2959C9E  C5 E2 C2 C9 01               vcmpltss xmm1, xmm3, xmm1
+2959CA3  C5 F0 55 D8                  vandnps xmm3, xmm1, xmm0
+2959CA7  C5 FA 10 4D D0               vmovss xmm1, dword ptr [rbp - 0x30]
+2959CAC  C4 C1 7A 11 9F B8 00 00 00   vmovss dword ptr [r15 + 0xb8], xmm3
+
+source => 2959C9A
+return => 
+cave   => 
+
+
+|== original ==|
+vminss xmm0, xmm3, xmm0
+C5 E2 5D C0
+
+|== activated ==|
+vmaxss xmm0, xmm3, xmm0
+C5 E2 5F C0

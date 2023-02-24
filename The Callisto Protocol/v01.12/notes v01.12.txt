@@ -1,0 +1,237 @@
+====================================
+===== Code cave start: 778B618 =====
+====================================
+
+
+
+------------------------ Godmode ------------------------
+
+28ABCD1  48 8B 49 30                     mov rcx, qword ptr [rcx + 0x30]
+28ABCD5  48 83 C0 30                     add rax, 0x30
+28ABCD9  48 39 04 D1                     cmp qword ptr [rcx + rdx*8], rax
+28ABCDD  0F 84 16 01 00 00               je 0x28abdf9
+28ABCE3  C4 C1 7A 10 8C 24 18 01 00 00   vmovss xmm1, dword ptr [r12 + 0x118]
+
+28ABCED  C5 F2 5C 44 24 20               vsubss xmm0, xmm1, dword ptr [rsp + 0x20]
+
+28ABCF3  C5 E8 57 D2                     vxorps xmm2, xmm2, xmm2
+28ABCF7  C5 F8 2E C2                     vucomiss xmm0, xmm2
+28ABCFB  0F 86 8A 00 00 00               jbe 0x28abd8b
+
+source => 28ABCED
+return => 28ABCF3
+cave   => 778B618
+
+
+|== original ==|
+vsubss xmm0, xmm1, dword ptr [rsp + 0x20]
+C5 F2 5C 44 24 20
+
+|== activated ==|
+jmp 0x778B618
+E9 26 F9 ED 04 90
+
+
+|== original ==|
+|== activated ==|
+cmp dword ptr [r12 + 0x1C4], 0x10
+jnz original
+full_health:
+    vmovss xmm1, dword ptr [r12 + 0x11C]
+    vmovss dword ptr [r12 + 0x118], xmm1
+    mov dword ptr [rsp + 0x20], 0x0
+original:
+    vsubss xmm0, xmm1, dword ptr [rsp + 0x20]
+return:
+    jmp 0x28ABCF3
+41 83 BC 24 C4 01 00 00 10 75 1C C4 C1 7A 10 8C 
+24 1C 01 00 00 C4 C1 7A 11 8C 24 18 01 00 00 C7 
+44 24 20 00 00 00 00 C5 F2 5C 44 24 20 E9 A9 06 
+12 FB 90 90
+
+
+
+
+------------------------ One-hit Kill ------------------------
+
+28ABCD1  48 8B 49 30                     mov rcx, qword ptr [rcx + 0x30]
+28ABCD5  48 83 C0 30                     add rax, 0x30
+28ABCD9  48 39 04 D1                     cmp qword ptr [rcx + rdx*8], rax
+28ABCDD  0F 84 16 01 00 00               je 0x28abdf9
+
+28ABCE3  C4 C1 7A 10 8C 24 18 01 00 00   vmovss xmm1, dword ptr [r12 + 0x118]
+
+28ABCED  C5 F2 5C 44 24 20               vsubss xmm0, xmm1, dword ptr [rsp + 0x20]
+28ABCF3  C5 E8 57 D2                     vxorps xmm2, xmm2, xmm2
+28ABCF7  C5 F8 2E C2                     vucomiss xmm0, xmm2
+28ABCFB  0F 86 8A 00 00 00               jbe 0x28abd8b
+
+source => 28ABCE3
+return => 28ABCED
+cave   => 778B678
+
+
+|== original ==|
+vmovss xmm1, dword ptr [r12 + 0x118]
+C4 C1 7A 10 8C 24 18 01 00 00
+
+|== activated ==|
+jmp 0x778B678
+E9 90 F9 ED 04 90 90 90 90 90
+
+
+|== original ==|
+|== activated ==|
+cmp dword ptr [r12 + 0x1C4], 0x10
+jz original
+10k_damage:
+    mov dword ptr [rsp + 0x20], 0x461C4000      //=> 0x461C4000 = 10000.0
+original:
+    vmovss xmm1, dword ptr [r12 + 0x118]
+return:
+    jmp 0x28ABCED
+41 83 BC 24 C4 01 00 00 10 74 08 C7 44 24 20 00 
+40 1C 46 C4 C1 7A 10 8C 24 18 01 00 00 E9 53 06 
+12 FB 90 90
+
+
+
+
+------------------------ Callisto Credits 10x (pickup/sell) ------------------------
+
+299C8C8  75 E6               jne 0x299c8b0
+299C8CA  EB 1B               jmp 0x299c8e7
+299C8CC  8B 7E F8            mov edi, dword ptr [rsi - 8]
+299C8CF  3B 3E               cmp edi, dword ptr [rsi]
+299C8D1  7D E7               jge 0x299c8ba
+
+299C8D3  44 01 FF            add edi, r15d
+299C8D6  41 89 FF            mov r15d, edi
+
+299C8D9  41 29 CF            sub r15d, ecx
+299C8DC  0F 8F FA 01 00 00   jg 0x299cadc
+299C8E2  89 7E F8            mov dword ptr [rsi - 8], edi
+299C8E5  EB 05               jmp 0x299c8ec
+
+source => 299C8D3
+return => 299C8D9
+cave   => 778B6D8
+
+
+|== original ==|
+add edi, r15d
+mov r15d, edi
+44 01 FF 41 89 FF
+
+|== activated ==|
+jmp 0x778B6D8
+E9 00 EE DE 04 90
+
+
+|== original ==|
+|== activated ==|
+multiplier:
+    imul r15d, 0xA
+test r8d, r8d
+jz on_sell
+on_pickup:
+    mov dword ptr [rsp + 0x128], r15d
+    jmp original
+on_sell:
+    mov dword ptr [rbx + 0x10], r15d
+original:
+    add edi, r15d
+    mov r15d, edi
+return:
+    jmp 0x299C8D9
+45 6B FF 0A 45 85 C0 74 0A 44 89 BC 24 28 01 00 
+00 EB 04 44 89 7B 10 44 01 FF 41 89 FF E9 DF 11 
+21 FB 90 90
+
+
+
+
+------------------------ No Reload ------------------------
+
+29A79AA  49 8B 04 24               mov rax, qword ptr [r12]
+29A79AE  4C 89 E7                  mov rdi, r12
+29A79B1  FF 90 90 07 00 00         call qword ptr [rax + 0x790]
+29A79B7  31 F6                     xor esi, esi
+
+29A79B9  2B 70 44                  sub esi, dword ptr [rax + 0x44]
+
+29A79BC  4C 89 F7                  mov rdi, r14
+29A79BF  E8 FC 03 FE FF            call 0x2987dc0
+29A79C4  41 8B 84 24 94 09 00 00   mov eax, dword ptr [r12 + 0x994]
+29A79CC  85 C0                     test eax, eax
+
+source => 29A79B9
+return => 
+cave   => 
+
+
+|== original ==|
+sub esi, dword ptr [rax + 0x44]
+2B 70 44
+
+|== activated ==|
+noppppp
+90 90 90
+
+
+
+
+------------------------ Infinite GRP ------------------------
+
+2982BA1  C5 FA 10 45 D4               vmovss xmm0, dword ptr [rbp - 0x2c]
+2982BA6  C4 C1 7A 10 9F B8 00 00 00   vmovss xmm3, dword ptr [r15 + 0xb8]
+2982BAF  C5 E8 57 D2                  vxorps xmm2, xmm2, xmm2
+2982BB3  C5 FA 10 88 D0 05 00 00      vmovss xmm1, dword ptr [rax + 0x5d0]
+
+2982BBB  C5 E2 5C D8                  vsubss xmm3, xmm3, xmm0
+
+2982BBF  C4 C1 7A 11 8F BC 00 00 00   vmovss dword ptr [r15 + 0xbc], xmm1
+2982BC8  C4 C1 7A 11 9F B8 00 00 00   vmovss dword ptr [r15 + 0xb8], xmm3
+2982BD1  49 8B 87 B0 00 00 00         mov rax, qword ptr [r15 + 0xb0]
+2982BD8  4C 8B B0 F0 05 00 00         mov r14, qword ptr [rax + 0x5f0]
+
+source => 2982BBB
+return => 
+cave   => 
+
+
+|== original ==|
+vsubss xmm3, xmm3, xmm0
+C5 E2 5C D8
+
+|== activated ==|
+noppppp
+90 90 90 90
+
+
+
+
+2982C48  E8 83 55 05 00               call 0x29d81d0
+2982C4D  C5 FA 10 5D D4               vmovss xmm3, dword ptr [rbp - 0x2c]
+2982C52  C5 E8 57 D2                  vxorps xmm2, xmm2, xmm2
+2982C56  C5 F0 57 C9                  vxorps xmm1, xmm1, xmm1
+
+2982C5A  C5 E2 5D C0                  vminss xmm0, xmm3, xmm0
+
+2982C5E  C5 E2 C2 C9 01               vcmpltss xmm1, xmm3, xmm1
+2982C63  C5 F0 55 D8                  vandnps xmm3, xmm1, xmm0
+2982C67  C5 FA 10 4D D0               vmovss xmm1, dword ptr [rbp - 0x30]
+2982C6C  C4 C1 7A 11 9F B8 00 00 00   vmovss dword ptr [r15 + 0xb8], xmm3
+
+source => 2982C5A
+return => 
+cave   => 
+
+
+|== original ==|
+vminss xmm0, xmm3, xmm0
+C5 E2 5D C0
+
+|== activated ==|
+vmaxss xmm0, xmm3, xmm0
+C5 E2 5F C0
